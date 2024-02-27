@@ -1,11 +1,13 @@
 import React from 'react';
-import { Container, Typography, TextField, Button, Box } from '@mui/material';
+import { Container, Typography, TextField, Button, Box, Grid, Link,} from '@mui/material';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 
 export default function Login() {
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // TODO: implement authentication logic
-    console.log('Login form submitted');
+    // TODO implement login logic
   };
 
   return (
@@ -34,15 +36,24 @@ export default function Login() {
           id="password"
           autoComplete="current-password"
         />
+        <Grid container>
+          <Typography variant="body2" sx={{ mt: 2 }}>
+          Forgot your <RouterLink to="/reset-username">username</RouterLink> or <RouterLink to="/reset-password">password</RouterLink> ?
+        </Typography>
+        </Grid>
         <Button
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Log In
+          Sign In
         </Button>
+        <Typography variant="body1" sx={{ mt: 2, textAlign: 'center' }}>
+          You don't have an account? <RouterLink to="/register">Register</RouterLink>
+        </Typography>
       </Box>
     </Container>
   );
 }
+

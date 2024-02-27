@@ -7,6 +7,7 @@ import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody RegistrationDTO registrationDTO) {
+    public User registerUser(@RequestBody @Valid RegistrationDTO registrationDTO) {
         try {
             return authenticationService.registerUser(registrationDTO.getUsername(), registrationDTO.getPassword(), registrationDTO.getEmail());
         } catch (UserAlreadyExistsException e) {
@@ -33,7 +34,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO loginUser (@RequestBody LoginDTO loginDTO) {
+    public LoginResponseDTO loginUser (@RequestBody @Valid LoginDTO loginDTO) {
         return authenticationService.loginUser(loginDTO.getUsername(), loginDTO.getPassword());
     }
 }
