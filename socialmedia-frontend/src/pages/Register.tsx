@@ -1,11 +1,27 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
+import { authService } from '../services/authService';
 
 export default function Register() {
-  const handleRegister = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+
+  const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // TODO: implement register logic
-    console.log('Register form submitted');
+    const data = new FormData(event.currentTarget);
+
+    try {
+      await authService.register(
+        data.get('username') as string,
+        data.get('password') as string,
+        data.get('email') as string
+      );
+      // If the registration was successful, redirect to the login page
+      navigate('/');
+    } catch (error) {
+      // Handle errors, e.g., display an error message from the error object
+      console.error(error);
+    }
   };
 
   return (
