@@ -69,8 +69,6 @@ export default function Register() {
       
     }
   };
-  
-  
 
   const validateForm = () => {
     let errors: FormErrors = {};
@@ -86,7 +84,6 @@ export default function Register() {
       errors.password = 'Password must be at least 6 characters';
     }
 
-    // Check email
     if (!/\S+@\S+\.\S+/.test(formValues.email)) {
       formIsValid = false;
       errors.email = 'Email must be a valid email address';

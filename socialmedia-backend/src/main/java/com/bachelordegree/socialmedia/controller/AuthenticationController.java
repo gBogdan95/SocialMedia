@@ -3,6 +3,7 @@ package com.bachelordegree.socialmedia.controller;
 import com.bachelordegree.socialmedia.dto.LoginDTO;
 import com.bachelordegree.socialmedia.dto.LoginResponseDTO;
 import com.bachelordegree.socialmedia.dto.RegistrationDTO;
+import com.bachelordegree.socialmedia.exception.CustomAuthenticationException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.User;
@@ -35,6 +36,10 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public LoginResponseDTO loginUser (@RequestBody @Valid LoginDTO loginDTO) {
-        return authenticationService.loginUser(loginDTO.getUsername(), loginDTO.getPassword());
+        try {
+            return authenticationService.loginUser(loginDTO.getUsername(), loginDTO.getPassword());
+        } catch (CustomAuthenticationException e) {
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.bachelordegree.socialmedia.service;
 
 import com.bachelordegree.socialmedia.dto.LoginResponseDTO;
+import com.bachelordegree.socialmedia.exception.CustomAuthenticationException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.Role;
 import com.bachelordegree.socialmedia.model.User;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.bachelordegree.socialmedia.exception.CustomAuthenticationException.ERR_MSG_LOGIN_FAILED;
 import static com.bachelordegree.socialmedia.exception.UserAlreadyExistsException.ERR_MSG_USER_ALREADY_EXISTS;
 
 @Service
@@ -53,18 +56,20 @@ public class AuthenticationService {
         return userRepository.save(new User(username, encodedPassword, email, authorities));
     }
 
-
-    public LoginResponseDTO loginUser(String username, String password) {
+    public LoginResponseDTO loginUser(String username, String password) throws CustomAuthenticationException {
         try {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
 
             String token = tokenService.generateJwt(auth);
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            return new LoginResponseDTO(userRepository.findByUsername(username).get(), token);
-        } catch(AuthenticationException e) {
-            return new LoginResponseDTO(null, "");
+            return new LoginResponseDTO(user, token);
+        } catch (AuthenticationException e) {
+            throw new CustomAuthenticationException(ERR_MSG_LOGIN_FAILED);
         }
     }
+
 }
