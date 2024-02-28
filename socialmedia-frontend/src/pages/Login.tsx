@@ -12,8 +12,10 @@ import { useNavigate, Link as RouterLink } from "react-router-dom";
 import useForm from "../hooks/useForm";
 import { validateLogin } from "../utils/validate";
 import { authService } from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const { values, errors, handleChange, handleSubmit, reset } = useForm({
@@ -31,7 +33,7 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const data = await authService.login(values.username, values.password);
-      localStorage.setItem("token", data.jwt);
+      login(data.jwt);
       navigate("/dashboard");
     } catch (error) {
       setGeneralError("Incorrect username or password");

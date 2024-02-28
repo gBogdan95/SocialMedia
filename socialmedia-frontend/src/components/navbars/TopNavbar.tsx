@@ -1,8 +1,16 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function TopNavbar() {
-  const isAuthenticated = false; // TODO: implement authentification logic
+  const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <AppBar position="static" sx={{ flexGrow: 1 }}>
@@ -17,19 +25,24 @@ export default function TopNavbar() {
         </Typography>
 
         {isAuthenticated ? (
-          <React.Fragment>
+          <>
+            <Button
+              color="inherit"
+              onClick={() => console.log("Notifications clicked")}
+            >
+              Notifications
+            </Button>
             <Button
               color="inherit"
               onClick={() => console.log("Messages clicked")}
             >
               Messages
             </Button>
-          </React.Fragment>
-        ) : (
-          <Button color="inherit" onClick={() => console.log("Login clicked")}>
-            Info
-          </Button>
-        )}
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
+            </Button>
+          </>
+        ) : null}
       </Toolbar>
     </AppBar>
   );
