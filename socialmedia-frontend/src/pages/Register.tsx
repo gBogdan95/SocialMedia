@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
   Container,
@@ -11,20 +11,27 @@ import {
 import useForm from "../hooks/useForm";
 import { validateRegister } from "../utils/validate";
 import { authService } from "../services/authService";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 export default function Register() {
   const navigate = useNavigate();
+  const [openDialog, setOpenDialog] = useState(false);
 
-  const { values, errors, handleChange, handleSubmit, setErrors } = useForm({
-    initialValues: {
-      username: "",
-      password: "",
-      email: "",
-    },
-    validate: (name, value) => {
-      return validateRegister[name] ? validateRegister[name](value) : "";
-    },
-  });
+  const { values, errors, handleChange, handleSubmit, setErrors, reset } =
+    useForm({
+      initialValues: {
+        username: "",
+        password: "",
+        email: "",
+      },
+      validate: (name, value) => {
+        return validateRegister[name] ? validateRegister[name](value) : "";
+      },
+    });
 
   const handleRegister = async () => {
     try {
@@ -33,7 +40,8 @@ export default function Register() {
         values.password,
         values.email
       );
-      navigate("/");
+      setOpenDialog(true);
+      reset();
     } catch (error) {
       const errorMessage =
         (error as Error).message || "An unknown error occurred";
@@ -44,6 +52,11 @@ export default function Register() {
         console.error("Registration error:", errorMessage);
       }
     }
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    navigate("/");
   };
 
   return (
@@ -114,6 +127,41 @@ export default function Register() {
           </MuiLink>
         </Typography>
       </Box>
+      <Dialog
+        open={openDialog}
+        onClose={() => {}}
+        aria-labelledby="registration-success-dialog"
+        sx={{
+          "& .MuiDialog-paper": {
+            width: "100%",
+            maxWidth: "400px",
+            mx: "auto",
+          },
+        }}
+      >
+        <DialogTitle id="registration-success-dialog">
+          Registration Complete
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You have successfully created an account.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center" }}>
+          <Button
+            onClick={handleDialogClose}
+            color="primary"
+            variant="contained"
+            size="large"
+            sx={{
+              width: "75%",
+              my: 2,
+            }}
+          >
+            LOG IN
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
