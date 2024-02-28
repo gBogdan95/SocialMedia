@@ -1,74 +1,55 @@
-import React, {useState} from 'react';
-import { Container, Typography, TextField, Button, Box, Grid, } from '@mui/material';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { authService } from '../services/authService';
+import React, { useState } from "react";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Grid,
+  Link as MuiLink,
+} from "@mui/material";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import useForm from "../hooks/useForm";
+import { validateLogin } from "../utils/validate";
+import { authService } from "../services/authService";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [formErrors, setFormErrors] = useState({ username: '', password: '' });
 
-  const validateField = (name: string, value: string) => {
-    setFormErrors(prevErrors => ({
-      ...prevErrors,
-      [name]: value.trim().length === 0 ? 'This field cannot be empty' : ''
-    }));
-  };
-  
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-    validateField(event.target.name, event.target.value);
-  };
-  
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-    validateField(event.target.name, event.target.value);
-  };
-  
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!username.trim() || !password.trim()) {
-      setFormErrors({
-        username: !username.trim() ? 'Username cannot be empty' : '',
-        password: !password.trim() ? 'Password cannot be empty' : '',
-      });
-      return;
-    }
+  const { values, errors, handleChange, handleSubmit, reset } = useForm({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validate: (name, value) => {
+      return validateLogin[name] ? validateLogin[name](value) : "";
+    },
+  });
 
-    setError('');
+  const [generalError, setGeneralError] = useState("");
+
+  const handleLogin = async () => {
     try {
-      const data = await authService.login(username, password);
-      const jwt = data.jwt;
-      localStorage.setItem('token', jwt);
-      navigate('/dashboard');
+      const data = await authService.login(values.username, values.password);
+      localStorage.setItem("token", data.jwt);
+      navigate("/dashboard");
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-        console.error('Login error:', error.message);
-      } else {
-        setError('An unexpected error occurred.');
-        console.error('Login error:', error);
-      }
+      setGeneralError("Incorrect username or password");
+      reset();
     }
   };
-
-  let errorMessage = null;
-  if (error) {
-    errorMessage = (
-      <Typography color="error" sx={{ mt: 2 }}>
-        {error}
-      </Typography>
-    );
-  }
 
   return (
     <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
       <Typography component="h1" variant="h5">
         Log In
       </Typography>
-      <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
+      <Box
+        component="form"
+        onSubmit={(e) => handleSubmit(e, handleLogin)}
+        noValidate
+        sx={{ mt: 1 }}
+      >
         <TextField
           margin="normal"
           required
@@ -78,10 +59,10 @@ export default function Login() {
           name="username"
           autoComplete="username"
           autoFocus
-          value={username}
-          onChange={handleUsernameChange}
-          error={!!formErrors.username}
-          helperText={formErrors.username}
+          value={values.username}
+          onChange={handleChange}
+          error={!!errors.username}
+          helperText={errors.username}
         />
         <TextField
           margin="normal"
@@ -92,16 +73,36 @@ export default function Login() {
           type="password"
           id="password"
           autoComplete="current-password"
-          value={password}
-          onChange={handlePasswordChange}
-          error={!!formErrors.password}
-          helperText={formErrors.password}
+          value={values.password}
+          onChange={handleChange}
+          error={!!errors.password}
+          helperText={errors.password}
         />
-        {errorMessage}
+        {generalError && (
+          <Typography color="error" sx={{ mt: 2, textAlign: "left" }}>
+            {generalError}
+          </Typography>
+        )}
         <Grid container>
           <Typography variant="body2" sx={{ mt: 2 }}>
-          Forgot your <RouterLink to="/reset-username">username</RouterLink> or <RouterLink to="/reset-password">password</RouterLink> ?
-        </Typography>
+            Forgot your{" "}
+            <MuiLink
+              component={RouterLink}
+              to="/reset-username"
+              underline="none"
+            >
+              username
+            </MuiLink>{" "}
+            or{" "}
+            <MuiLink
+              component={RouterLink}
+              to="/reset-password"
+              underline="none"
+            >
+              password
+            </MuiLink>
+            ?
+          </Typography>
         </Grid>
         <Button
           type="submit"
@@ -111,11 +112,13 @@ export default function Login() {
         >
           Sign In
         </Button>
-        <Typography variant="body1" sx={{ mt: 2, textAlign: 'center' }}>
-          You don't have an account? <RouterLink to="/register">Register</RouterLink>
+        <Typography variant="body1" sx={{ mt: 2, textAlign: "center" }}>
+          You don't have an account?{" "}
+          <MuiLink component={RouterLink} to="/register" underline="none">
+            Register
+          </MuiLink>
         </Typography>
       </Box>
     </Container>
   );
 }
-
