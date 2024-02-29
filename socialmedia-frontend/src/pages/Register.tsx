@@ -46,10 +46,10 @@ export default function Register() {
       const errorMessage =
         (error as Error).message || "An unknown error occurred";
 
+      console.error("Registration error:", errorMessage);
+
       if (errorMessage.toLowerCase().includes("this username already exists")) {
         setErrors((prevErrors) => ({ ...prevErrors, username: errorMessage }));
-      } else {
-        console.error("Registration error:", errorMessage);
       }
     }
   };

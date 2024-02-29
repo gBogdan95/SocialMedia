@@ -34,8 +34,11 @@ export default function Login() {
     try {
       const data = await authService.login(values.username, values.password);
       login(data.jwt);
-      navigate("/dashboard");
+      navigate("/explore");
     } catch (error) {
+      const errorMessage =
+        (error as Error).message || "An unknown error occurred";
+      console.error("Login error:", errorMessage);
       setGeneralError("Incorrect username or password");
       reset();
     }
