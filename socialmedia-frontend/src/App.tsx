@@ -8,6 +8,9 @@ import TopNavbar from "./components/TopNavbar";
 import Explore from "./pages/Explore";
 import Groups from "./pages/Groups";
 import CreatePost from "./pages/CreatePost";
+import People from "./pages/People";
+import Shop from "./pages/Shop";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
             <Route path="explore" element={<Explore />} />
             <Route path="groups" element={<Groups />} />
             <Route path="create-post" element={<CreatePost />} />
+            <Route path="people" element={<People />} />
+            <Route path="shop" element={<Shop />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Routes>
       </BrowserRouter>
