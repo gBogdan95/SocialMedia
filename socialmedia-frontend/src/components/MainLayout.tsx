@@ -15,7 +15,8 @@ const MainLayout = () => {
         sx={{
           flexGrow: 1,
           overflowY: "auto",
-          height: "calc(100% - 64px)",
+          height: "calc(100vh - 64px)",
+          marginRight: "444px",
         }}
       >
         <Outlet />
@@ -23,13 +24,13 @@ const MainLayout = () => {
       <Box
         component="aside"
         sx={{
-          width: "440px",
+          width: "444px",
           overflowY: "auto",
-          height: "calc(100% - 64px)",
+          height: "calc(100vh - 64px)",
           position: "fixed",
           right: 0,
           top: "64px",
-          backgroundColor: "#D4F1F4",
+          backgroundColor: "#D3D3D3",
         }}
       >
         {RightSideContent}

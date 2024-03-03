@@ -60,7 +60,7 @@ export default function Register() {
   };
 
   return (
-    <Container component="main" maxWidth="xs" sx={{ mt: 8 }}>
+    <Container component="main" maxWidth="xs" sx={{ mt: 30 }}>
       <Typography component="h1" variant="h5">
         Register
       </Typography>

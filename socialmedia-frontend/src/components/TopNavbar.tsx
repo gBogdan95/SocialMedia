@@ -21,8 +21,8 @@ export default function TopNavbar() {
     buttonId: string,
     contentComponent: ReactElement
   ) => {
-    setActiveButton(buttonId); // Update the active button state
-    setContent(contentComponent); // Update the content in the right-side panel
+    setActiveButton(buttonId);
+    setContent(contentComponent);
   };
 
   const handleLogout = () => {
@@ -32,16 +32,16 @@ export default function TopNavbar() {
 
   const { setContent } = useRightContent();
 
-  const handleRightContentChange = (component: ReactElement) => {
-    setContent(component);
-  };
-
   return (
     <AppBar
       position="fixed"
-      sx={{ flexGrow: 1, zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      sx={{
+        width: "100%",
+        flexGrow: 1,
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+      }}
     >
-      <Toolbar>
+      <Toolbar disableGutters sx={{ width: "100%", padding: 0 }}>
         <img
           src={logo}
           alt="Logo"
@@ -76,19 +76,21 @@ export default function TopNavbar() {
                 startIcon={<AccountCircleIcon />}
                 sx={{
                   textTransform: "none",
+                  height: "100%",
+                  minHeight: "64px",
                   backgroundColor:
-                    activeButton === "myProfile" ? "red" : "inherit",
+                    activeButton === "myProfile" ? "blue" : "inherit",
                   "&:hover": {
-                    backgroundColor: "red !important",
+                    backgroundColor: "lightblue !important",
                   },
                   "&:focus": {
                     backgroundColor:
-                      activeButton === "myProfile" ? "red" : "inherit",
+                      activeButton === "myProfile" ? "blue" : "inherit",
                     outline: "none",
                   },
                   "&:active": {
                     backgroundColor:
-                      activeButton === "myProfile" ? "red" : "inherit",
+                      activeButton === "myProfile" ? "blue" : "inherit",
                   },
                 }}
               >
@@ -102,19 +104,21 @@ export default function TopNavbar() {
                 startIcon={<NotificationsIcon />}
                 sx={{
                   textTransform: "none",
+                  height: "100%",
+                  minHeight: "64px",
                   backgroundColor:
-                    activeButton === "notifications" ? "red" : "inherit",
+                    activeButton === "notifications" ? "blue" : "inherit",
                   "&:hover": {
-                    backgroundColor: "red !important",
+                    backgroundColor: "lightblue !important",
                   },
                   "&:focus": {
                     backgroundColor:
-                      activeButton === "notifications" ? "red" : "inherit",
+                      activeButton === "notifications" ? "blue" : "inherit",
                     outline: "none",
                   },
                   "&:active": {
                     backgroundColor:
-                      activeButton === "notifications" ? "red" : "inherit",
+                      activeButton === "notifications" ? "blue" : "inherit",
                   },
                 }}
               >
@@ -126,19 +130,21 @@ export default function TopNavbar() {
                 startIcon={<EmailIcon />}
                 sx={{
                   textTransform: "none",
+                  height: "100%",
+                  minHeight: "64px",
                   backgroundColor:
-                    activeButton === "messages" ? "red" : "inherit",
+                    activeButton === "messages" ? "blue" : "inherit",
                   "&:hover": {
-                    backgroundColor: "red !important",
+                    backgroundColor: "lightblue !important",
                   },
                   "&:focus": {
                     backgroundColor:
-                      activeButton === "messages" ? "red" : "inherit",
+                      activeButton === "messages" ? "blue" : "inherit",
                     outline: "none",
                   },
                   "&:active": {
                     backgroundColor:
-                      activeButton === "messages" ? "red" : "inherit",
+                      activeButton === "messages" ? "blue" : "inherit",
                   },
                 }}
               >
@@ -148,7 +154,15 @@ export default function TopNavbar() {
                 color="inherit"
                 onClick={handleLogout}
                 startIcon={<LogoutIcon />}
-                sx={{ textTransform: "none" }}
+                sx={{
+                  textTransform: "none",
+                  height: "100%",
+                  minHeight: "64px",
+                  minWidth: "110px",
+                  "&:hover": {
+                    backgroundColor: "lightblue !important",
+                  },
+                }}
               >
                 Logout
               </Button>
