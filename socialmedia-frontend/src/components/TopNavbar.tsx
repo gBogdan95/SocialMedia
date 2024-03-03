@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { AppBar, Toolbar, Button, Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -7,6 +7,10 @@ import EmailIcon from "@mui/icons-material/Email";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import logo from "../assets/logo.png";
+import { useRightContent } from "../contexts/RightContentContext";
+import MyProfile from "../pages/MyProfile";
+import Notifications from "../pages/Notifications";
+import Messages from "../pages/Messages";
 
 export default function TopNavbar() {
   const navigate = useNavigate();
@@ -17,9 +21,15 @@ export default function TopNavbar() {
     navigate("/");
   };
 
+  const { setContent } = useRightContent();
+
+  const handleRightContentChange = (component: ReactElement) => {
+    setContent(component);
+  };
+
   return (
     <AppBar
-      position="static"
+      position="fixed"
       sx={{ flexGrow: 1, zIndex: (theme) => theme.zIndex.drawer + 1 }}
     >
       <Toolbar>
@@ -53,7 +63,7 @@ export default function TopNavbar() {
             <>
               <Button
                 color="inherit"
-                onClick={() => console.log("Notifications clicked")}
+                onClick={() => handleRightContentChange(<MyProfile />)}
                 startIcon={<AccountCircleIcon />}
                 sx={{ textTransform: "none" }}
               >
@@ -61,7 +71,7 @@ export default function TopNavbar() {
               </Button>
               <Button
                 color="inherit"
-                onClick={() => console.log("Notifications clicked")}
+                onClick={() => handleRightContentChange(<Notifications />)}
                 startIcon={<NotificationsIcon />}
                 sx={{ textTransform: "none" }}
               >
@@ -69,7 +79,7 @@ export default function TopNavbar() {
               </Button>
               <Button
                 color="inherit"
-                onClick={() => console.log("Messages clicked")}
+                onClick={() => handleRightContentChange(<Messages />)}
                 startIcon={<EmailIcon />}
                 sx={{ textTransform: "none" }}
               >
