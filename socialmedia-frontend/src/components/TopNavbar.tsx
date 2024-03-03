@@ -18,7 +18,10 @@ export default function TopNavbar() {
   };
 
   return (
-    <AppBar position="static" sx={{ flexGrow: 1 }}>
+    <AppBar
+      position="static"
+      sx={{ flexGrow: 1, zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    >
       <Toolbar>
         <img
           src={logo}

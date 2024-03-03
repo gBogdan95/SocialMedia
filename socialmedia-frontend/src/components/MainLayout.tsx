@@ -5,9 +5,16 @@ import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {
   return (
-    <Box display="flex">
+    <Box display="flex" height="100vh">
+      {" "}
       <LeftNavbar />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          overflowY: "auto",
+        }}
+      >
         <Outlet />
       </Box>
     </Box>
