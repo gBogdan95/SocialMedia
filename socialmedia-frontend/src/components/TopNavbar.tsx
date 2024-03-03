@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { AppBar, Toolbar, Button, Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -15,6 +15,15 @@ import Messages from "../pages/Messages";
 export default function TopNavbar() {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
+  const [activeButton, setActiveButton] = useState<string | null>(null);
+
+  const handleButtonClick = (
+    buttonId: string,
+    contentComponent: ReactElement
+  ) => {
+    setActiveButton(buttonId); // Update the active button state
+    setContent(contentComponent); // Update the content in the right-side panel
+  };
 
   const handleLogout = () => {
     logout();
@@ -63,25 +72,75 @@ export default function TopNavbar() {
             <>
               <Button
                 color="inherit"
-                onClick={() => handleRightContentChange(<MyProfile />)}
+                onClick={() => handleButtonClick("myProfile", <MyProfile />)}
                 startIcon={<AccountCircleIcon />}
-                sx={{ textTransform: "none" }}
+                sx={{
+                  textTransform: "none",
+                  backgroundColor:
+                    activeButton === "myProfile" ? "red" : "inherit",
+                  "&:hover": {
+                    backgroundColor: "red !important",
+                  },
+                  "&:focus": {
+                    backgroundColor:
+                      activeButton === "myProfile" ? "red" : "inherit",
+                    outline: "none",
+                  },
+                  "&:active": {
+                    backgroundColor:
+                      activeButton === "myProfile" ? "red" : "inherit",
+                  },
+                }}
               >
                 My Profile
               </Button>
               <Button
                 color="inherit"
-                onClick={() => handleRightContentChange(<Notifications />)}
+                onClick={() =>
+                  handleButtonClick("notifications", <Notifications />)
+                }
                 startIcon={<NotificationsIcon />}
-                sx={{ textTransform: "none" }}
+                sx={{
+                  textTransform: "none",
+                  backgroundColor:
+                    activeButton === "notifications" ? "red" : "inherit",
+                  "&:hover": {
+                    backgroundColor: "red !important",
+                  },
+                  "&:focus": {
+                    backgroundColor:
+                      activeButton === "notifications" ? "red" : "inherit",
+                    outline: "none",
+                  },
+                  "&:active": {
+                    backgroundColor:
+                      activeButton === "notifications" ? "red" : "inherit",
+                  },
+                }}
               >
                 Notifications
               </Button>
               <Button
                 color="inherit"
-                onClick={() => handleRightContentChange(<Messages />)}
+                onClick={() => handleButtonClick("messages", <Messages />)}
                 startIcon={<EmailIcon />}
-                sx={{ textTransform: "none" }}
+                sx={{
+                  textTransform: "none",
+                  backgroundColor:
+                    activeButton === "messages" ? "red" : "inherit",
+                  "&:hover": {
+                    backgroundColor: "red !important",
+                  },
+                  "&:focus": {
+                    backgroundColor:
+                      activeButton === "messages" ? "red" : "inherit",
+                    outline: "none",
+                  },
+                  "&:active": {
+                    backgroundColor:
+                      activeButton === "messages" ? "red" : "inherit",
+                  },
+                }}
               >
                 Messages
               </Button>
