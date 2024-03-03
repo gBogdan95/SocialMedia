@@ -4,11 +4,15 @@ import React, {
   useState,
   ReactNode,
   ReactElement,
+  useEffect,
 } from "react";
+import MyProfile from "../pages/MyProfile";
+import Notifications from "../pages/Notifications";
+import Messages from "../pages/Messages";
 
 interface RightContentContextType {
   content: ReactElement | null;
-  setContent: (component: ReactElement) => void;
+  setContent: (component: ReactElement, identifier: string) => void;
 }
 
 const RightContentContext = createContext<RightContentContextType>({
@@ -22,13 +26,39 @@ interface RightContentProviderProps {
   children: ReactNode;
 }
 
+const defaultContentMap: { [key: string]: ReactElement } = {
+  myProfile: <MyProfile />,
+  notifications: <Notifications />,
+  messages: <Messages />,
+};
+
 export const RightContentProvider: React.FC<RightContentProviderProps> = ({
   children,
 }) => {
   const [content, setContent] = useState<ReactElement | null>(null);
 
+  useEffect(() => {
+    const defaultContentId =
+      localStorage.getItem("defaultRightContent") || "myProfile";
+    const defaultContent =
+      defaultContentMap[defaultContentId as keyof typeof defaultContentMap];
+    if (defaultContent) {
+      setContent(defaultContent);
+    }
+  }, []);
+
+  const setAndPersistContent = (
+    component: ReactElement,
+    identifier: string
+  ) => {
+    setContent(component);
+    localStorage.setItem("defaultRightContent", identifier);
+  };
+
   return (
-    <RightContentContext.Provider value={{ content, setContent }}>
+    <RightContentContext.Provider
+      value={{ content, setContent: setAndPersistContent }}
+    >
       {children}
     </RightContentContext.Provider>
   );

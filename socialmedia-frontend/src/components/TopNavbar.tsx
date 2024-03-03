@@ -15,22 +15,28 @@ import Messages from "../pages/Messages";
 export default function TopNavbar() {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
-  const [activeButton, setActiveButton] = useState<string | null>(null);
+  const initialActiveButton =
+    localStorage.getItem("defaultRightContent") || "myProfile";
+  const [activeButton, setActiveButton] = useState<string | null>(
+    initialActiveButton
+  );
+
+  const { setContent } = useRightContent();
 
   const handleButtonClick = (
     buttonId: string,
     contentComponent: ReactElement
   ) => {
     setActiveButton(buttonId);
-    setContent(contentComponent);
+    setContent(contentComponent, buttonId);
   };
 
   const handleLogout = () => {
+    localStorage.setItem("defaultRightContent", "myProfile");
+    setActiveButton("myProfile");
     logout();
     navigate("/");
   };
-
-  const { setContent } = useRightContent();
 
   return (
     <AppBar
