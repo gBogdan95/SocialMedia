@@ -8,12 +8,14 @@ const MyProfile = () => {
   return (
     <Box
       display="flex"
+      flexDirection="column"
       alignItems="center"
       justifyContent="center"
       height="100%"
       width="100%"
     >
       <h3>Username: {user?.username}</h3>
+      <h3>Email: {user?.email}</h3>
     </Box>
   );
 };

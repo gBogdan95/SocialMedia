@@ -8,8 +8,8 @@ import React, {
 
 export interface AuthContextType {
   isAuthenticated: boolean;
-  user: { username: string } | null;
-  login: (token: string, user: { username: string }) => void;
+  user: any | null;
+  login: (token: string, user: any) => void;
   logout: () => void;
 }
 
@@ -29,12 +29,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.setItem("isAuthenticated", isAuthenticated.toString());
   }, [isAuthenticated]);
 
-  const [user, setUser] = useState<{ username: string } | null>(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  const [user, setUser] = useState<{ username: string; email: string } | null>(
+    () => {
+      const storedUser = localStorage.getItem("user");
+      return storedUser ? JSON.parse(storedUser) : null;
+    }
+  );
 
-  const login = (token: string, userDetails: { username: string }) => {
+  const login = (token: string, userDetails: any) => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(userDetails));
     setIsAuthenticated(true);
