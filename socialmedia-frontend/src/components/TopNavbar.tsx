@@ -85,18 +85,18 @@ export default function TopNavbar() {
                   height: "100%",
                   minHeight: "64px",
                   backgroundColor:
-                    activeButton === "myProfile" ? "blue" : "inherit",
+                    activeButton === "myProfile" ? "#1450A3" : "#inherit",
                   "&:hover": {
-                    backgroundColor: "lightblue !important",
+                    backgroundColor: "#1450A3",
                   },
                   "&:focus": {
                     backgroundColor:
-                      activeButton === "myProfile" ? "blue" : "inherit",
+                      activeButton === "myProfile" ? "#1450A3" : "#inherit",
                     outline: "none",
                   },
                   "&:active": {
                     backgroundColor:
-                      activeButton === "myProfile" ? "blue" : "inherit",
+                      activeButton === "myProfile" ? "#1450A3" : "#inherit",
                   },
                 }}
               >
@@ -113,18 +113,18 @@ export default function TopNavbar() {
                   height: "100%",
                   minHeight: "64px",
                   backgroundColor:
-                    activeButton === "notifications" ? "blue" : "inherit",
+                    activeButton === "notifications" ? "#1450A3" : "inherit",
                   "&:hover": {
-                    backgroundColor: "lightblue !important",
+                    backgroundColor: "#1450A3",
                   },
                   "&:focus": {
                     backgroundColor:
-                      activeButton === "notifications" ? "blue" : "inherit",
+                      activeButton === "notifications" ? "#1450A3" : "inherit",
                     outline: "none",
                   },
                   "&:active": {
                     backgroundColor:
-                      activeButton === "notifications" ? "blue" : "inherit",
+                      activeButton === "notifications" ? "#1450A3" : "inherit",
                   },
                 }}
               >
@@ -139,18 +139,18 @@ export default function TopNavbar() {
                   height: "100%",
                   minHeight: "64px",
                   backgroundColor:
-                    activeButton === "messages" ? "blue" : "inherit",
+                    activeButton === "messages" ? "#1450A3" : "inherit",
                   "&:hover": {
-                    backgroundColor: "lightblue !important",
+                    backgroundColor: "#1450A3",
                   },
                   "&:focus": {
                     backgroundColor:
-                      activeButton === "messages" ? "blue" : "inherit",
+                      activeButton === "messages" ? "#1450A3" : "inherit",
                     outline: "none",
                   },
                   "&:active": {
                     backgroundColor:
-                      activeButton === "messages" ? "blue" : "inherit",
+                      activeButton === "messages" ? "#1450A3" : "inherit",
                   },
                 }}
               >

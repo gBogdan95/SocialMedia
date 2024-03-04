@@ -107,10 +107,10 @@ const LeftNavbar = () => {
               fontSize: "1.5em",
               borderRadius: "10px",
               marginTop: index === 0 ? "10%" : "70px",
-              backgroundColor: isActive(button.path) ? "#2979ff" : "#40A2D8",
+              backgroundColor: isActive(button.path) ? "#1450A3" : "#40A2D8",
               color: "white",
               "&:hover": {
-                backgroundColor: isActive(button.path) ? "#1565C0" : "#2979ff",
+                backgroundColor: isActive(button.path) ? "#1450A3" : "#1450A3",
               },
               boxShadow: "none",
             }}
