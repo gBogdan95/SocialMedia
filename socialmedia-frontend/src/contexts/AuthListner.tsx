@@ -1,10 +1,18 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import { useAuth, AuthContextType } from "./AuthContext";
 
 const AuthListener: React.FC = () => {
-  const { logout, isAuthenticated } = useAuth();
+  const { logout, isAuthenticated } = useAuth() as AuthContextType;
   const location = useLocation();
+
+  useEffect(() => {
+    const storedAuth = localStorage.getItem("isAuthenticated");
+    if (storedAuth === "true") {
+    }
+
+    return () => {};
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (
@@ -14,7 +22,6 @@ const AuthListener: React.FC = () => {
       logout();
     }
   }, [location, logout, isAuthenticated]);
-
   return null;
 };
 
