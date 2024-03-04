@@ -12,7 +12,7 @@ import People from "./pages/People";
 import Shop from "./pages/Shop";
 import Settings from "./pages/Settings";
 import { RightContentProvider } from "./contexts/RightContentContext";
-import AuthListener from "./contexts/AuthListner";
+import AuthListener from "./components/AuthListner";
 
 function App() {
   return (
