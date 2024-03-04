@@ -10,7 +10,7 @@ const Settings = () => {
       height="100%"
       width="100%"
     >
-      <h3>SETTINGS PAGE</h3>
+      <h1>SETTINGS PAGE</h1>
     </Box>
   );
 };

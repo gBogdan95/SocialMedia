@@ -10,7 +10,7 @@ const People = () => {
       height="100%"
       width="100%"
     >
-      <h3>PEOPLE PAGE</h3>
+      <h1>PEOPLE PAGE</h1>
     </Box>
   );
 };

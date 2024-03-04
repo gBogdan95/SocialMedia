@@ -10,7 +10,7 @@ const Shop = () => {
       height="100%"
       width="100%"
     >
-      <h3>SHOP PAGE</h3>
+      <h1>SHOP PAGE</h1>
     </Box>
   );
 };

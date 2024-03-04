@@ -10,7 +10,7 @@ const Explore = () => {
       height="100%"
       width="100%"
     >
-      <h3>EXPLORE PAGE</h3>
+      <h1>EXPLORE PAGE</h1>
     </Box>
   );
 };

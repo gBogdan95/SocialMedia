@@ -10,7 +10,7 @@ const Groups = () => {
       height="100%"
       width="100%"
     >
-      <h3>GROUPS PAGE</h3>
+      <h1>GROUPS PAGE</h1>
     </Box>
   );
 };
