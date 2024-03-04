@@ -34,7 +34,7 @@ export default function Login() {
     try {
       const data = await authService.login(values.username, values.password);
       login(data.jwt);
-      navigate("/explore");
+      navigate("/explore", { replace: true });
     } catch (error) {
       const errorMessage =
         (error as Error).message || "An unknown error occurred";
