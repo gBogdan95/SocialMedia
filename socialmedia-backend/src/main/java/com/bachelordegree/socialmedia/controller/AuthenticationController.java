@@ -3,6 +3,7 @@ package com.bachelordegree.socialmedia.controller;
 import com.bachelordegree.socialmedia.dto.LoginDTO;
 import com.bachelordegree.socialmedia.dto.LoginResponseDTO;
 import com.bachelordegree.socialmedia.dto.RegistrationDTO;
+import com.bachelordegree.socialmedia.dto.RegistrationResponseDTO;
 import com.bachelordegree.socialmedia.exception.CustomAuthenticationException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
@@ -26,9 +27,10 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody @Valid RegistrationDTO registrationDTO) {
+    public RegistrationResponseDTO registerUser(@RequestBody @Valid RegistrationDTO registrationDTO) {
         try {
-            return authenticationService.registerUser(registrationDTO.getUsername(), registrationDTO.getPassword(), registrationDTO.getEmail());
+            User user = authenticationService.registerUser(registrationDTO.getUsername(), registrationDTO.getPassword(), registrationDTO.getEmail());
+            return new RegistrationResponseDTO(user.getId(), user.getUsername(), user.getEmail());
         } catch (UserAlreadyExistsException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

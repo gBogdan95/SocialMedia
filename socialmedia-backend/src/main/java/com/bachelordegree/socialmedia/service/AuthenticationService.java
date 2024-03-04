@@ -1,6 +1,7 @@
 package com.bachelordegree.socialmedia.service;
 
 import com.bachelordegree.socialmedia.dto.LoginResponseDTO;
+import com.bachelordegree.socialmedia.dto.UserDTO;
 import com.bachelordegree.socialmedia.exception.CustomAuthenticationException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.Role;
@@ -66,7 +67,8 @@ public class AuthenticationService {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            return new LoginResponseDTO(user, token);
+            UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getAuthorities());
+            return new LoginResponseDTO(userDTO, token);
         } catch (AuthenticationException e) {
             throw new CustomAuthenticationException(ERR_MSG_LOGIN_FAILED);
         }

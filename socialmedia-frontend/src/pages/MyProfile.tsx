@@ -1,7 +1,10 @@
 import React from "react";
 import Box from "@mui/material/Box";
+import { useAuth } from "../contexts/AuthContext";
 
 const MyProfile = () => {
+  const { user } = useAuth();
+
   return (
     <Box
       display="flex"
@@ -10,7 +13,7 @@ const MyProfile = () => {
       height="100%"
       width="100%"
     >
-      <h3>MY PROFILE PAGE</h3>
+      <h3>Username: {user?.username}</h3>
     </Box>
   );
 };

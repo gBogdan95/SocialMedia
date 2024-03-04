@@ -8,7 +8,8 @@ import React, {
 
 export interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  user: { username: string } | null;
+  login: (token: string, user: { username: string }) => void;
   logout: () => void;
 }
 
@@ -28,18 +29,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.setItem("isAuthenticated", isAuthenticated.toString());
   }, [isAuthenticated]);
 
-  const login = (token: string) => {
+  const [user, setUser] = useState<{ username: string } | null>(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
+  const login = (token: string, userDetails: { username: string }) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userDetails));
     setIsAuthenticated(true);
+    setUser(userDetails);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setIsAuthenticated(false);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

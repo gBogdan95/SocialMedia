@@ -33,7 +33,7 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const data = await authService.login(values.username, values.password);
-      login(data.jwt);
+      login(data.jwt, data.user);
       navigate("/explore", { replace: true });
     } catch (error) {
       const errorMessage =
