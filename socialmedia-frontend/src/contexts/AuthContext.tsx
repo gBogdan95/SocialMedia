@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
+import { useLocation } from "react-router-dom";
 
 interface AuthContextType {
   isAuthenticated: boolean;

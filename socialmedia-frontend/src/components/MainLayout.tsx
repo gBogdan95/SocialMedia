@@ -2,10 +2,16 @@ import React from "react";
 import { Box } from "@mui/material";
 import LeftNavbar from "./LeftNavbar";
 import { useRightContent } from "../contexts/RightContentContext";
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const MainLayout = () => {
   const { content: RightSideContent } = useRightContent();
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <Box sx={{ display: "flex", height: "100vh", paddingTop: "64px" }}>
