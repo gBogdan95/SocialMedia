@@ -20,6 +20,7 @@ public class PostConverter {
         postDTO.setId(post.getId());
         postDTO.setText(post.getText());
         postDTO.setLikes(post.getLikes());
+        postDTO.setUserId(post.getUser().getId());
 
         return postDTO;
     }

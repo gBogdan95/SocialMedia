@@ -46,6 +46,14 @@ public class User implements UserDetails {
     )
     private Set<Role> authorities;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Post> posts = new HashSet<>();
+
+    public void addPost(Post post) {
+        posts.add(post);
+        post.setUser(this);
+    }
+
     public User() {
         super();
         this.authorities = new HashSet<>();

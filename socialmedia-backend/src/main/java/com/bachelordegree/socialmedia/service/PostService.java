@@ -1,8 +1,13 @@
 package com.bachelordegree.socialmedia.service;
 
+import com.bachelordegree.socialmedia.dto.PostDTO;
 import com.bachelordegree.socialmedia.exception.PostNotFoundException;
 import com.bachelordegree.socialmedia.model.Post;
+import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.repository.PostRepository;
+import com.bachelordegree.socialmedia.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +22,8 @@ import static com.bachelordegree.socialmedia.exception.PostNotFoundException.ERR
 public class PostService {
 
     private final PostRepository postRepository;
+    @Autowired
+    private UserRepository userRepository;
     public List<Post> getAll() {
         return postRepository.findAll();
     }
@@ -26,7 +33,11 @@ public class PostService {
                 .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
     }
 
-    public Post save(Post post) {
+    public Post save(Post post, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        post.setUser(user);
         return postRepository.save(post);
     }
 

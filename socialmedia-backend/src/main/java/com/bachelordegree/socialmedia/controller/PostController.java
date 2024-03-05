@@ -5,12 +5,21 @@ import com.bachelordegree.socialmedia.dto.PostDTO;
 import com.bachelordegree.socialmedia.exception.PostNotFoundException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.Post;
+import com.bachelordegree.socialmedia.model.User;
+import com.bachelordegree.socialmedia.repository.UserRepository;
 import com.bachelordegree.socialmedia.service.PostService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +31,7 @@ public class PostController {
 
     private final PostService postService;
     private final PostConverter postConverter;
+    private final UserRepository userRepository;
 
     @GetMapping
     public List<PostDTO> getAll() {
@@ -41,11 +51,19 @@ public class PostController {
     }
 
     @PostMapping
-    public PostDTO createPost(@RequestBody PostDTO postDTO) {
-        Post post = postConverter.toEntity(postDTO);
-        post = postService.save(post);
-        return postConverter.toDTO(post);
+    public PostDTO createPost(@Valid @RequestBody PostDTO postDTO, Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            Post post = postConverter.toEntity(postDTO);
+            post = postService.save(post, username);
+            return postConverter.toDTO(post);
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating post: " + e.getMessage());
+        }
     }
+
 
     @PutMapping("/{id}")
     public PostDTO update(@PathVariable @NotNull UUID id, @RequestBody PostDTO postDTO) {

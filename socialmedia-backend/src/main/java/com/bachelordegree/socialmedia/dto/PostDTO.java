@@ -11,11 +11,12 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PostDTO {
 
-    @NotNull
     private UUID id;
 
     @NotBlank
     private String text;
 
     private int likes;
+
+    private UUID userId;
 }
