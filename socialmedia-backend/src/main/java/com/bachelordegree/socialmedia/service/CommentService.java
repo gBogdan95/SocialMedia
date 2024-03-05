@@ -80,25 +80,4 @@ public class CommentService {
 
         commentRepository.save(comment);
     }
-
-    @Transactional
-    public void dislikeComment(UUID id) throws CommentNotFoundException {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new CommentNotFoundException(ERR_MSG_COMMENT_NOT_FOUND));
-
-        comment.setDislikes(comment.getDislikes() + 1);
-
-        commentRepository.save(comment);
-    }
-
-    @Transactional
-    public void removeDislikeComment(UUID id) throws CommentNotFoundException {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new CommentNotFoundException(ERR_MSG_COMMENT_NOT_FOUND));
-
-        int currentDislikes = comment.getDislikes();
-        comment.setDislikes(Math.max(0, currentDislikes - 1));
-
-        commentRepository.save(comment);
-    }
 }

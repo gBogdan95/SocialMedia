@@ -11,7 +11,6 @@ public class PostConverter {
         Post post = new Post();
         post.setText(postDTO.getText());
         post.setLikes(postDTO.getLikes());
-        post.setDislikes(postDTO.getDislikes());
 
         return post;
     }
@@ -21,7 +20,6 @@ public class PostConverter {
         postDTO.setId(post.getId());
         postDTO.setText(post.getText());
         postDTO.setLikes(post.getLikes());
-        postDTO.setDislikes(post.getDislikes());
 
         return postDTO;
     }

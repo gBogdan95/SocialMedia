@@ -12,7 +12,6 @@ public class CommentConverter {
         Comment comment = new Comment();
         comment.setText(commentDTO.getText());
         comment.setLikes(commentDTO.getLikes());
-        comment.setDislikes(commentDTO.getDislikes());
 
         return comment;
     }
@@ -22,7 +21,6 @@ public class CommentConverter {
         commentDTO.setId(comment.getId());
         commentDTO.setText(comment.getText());
         commentDTO.setLikes(comment.getLikes());
-        commentDTO.setDislikes(comment.getDislikes());
 
         return commentDTO;
     }

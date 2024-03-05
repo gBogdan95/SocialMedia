@@ -88,26 +88,4 @@ public class PostController {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
-    @PostMapping("/{id}/dislike")
-    public PostDTO dislike(@PathVariable UUID id) {
-        try {
-            postService.dislikePost(id);
-            Post post = postService.getById(id);
-            return postConverter.toDTO(post);
-        } catch (PostNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    @PostMapping("/{id}/remove-dislike")
-    public PostDTO removeDislike(@PathVariable UUID id) {
-        try {
-            postService.removeDislikePost(id);
-            Post post = postService.getById(id);
-            return postConverter.toDTO(post);
-        } catch (PostNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
 }

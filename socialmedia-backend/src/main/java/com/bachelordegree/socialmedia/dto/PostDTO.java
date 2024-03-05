@@ -18,6 +18,4 @@ public class PostDTO {
     private String text;
 
     private int likes;
-
-    private int dislikes;
 }

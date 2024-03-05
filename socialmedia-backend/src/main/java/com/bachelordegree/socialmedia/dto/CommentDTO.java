@@ -19,5 +19,4 @@ public class CommentDTO {
 
     private int likes;
 
-    private int dislikes;
 }

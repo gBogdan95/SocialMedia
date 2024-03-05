@@ -26,9 +26,6 @@ public class Reply {
     @Column(name = "likes", nullable = false)
     private int likes;
 
-    @Column(name = "dislikes", nullable = false)
-    private int dislikes;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;

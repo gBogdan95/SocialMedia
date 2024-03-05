@@ -63,23 +63,4 @@ public class PostService {
         post.setLikes(Math.max(0, currentLikes - 1));
         postRepository.save(post);
     }
-
-    @Transactional
-    public void dislikePost(UUID id) throws PostNotFoundException {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
-
-        post.setDislikes(post.getDislikes() + 1);
-        postRepository.save(post);
-    }
-
-    @Transactional
-    public void removeDislikePost(UUID id) throws PostNotFoundException {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
-
-        int currentDislikes = post.getDislikes();
-        post.setDislikes(Math.max(0, currentDislikes - 1));
-        postRepository.save(post);
-    }
 }

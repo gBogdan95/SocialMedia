@@ -18,6 +18,4 @@ public class ReplyDTO {
     private String text;
 
     private int likes;
-
-    private int dislikes;
 }

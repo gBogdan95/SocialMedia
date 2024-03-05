@@ -26,9 +26,6 @@ public class Post {
     @Column(name = "likes", nullable = false)
     private int likes;
 
-    @Column(name = "dislikes", nullable = false)
-    private int dislikes;
-
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 }

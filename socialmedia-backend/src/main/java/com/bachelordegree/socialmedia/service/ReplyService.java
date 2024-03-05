@@ -80,25 +80,4 @@ public class ReplyService {
 
         replyRepository.save(reply);
     }
-
-    @Transactional
-    public void dislikeReply(UUID id) throws ReplyNotFoundException {
-        Reply reply = replyRepository.findById(id)
-                .orElseThrow(() -> new ReplyNotFoundException(ERR_MSG_REPLY_NOT_FOUND));
-
-        reply.setDislikes(reply.getDislikes() + 1);
-
-        replyRepository.save(reply);
-    }
-
-    @Transactional
-    public void removeDislikeReply(UUID id) throws ReplyNotFoundException {
-        Reply reply = replyRepository.findById(id)
-                .orElseThrow(() -> new ReplyNotFoundException(ERR_MSG_REPLY_NOT_FOUND));
-
-        int currentDislikes = reply.getDislikes();
-        reply.setDislikes(Math.max(0, currentDislikes - 1));
-
-        replyRepository.save(reply);
-    }
 }

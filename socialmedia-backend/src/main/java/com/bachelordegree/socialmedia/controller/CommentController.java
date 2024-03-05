@@ -101,26 +101,4 @@ public class CommentController {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
-    @PostMapping("/{id}/dislike")
-    public CommentDTO dislike(@PathVariable UUID id) {
-        try {
-            commentService.dislikeComment(id);
-            Comment comment = commentService.getById(id);
-            return commentConverter.toDTO(comment);
-        } catch (CommentNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    @PostMapping("/{id}/remove-dislike")
-    public CommentDTO removeDislike(@PathVariable UUID id) {
-        try {
-            commentService.removeDislikeComment(id);
-            Comment comment = commentService.getById(id);
-            return commentConverter.toDTO(comment);
-        } catch (CommentNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
 }

@@ -11,7 +11,6 @@ public class ReplyConverter {
         Reply reply = new Reply();
         reply.setText(replyDTO.getText());
         reply.setLikes(replyDTO.getLikes());
-        reply.setDislikes(replyDTO.getDislikes());
 
         return reply;
     }
@@ -21,7 +20,6 @@ public class ReplyConverter {
         replyDTO.setId(reply.getId());
         replyDTO.setText(reply.getText());
         replyDTO.setLikes(reply.getLikes());
-        replyDTO.setDislikes(reply.getDislikes());
 
         return replyDTO;
     }

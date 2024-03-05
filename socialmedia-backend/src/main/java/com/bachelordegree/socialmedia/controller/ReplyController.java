@@ -102,26 +102,4 @@ public class ReplyController {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
-    @PostMapping("/{id}/dislike")
-    public ReplyDTO dislike(@PathVariable UUID id) {
-        try {
-            replyService.dislikeReply(id);
-            Reply reply = replyService.getById(id);
-            return replyConverter.toDTO(reply);
-        } catch (ReplyNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    @PostMapping("/{id}/remove-dislike")
-    public ReplyDTO removeDislike(@PathVariable UUID id) {
-        try {
-            replyService.removeDislikeReply(id);
-            Reply reply = replyService.getById(id);
-            return replyConverter.toDTO(reply);
-        } catch (ReplyNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
 }
