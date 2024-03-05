@@ -18,5 +18,5 @@ public class PostDTO {
 
     private int likes;
 
-    private UUID userId;
+    private UserDTO user;
 }
