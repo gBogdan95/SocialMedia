@@ -13,6 +13,7 @@ import Shop from "./pages/Shop";
 import Settings from "./pages/Settings";
 import { RightContentProvider } from "./contexts/RightContentContext";
 import AuthListener from "./components/AuthListner";
+import PostDetails from "./pages/PostDetails";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
 
             <Route path="/" element={<MainLayout />}>
               <Route path="explore" element={<Explore />} />
+              <Route path="post/:id" element={<PostDetails />} />
               <Route path="groups" element={<Groups />} />
               <Route path="create-post" element={<CreatePost />} />
               <Route path="people" element={<People />} />

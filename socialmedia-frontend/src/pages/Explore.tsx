@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Post, { PostType } from "../components/Post";
+import { Box, Typography } from "@mui/material";
 import { postService } from "../services/postService";
 
 const ExplorePage = () => {
@@ -19,13 +20,21 @@ const ExplorePage = () => {
   }, []);
 
   return (
-    <div>
+    <Box
+      sx={{
+        marginTop: 2.5,
+        marginRight: 2.5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       {posts.length > 0 ? (
         posts.map((post) => <Post key={post.id} post={post} />)
       ) : (
-        <p>No posts to display</p>
+        <Typography>No posts to display</Typography>
       )}
-    </div>
+    </Box>
   );
 };
 
