@@ -7,6 +7,7 @@ import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.repository.PostRepository;
 import com.bachelordegree.socialmedia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,13 +42,18 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Post update(UUID id, Post postUpdate) throws PostNotFoundException {
+    public Post update(UUID id, Post postUpdate, String username) throws PostNotFoundException, AccessDeniedException {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
+
+        if (!post.getUser().getUsername().equals(username)) {
+            throw new AccessDeniedException("User does not have permission to update this post");
+        }
 
         post.setText(postUpdate.getText());
         return postRepository.save(post);
     }
+
 
     public void delete(UUID id) throws PostNotFoundException {
         Post post = postRepository.findById(id)

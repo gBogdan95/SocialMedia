@@ -1,18 +1,32 @@
-import React from "react";
-import Box from "@mui/material/Box";
+import React, { useState, useEffect } from "react";
+import Post, { PostType } from "../components/Post";
+import { postService } from "../services/postService";
 
-const Explore = () => {
+const ExplorePage = () => {
+  const [posts, setPosts] = useState<PostType[]>([]);
+
+  useEffect(() => {
+    const fetchAndSetPosts = async () => {
+      try {
+        const data = await postService.fetchPosts();
+        setPosts(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAndSetPosts();
+  }, []);
+
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100%"
-      width="100%"
-    >
-      <h1>EXPLORE PAGE</h1>
-    </Box>
+    <div>
+      {posts.length > 0 ? (
+        posts.map((post) => <Post key={post.id} post={post} />)
+      ) : (
+        <p>No posts to display</p>
+      )}
+    </div>
   );
 };
 
-export default Explore;
+export default ExplorePage;

@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,7 +52,7 @@ public class PostController {
     }
 
     @PostMapping
-    public PostDTO createPost(@Valid @RequestBody PostDTO postDTO, Authentication authentication) {
+    public PostDTO create(@Valid @RequestBody PostDTO postDTO, Authentication authentication) {
         try {
             String username = authentication.getName();
             Post post = postConverter.toEntity(postDTO);
@@ -64,17 +65,20 @@ public class PostController {
         }
     }
 
-
     @PutMapping("/{id}")
-    public PostDTO update(@PathVariable @NotNull UUID id, @RequestBody PostDTO postDTO) {
+    public PostDTO update(@PathVariable @NotNull UUID id, @RequestBody PostDTO postDTO, Authentication authentication) {
         try {
+            String username = authentication.getName();
             Post postToUpdate = postConverter.toEntity(postDTO);
-            Post updatedPost = postService.update(id, postToUpdate);
+            Post updatedPost = postService.update(id, postToUpdate, username);
             return postConverter.toDTO(updatedPost);
         } catch (PostNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AccessDeniedException e) {
+            throw new RestException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable @NotNull UUID id) {
