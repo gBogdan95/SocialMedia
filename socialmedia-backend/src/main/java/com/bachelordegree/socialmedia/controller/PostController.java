@@ -2,6 +2,7 @@ package com.bachelordegree.socialmedia.controller;
 
 import com.bachelordegree.socialmedia.converter.PostConverter;
 import com.bachelordegree.socialmedia.dto.PostDTO;
+import com.bachelordegree.socialmedia.exception.AlreadyLikedException;
 import com.bachelordegree.socialmedia.exception.PostNotFoundException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.Post;
@@ -90,15 +91,20 @@ public class PostController {
     }
 
     @PostMapping("/{id}/like")
-    public PostDTO like(@PathVariable UUID id) {
+    public PostDTO like(@PathVariable UUID id, Authentication authentication) {
         try {
-            postService.likePost(id);
+            String username = authentication.getName();
+            postService.likePost(id, username);
             Post post = postService.getById(id);
             return postConverter.toDTO(post);
-        } catch (PostNotFoundException e) {
+        } catch (PostNotFoundException | AlreadyLikedException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error liking post: " + e.getMessage());
         }
     }
+
+
 
     @PostMapping("/{id}/remove-like")
     public PostDTO unlike(@PathVariable UUID id) {

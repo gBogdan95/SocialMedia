@@ -1,6 +1,7 @@
 package com.bachelordegree.socialmedia.service;
 
 import com.bachelordegree.socialmedia.dto.PostDTO;
+import com.bachelordegree.socialmedia.exception.AlreadyLikedException;
 import com.bachelordegree.socialmedia.exception.PostNotFoundException;
 import com.bachelordegree.socialmedia.model.Post;
 import com.bachelordegree.socialmedia.model.User;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+import static com.bachelordegree.socialmedia.exception.AlreadyLikedException.ERR_MSG_POST_ALREADY_LIKED;
 import static com.bachelordegree.socialmedia.exception.PostNotFoundException.ERR_MSG_POST_NOT_FOUND;
 
 @Service
@@ -63,12 +65,21 @@ public class PostService {
     }
 
     @Transactional
-    public void likePost(UUID id) throws PostNotFoundException {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
+    public void likePost(UUID postId, String username) throws PostNotFoundException, AlreadyLikedException {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
 
-        post.setLikes(post.getLikes() + 1);
-        postRepository.save(post);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        boolean alreadyLiked = postRepository.existsByPostIdAndUserId(postId, user.getId());
+        if (alreadyLiked) {
+            throw new AlreadyLikedException("User already liked this post");
+        } else {
+            post.getLikedByUsers().add(user);
+            post.setLikes(post.getLikes() + 1);
+            postRepository.save(post);
+        }
     }
 
     @Transactional

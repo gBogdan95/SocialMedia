@@ -1,15 +1,21 @@
 package com.bachelordegree.socialmedia.controller;
 
 import com.bachelordegree.socialmedia.converter.CommentConverter;
+import com.bachelordegree.socialmedia.converter.PostConverter;
 import com.bachelordegree.socialmedia.dto.CommentDTO;
+import com.bachelordegree.socialmedia.exception.AlreadyLikedException;
 import com.bachelordegree.socialmedia.exception.CommentNotFoundException;
 import com.bachelordegree.socialmedia.exception.PostNotFoundException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.Comment;
+import com.bachelordegree.socialmedia.model.Post;
 import com.bachelordegree.socialmedia.service.CommentService;
+import com.bachelordegree.socialmedia.service.PostService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +29,8 @@ public class CommentController {
 
     private final CommentService commentService;
     private final CommentConverter commentConverter;
+    private final PostService postService;
+    private final PostConverter postConverter;
 
     @GetMapping
     public List<CommentDTO> getAll() {
@@ -81,15 +89,17 @@ public class CommentController {
     }
 
     @PostMapping("/{id}/like")
-    public CommentDTO like(@PathVariable UUID id) {
+    public ResponseEntity<?> like(@PathVariable UUID id, Authentication authentication) {
         try {
-            commentService.likeComment(id);
-            Comment comment = commentService.getById(id);
-            return commentConverter.toDTO(comment);
-        } catch (CommentNotFoundException e) {
+            String username = authentication.getName();
+            postService.likePost(id, username);
+            Post post = postService.getById(id); // Ensure this method exists or implement it.
+            return ResponseEntity.ok(postConverter.toDTO(post));
+        } catch (PostNotFoundException | AlreadyLikedException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
 
     @PostMapping("/{id}/remove-like")
     public CommentDTO unlike(@PathVariable UUID id) {
