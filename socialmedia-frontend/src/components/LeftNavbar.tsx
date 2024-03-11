@@ -60,44 +60,37 @@ const LeftNavbar = () => {
 
   const buttons = [
     {
-      label: "CREATE",
-      path: "/create-post",
-      width: "150px",
-      height: "120px",
-      icon: <AddBoxIcon />,
-    },
-    {
       label: "EXPLORE",
       path: "/explore",
-      width: "280px",
+      width: "250px",
       height: "60px",
       icon: <SearchIcon />,
     },
     {
       label: "GROUPS",
       path: "/groups",
-      width: "280px",
+      width: "250px",
       height: "60px",
       icon: <LockIcon />,
     },
     {
       label: "PEOPLE",
       path: "/people",
-      width: "280px",
+      width: "250px",
       height: "60px",
       icon: <PeopleIcon />,
     },
     {
       label: "SHOP",
       path: "/shop",
-      width: "280px",
+      width: "250px",
       height: "60px",
       icon: <ShopIcon />,
     },
     {
       label: "SETTINGS",
       path: "/settings",
-      width: "280px",
+      width: "250px",
       height: "60px",
       icon: <SettingsIcon />,
     },
@@ -106,129 +99,161 @@ const LeftNavbar = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: 400,
-        "& .MuiDrawer-paper": {
-          width: 380,
-          boxSizing: "border-box",
-          height: "calc(100vh - 64px)",
-          backgroundImage: `url(${backgroundImage})`,
-          top: "64px",
-        },
-      }}
-    >
-      <Box
+    <>
+      <Button
+        variant="contained"
+        startIcon={<AddBoxIcon />}
+        onClick={handleOpenDialog}
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          paddingTop: "20px",
+          minWidth: "280px",
+          minHeight: "120px",
+          fontSize: "1.5em",
+          borderRadius: "50px",
+          marginTop: "120px",
+          marginLeft: "50px",
+          backgroundColor: "#40A2D8",
+          color: "white",
+          "&:hover": {
+            backgroundColor: "#1450A3",
+          },
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+          position: "fixed",
+          zIndex: 1,
         }}
       >
-        {buttons.map((button, index) => (
-          <Button
-            key={button.label}
-            variant="contained"
-            startIcon={button.icon}
-            onClick={() => {
-              if (button.label === "CREATE") {
-                handleOpenDialog();
-              } else {
-                handleNavigation(button.path);
-              }
-            }}
-            sx={{
-              minWidth: button.width,
-              minHeight: button.height,
-              fontSize: "1.5em",
-              borderRadius: "10px",
-              marginTop: index === 0 ? "10%" : "70px",
-              backgroundColor: isActive(button.path) ? "#1450A3" : "#40A2D8",
-              color: "white",
-              "&:hover": {
-                backgroundColor: isActive(button.path) ? "#1450A3" : "#1450A3",
-              },
-              boxShadow: "none",
-            }}
-          >
-            {button.label}
-          </Button>
-        ))}
-      </Box>
+        CREATE POST
+      </Button>
 
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        fullWidth
-        maxWidth="md"
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: 400,
+          "& .MuiDrawer-paper": {
+            width: 300,
+            boxSizing: "border-box",
+            height: "auto",
+            backgroundImage: `url(${backgroundImage})`,
+            margin: "310px 40px",
+            borderRadius: "20px",
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
+            overflow: "hidden",
+          },
+        }}
       >
-        <DialogTitle>Create a new post</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Write anything it's on your mind
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="post-content"
-            type="text"
-            fullWidth
-            variant="outlined"
-            multiline
-            rows={15}
-            value={postContent}
-            onChange={(e) => setPostContent(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions
+        <Box
           sx={{
-            marginBottom: "15px",
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            paddingTop: "25px",
+            paddingBottom: "40px",
           }}
         >
-          <Button
-            onClick={handleCloseDialog}
+          {buttons.map((button, index) => (
+            <Button
+              key={button.label}
+              variant="contained"
+              startIcon={button.icon}
+              onClick={() => {
+                if (button.label === "CREATE") {
+                  handleOpenDialog();
+                } else {
+                  handleNavigation(button.path);
+                }
+              }}
+              sx={{
+                minWidth: button.width,
+                minHeight: button.height,
+                fontSize: "1.5em",
+                borderRadius: "10px",
+                marginTop: index === 0 ? "5%" : "40px",
+                backgroundColor: isActive(button.path) ? "#1450A3" : "#40A2D8",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: isActive(button.path)
+                    ? "#1450A3"
+                    : "#1450A3",
+                },
+                boxShadow: "none",
+              }}
+            >
+              {button.label}
+            </Button>
+          ))}
+        </Box>
+
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          fullWidth
+          maxWidth="md"
+        >
+          <DialogTitle>Create a new post</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Write anything it's on your mind
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="post-content"
+              type="text"
+              fullWidth
+              variant="outlined"
+              multiline
+              rows={15}
+              value={postContent}
+              onChange={(e) => setPostContent(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions
             sx={{
-              fontSize: "1rem",
-              padding: "6px 16px",
-              width: "125px",
-              color: "white",
-              mr: 1,
-              backgroundColor: "#40A2D8",
-              "&:hover": {
-                backgroundColor: "#1450A3",
-              },
+              marginBottom: "15px",
             }}
           >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSavePost}
-            disabled={!postContent.trim()}
-            sx={{
-              fontSize: "1rem",
-              padding: "6px 16px",
-              width: "125px",
-              color: "white",
-              mr: 2,
-              backgroundColor: "#40A2D8",
-              "&:hover": {
-                backgroundColor: "#1450A3",
-              },
-              "&.Mui-disabled": {
-                backgroundColor: "lightgray",
-                color: "gray",
-              },
-            }}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Drawer>
+            <Button
+              onClick={handleCloseDialog}
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 1,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSavePost}
+              disabled={!postContent.trim()}
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 2,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+                "&.Mui-disabled": {
+                  backgroundColor: "lightgray",
+                  color: "gray",
+                },
+              }}
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Drawer>
+    </>
   );
 };
 
