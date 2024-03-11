@@ -18,6 +18,8 @@ public class PostDTO {
 
     private int likes;
 
+    private int totalComments;
+
     private UserDTO user;
 
     private boolean isLiked;

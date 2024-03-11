@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { postService } from "../services/postService";
 
 export interface PostType {
@@ -10,6 +11,7 @@ export interface PostType {
   text: string;
   likes: number;
   liked: boolean;
+  totalComments: number;
 }
 
 interface PostProps {
@@ -26,7 +28,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
     setLiked(post.liked);
   }, [post.liked]);
 
-  const handlePostClick = () => {
+  const handleClick = () => {
     navigate(`/post/${post.id}`);
   };
 
@@ -53,6 +55,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
     <Box
       sx={{
         maxWidth: "100%",
+        minWidth: "1005px",
         wordBreak: "break-word",
         marginBottom: 2,
         padding: 2,
@@ -71,7 +74,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
       <Typography
         variant="body1"
         component="p"
-        onClick={handlePostClick}
+        onClick={handleClick}
         sx={{ mb: 2, cursor: "pointer" }}
       >
         {post.text}
@@ -99,8 +102,25 @@ const Post: React.FC<PostProps> = ({ post }) => {
             color={liked ? "primary" : "action"}
             sx={{ fontSize: "28px" }}
           />
-          <Typography variant="body2" sx={{ marginLeft: 0.5 }}>
+          <Typography variant="body2" sx={{ marginLeft: 0.5, fontSize: 20 }}>
             {likes}
+          </Typography>
+        </IconButton>
+        <IconButton
+          aria-label="comment on post"
+          onClick={handleClick}
+          sx={{
+            mr: 1,
+            borderRadius: "15px",
+            padding: "12px",
+            "&:hover": {
+              backgroundColor: "lightblue",
+            },
+          }}
+        >
+          <ChatBubbleIcon sx={{ fontSize: "28px" }} />
+          <Typography variant="body2" sx={{ marginLeft: 0.5, fontSize: 20 }}>
+            {post.totalComments}
           </Typography>
         </IconButton>
       </Box>

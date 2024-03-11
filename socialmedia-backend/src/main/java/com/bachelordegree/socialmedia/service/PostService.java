@@ -9,6 +9,7 @@ import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.repository.PostRepository;
 import com.bachelordegree.socialmedia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,9 @@ public class PostService {
     private final PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
+
     public List<Post> getAll() {
-        return postRepository.findAll();
+        return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public Post getById(UUID id) throws PostNotFoundException {

@@ -21,6 +21,7 @@ public class PostConverter {
         postDTO.setId(post.getId());
         postDTO.setText(post.getText());
         postDTO.setLikes(post.getLikes());
+        postDTO.setTotalComments(post.getTotalComments());
 
         if (post.getUser() != null) {
             UserDTO userDTO = toUserDTO(post.getUser());
@@ -35,6 +36,7 @@ public class PostConverter {
         postDTO.setId(post.getId());
         postDTO.setText(post.getText());
         postDTO.setLikes(post.getLikes());
+        postDTO.setTotalComments(post.getTotalComments());
 
         if (post.getUser() != null) {
             UserDTO userDTO = toUserDTO(post.getUser());

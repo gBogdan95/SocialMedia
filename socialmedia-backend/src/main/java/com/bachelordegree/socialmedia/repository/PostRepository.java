@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, UUID> {
+    List<Post> findAllByOrderByCreatedAtDesc();
     @Query("SELECT COUNT(l) > 0 FROM Post p JOIN p.likedByUsers l WHERE p.id = :postId AND l.id = :userId")
     boolean existsByPostIdAndUserId(@Param("postId") UUID postId, @Param("userId") UUID userId);
 }
