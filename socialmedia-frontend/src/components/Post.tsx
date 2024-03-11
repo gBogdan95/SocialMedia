@@ -68,14 +68,18 @@ const Post: React.FC<PostProps> = ({ post }) => {
         },
       }}
     >
-      <Typography variant="subtitle1" component="p" sx={{ fontWeight: "bold" }}>
+      <Typography
+        variant="subtitle1"
+        component="p"
+        sx={{ fontWeight: "bold", fontSize: 25, mb: 1 }}
+      >
         {post.user.username}
       </Typography>
       <Typography
         variant="body1"
         component="p"
         onClick={handleClick}
-        sx={{ mb: 2, cursor: "pointer" }}
+        sx={{ mb: 2, cursor: "pointer", fontSize: 20 }}
       >
         {post.text}
       </Typography>

@@ -89,13 +89,12 @@ public class CommentController {
     }
 
     @PostMapping("/{id}/like")
-    public ResponseEntity<?> like(@PathVariable UUID id, Authentication authentication) {
+    public CommentDTO like(@PathVariable UUID id) {
         try {
-            String username = authentication.getName();
-            postService.likePost(id, username);
-            Post post = postService.getById(id); // Ensure this method exists or implement it.
-            return ResponseEntity.ok(postConverter.toDTO(post));
-        } catch (PostNotFoundException | AlreadyLikedException e) {
+            commentService.likeComment(id);
+            Comment comment = commentService.getById(id);
+            return commentConverter.toDTO(comment);
+        } catch (CommentNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

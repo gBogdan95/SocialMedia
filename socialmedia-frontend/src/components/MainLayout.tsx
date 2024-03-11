@@ -14,7 +14,7 @@ const MainLayout = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", height: "100vh", paddingTop: "64px" }}>
+    <Box sx={{ display: "flex", height: "100vh" }}>
       <LeftNavbar />
       <Box
         component="main"
@@ -22,6 +22,7 @@ const MainLayout = () => {
           flexGrow: 1,
           height: "calc(100vh - 64px)",
           marginRight: "444px",
+          marginTop: "64px",
         }}
       >
         <Outlet />
