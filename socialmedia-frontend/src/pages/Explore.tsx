@@ -6,18 +6,22 @@ import { postService } from "../services/postService";
 const ExplorePage = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
 
-  useEffect(() => {
-    const fetchAndSetPosts = async () => {
-      try {
-        const data = await postService.fetchPosts();
-        setPosts(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const fetchAndSetPosts = async () => {
+    try {
+      const data = await postService.fetchPosts();
+      setPosts(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  useEffect(() => {
     fetchAndSetPosts();
   }, []);
+
+  const refreshPosts = () => {
+    fetchAndSetPosts();
+  };
 
   return (
     <Box
@@ -30,7 +34,9 @@ const ExplorePage = () => {
       }}
     >
       {posts.length > 0 ? (
-        posts.map((post) => <Post key={post.id} post={post} />)
+        posts.map((post) => (
+          <Post key={post.id} post={post} refreshPosts={refreshPosts} />
+        ))
       ) : (
         <Typography>No posts to display</Typography>
       )}

@@ -20,7 +20,6 @@ const MainLayout = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          overflowY: "auto",
           height: "calc(100vh - 64px)",
           marginRight: "444px",
         }}
@@ -32,6 +31,7 @@ const MainLayout = () => {
         sx={{
           width: "444px",
           overflowY: "auto",
+          wordBreak: "break-word",
           height: "calc(100vh - 64px)",
           position: "fixed",
           right: 0,

@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,13 +40,16 @@ public class PostController {
 
     @GetMapping
     public List<PostDTO> getAll() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
         return postService.getAll().stream()
-                .map(postConverter::toDTO)
+                .map(post -> postConverter.toDTO(post, currentUsername))
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public PostDTO getById(@PathVariable @NotNull UUID id) {
+    public PostDTO getById(@PathVariable @NotNull UUID id, Authentication authentication) {
         try {
             Post post = postService.getById(id);
             return postConverter.toDTO(post);
@@ -120,6 +125,4 @@ public class PostController {
             throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error unliking post: " + e.getMessage());
         }
     }
-
-
 }

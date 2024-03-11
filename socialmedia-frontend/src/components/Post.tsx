@@ -1,28 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { postService } from "../services/postService";
 
 export interface PostType {
   id: string;
   user: any;
   text: string;
   likes: number;
+  liked: boolean;
 }
 
 interface PostProps {
   post: PostType;
+  refreshPosts: () => void;
 }
 
 const Post: React.FC<PostProps> = ({ post }) => {
   const navigate = useNavigate();
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(post.liked);
+  const [likes, setLikes] = useState(post.likes);
+
+  useEffect(() => {
+    setLiked(post.liked);
+  }, [post.liked]);
 
   const handlePostClick = () => {
     navigate(`/post/${post.id}`);
   };
 
-  const toggleLike = () => {
+  const toggleLike = async () => {
+    if (liked) {
+      try {
+        await postService.unlikePost(post.id);
+        setLikes(Math.max(0, likes - 1));
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      try {
+        await postService.likePost(post.id);
+        setLikes(likes + 1);
+      } catch (error) {
+        console.error(error);
+      }
+    }
     setLiked(!liked);
   };
 
@@ -75,9 +98,9 @@ const Post: React.FC<PostProps> = ({ post }) => {
           <ThumbUpIcon
             color={liked ? "primary" : "action"}
             sx={{ fontSize: "28px" }}
-          />{" "}
+          />
           <Typography variant="body2" sx={{ marginLeft: 0.5 }}>
-            {post.likes}
+            {likes}
           </Typography>
         </IconButton>
       </Box>
