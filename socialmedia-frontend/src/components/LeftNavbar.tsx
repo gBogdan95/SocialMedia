@@ -21,6 +21,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import ShopIcon from "@mui/icons-material/Shop";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { postService } from "../services/postService";
+import backgroundImage from "../assets/leftNavbarBg.jpg";
 
 const LeftNavbar = () => {
   const { isAuthenticated } = useAuth();
@@ -113,7 +114,7 @@ const LeftNavbar = () => {
           width: 380,
           boxSizing: "border-box",
           height: "calc(100vh - 64px)",
-          backgroundColor: "#D4F1F4",
+          backgroundImage: `url(${backgroundImage})`,
           top: "64px",
         },
       }}

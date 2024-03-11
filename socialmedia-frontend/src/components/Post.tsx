@@ -55,10 +55,10 @@ const Post: React.FC<PostProps> = ({ post }) => {
     <Box
       sx={{
         maxWidth: "100%",
-        minWidth: "1005px",
+        minWidth: "95%",
         wordBreak: "break-word",
         marginBottom: 2,
-        padding: 2,
+        padding: 3.1,
         border: "1px solid #ccc",
         borderRadius: "8px",
         backgroundColor: "#f9f9f9",
