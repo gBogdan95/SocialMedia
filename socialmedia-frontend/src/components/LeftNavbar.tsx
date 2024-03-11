@@ -20,12 +20,14 @@ import LockIcon from "@mui/icons-material/Lock";
 import PeopleIcon from "@mui/icons-material/People";
 import ShopIcon from "@mui/icons-material/Shop";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { postService } from "../services/postService";
 
 const LeftNavbar = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [openDialog, setOpenDialog] = useState(false);
+  const [postContent, setPostContent] = useState("");
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -37,7 +39,18 @@ const LeftNavbar = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    navigate("/explore");
+    setPostContent("");
+  };
+
+  const handleSavePost = async () => {
+    try {
+      await postService.createPost(postContent);
+      handleCloseDialog();
+      navigate("/explore", { replace: true });
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to save the post", error);
+    }
   };
 
   if (!isAuthenticated) {
@@ -165,12 +178,14 @@ const LeftNavbar = () => {
             fullWidth
             variant="outlined"
             multiline
-            rows={10}
+            rows={15}
+            value={postContent}
+            onChange={(e) => setPostContent(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleCloseDialog}>Save</Button>
+          <Button onClick={handleSavePost}>Save</Button>
         </DialogActions>
       </Dialog>
     </Drawer>

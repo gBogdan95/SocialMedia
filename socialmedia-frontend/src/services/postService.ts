@@ -30,6 +30,25 @@ const fetchPosts = async () => {
   return data;
 };
 
+const createPost = async (postContent: string) => {
+  const token = getToken();
+  const response = await fetch(`${API_BASE_URL}/user/posts`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text: postContent }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to create post: ${errorText}`);
+  }
+
+  return response.json();
+};
+
 const likePost = async (postId: string) => {
   const token = getToken();
 
@@ -75,6 +94,7 @@ const unlikePost = async (postId: string) => {
 
 export const postService = {
   fetchPosts,
+  createPost,
   likePost,
   unlikePost,
 };
