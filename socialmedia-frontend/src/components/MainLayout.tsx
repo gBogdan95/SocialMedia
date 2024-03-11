@@ -19,6 +19,7 @@ const MainLayout = () => {
       <Box
         component="main"
         sx={{
+          overflowY: "scroll",
           flexGrow: 1,
           height: "calc(100vh - 64px)",
           marginRight: "444px",

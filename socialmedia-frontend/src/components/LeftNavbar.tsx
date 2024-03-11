@@ -1,9 +1,19 @@
-import React from "react";
-import { Box, Drawer } from "@mui/material";
+import React, { useState } from "react";
+
+import {
+  Box,
+  Drawer,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  DialogActions,
+} from "@mui/material";
 
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Button } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SearchIcon from "@mui/icons-material/Search";
 import LockIcon from "@mui/icons-material/Lock";
@@ -15,9 +25,19 @@ const LeftNavbar = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleNavigation = (path: string) => {
     navigate(path);
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    navigate("/explore");
   };
 
   if (!isAuthenticated) {
@@ -100,7 +120,13 @@ const LeftNavbar = () => {
             key={button.label}
             variant="contained"
             startIcon={button.icon}
-            onClick={() => handleNavigation(button.path)}
+            onClick={() => {
+              if (button.label === "CREATE") {
+                handleOpenDialog();
+              } else {
+                handleNavigation(button.path);
+              }
+            }}
             sx={{
               minWidth: button.width,
               minHeight: button.height,
@@ -119,6 +145,34 @@ const LeftNavbar = () => {
           </Button>
         ))}
       </Box>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>Create a new post</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Write anything it's on your mind
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="post-content"
+            type="text"
+            fullWidth
+            variant="outlined"
+            multiline
+            rows={10}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleCloseDialog}>Save</Button>
+        </DialogActions>
+      </Dialog>
     </Drawer>
   );
 };
