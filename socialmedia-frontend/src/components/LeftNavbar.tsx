@@ -183,9 +183,48 @@ const LeftNavbar = () => {
             onChange={(e) => setPostContent(e.target.value)}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSavePost}>Save</Button>
+        <DialogActions
+          sx={{
+            marginBottom: "15px",
+          }}
+        >
+          <Button
+            onClick={handleCloseDialog}
+            sx={{
+              fontSize: "1rem",
+              padding: "6px 16px",
+              width: "125px",
+              color: "white",
+              mr: 1,
+              backgroundColor: "#40A2D8",
+              "&:hover": {
+                backgroundColor: "#1450A3",
+              },
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSavePost}
+            disabled={!postContent.trim()}
+            sx={{
+              fontSize: "1rem",
+              padding: "6px 16px",
+              width: "125px",
+              color: "white",
+              mr: 2,
+              backgroundColor: "#40A2D8",
+              "&:hover": {
+                backgroundColor: "#1450A3",
+              },
+              "&.Mui-disabled": {
+                backgroundColor: "lightgray",
+                color: "gray",
+              },
+            }}
+          >
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
     </Drawer>
