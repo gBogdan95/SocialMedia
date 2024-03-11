@@ -2,6 +2,7 @@ package com.bachelordegree.socialmedia.service;
 
 import com.bachelordegree.socialmedia.dto.PostDTO;
 import com.bachelordegree.socialmedia.exception.AlreadyLikedException;
+import com.bachelordegree.socialmedia.exception.NotLikedException;
 import com.bachelordegree.socialmedia.exception.PostNotFoundException;
 import com.bachelordegree.socialmedia.model.Post;
 import com.bachelordegree.socialmedia.model.User;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.bachelordegree.socialmedia.exception.AlreadyLikedException.ERR_MSG_POST_ALREADY_LIKED;
+import static com.bachelordegree.socialmedia.exception.NotLikedException.ERR_MSG_POST_NOT_LIKED;
 import static com.bachelordegree.socialmedia.exception.PostNotFoundException.ERR_MSG_POST_NOT_FOUND;
 
 @Service
@@ -74,7 +76,7 @@ public class PostService {
 
         boolean alreadyLiked = postRepository.existsByPostIdAndUserId(postId, user.getId());
         if (alreadyLiked) {
-            throw new AlreadyLikedException("User already liked this post");
+            throw new AlreadyLikedException(ERR_MSG_POST_ALREADY_LIKED);
         } else {
             post.getLikedByUsers().add(user);
             post.setLikes(post.getLikes() + 1);
@@ -83,12 +85,22 @@ public class PostService {
     }
 
     @Transactional
-    public void unlikePost(UUID id) throws PostNotFoundException {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
+    public void unlikePost(UUID postId, String username) throws PostNotFoundException, NotLikedException {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
 
-        int currentLikes = post.getLikes();
-        post.setLikes(Math.max(0, currentLikes - 1));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        boolean hasUserLikedPost = post.getLikedByUsers().contains(user);
+        if (!hasUserLikedPost) {
+            throw new NotLikedException(ERR_MSG_POST_NOT_LIKED);
+        }
+
+        post.getLikedByUsers().remove(user);
+        post.setLikes(Math.max(0, post.getLikes() - 1));
         postRepository.save(post);
     }
+
+
 }
