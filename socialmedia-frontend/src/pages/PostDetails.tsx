@@ -25,8 +25,13 @@ const PostDetails: React.FC = () => {
   if (!post) return <Typography>Loading post...</Typography>;
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Post post={post} trimText={false} refreshPosts={() => {}} />
+    <Box sx={{ pt: 3, pr: 3, pb: 3, pl: 0 }}>
+      <Post
+        post={post}
+        refreshPosts={() => {}}
+        trimText={false}
+        isDetailPage={true}
+      />
     </Box>
   );
 };

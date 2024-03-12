@@ -51,8 +51,9 @@ public class PostController {
     @GetMapping("/{id}")
     public PostDTO getById(@PathVariable @NotNull UUID id, Authentication authentication) {
         try {
+            String currentUsername = authentication.getName();
             Post post = postService.getById(id);
-            return postConverter.toDTO(post);
+            return postConverter.toDTO(post, currentUsername);
         } catch (PostNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }

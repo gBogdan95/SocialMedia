@@ -20,9 +20,14 @@ interface PostProps {
   post: PostType;
   refreshPosts: () => void;
   trimText?: boolean;
+  isDetailPage?: boolean;
 }
 
-const Post: React.FC<PostProps> = ({ post, trimText = false }) => {
+const Post: React.FC<PostProps> = ({
+  post,
+  trimText = false,
+  isDetailPage = false,
+}) => {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(post.liked);
   const [likes, setLikes] = useState(post.likes);
@@ -36,9 +41,11 @@ const Post: React.FC<PostProps> = ({ post, trimText = false }) => {
     setLiked(post.liked);
   }, [post.liked]);
 
-  const handleClick = () => {
-    navigate(`/post/${post.id}`);
-  };
+  const handleClick = isDetailPage
+    ? undefined
+    : () => {
+        navigate(`/post/${post.id}`);
+      };
 
   const toggleLike = async () => {
     if (liked) {
@@ -71,9 +78,11 @@ const Post: React.FC<PostProps> = ({ post, trimText = false }) => {
         borderRadius: "8px",
         backgroundColor: "#f9f9f9",
         transition: "background-color 0.3s",
-        "&:hover": {
-          backgroundColor: "rgba(0, 0, 0, 0.08)",
-        },
+        "&:hover": isDetailPage
+          ? {}
+          : {
+              backgroundColor: "rgba(0, 0, 0, 0.08)",
+            },
       }}
     >
       <Box
@@ -86,7 +95,11 @@ const Post: React.FC<PostProps> = ({ post, trimText = false }) => {
         <Avatar sx={{ mr: 2, color: "black" }}>
           <PersonIcon />
         </Avatar>
-        <Typography variant="subtitle1" component="p" sx={{ fontSize: 25 }}>
+        <Typography
+          variant="subtitle1"
+          component="p"
+          sx={{ fontSize: 25, cursor: "default" }}
+        >
           {post.user.username}
         </Typography>
       </Box>
@@ -94,7 +107,12 @@ const Post: React.FC<PostProps> = ({ post, trimText = false }) => {
         variant="subtitle1"
         component="p"
         onClick={handleClick}
-        sx={{ mb: 1, cursor: "pointer", fontWeight: "bold", fontSize: 30 }}
+        sx={{
+          mb: 1,
+          cursor: isDetailPage ? "text" : "pointer",
+          fontWeight: "bold",
+          fontSize: 30,
+        }}
       >
         {post.title}
       </Typography>
@@ -102,7 +120,11 @@ const Post: React.FC<PostProps> = ({ post, trimText = false }) => {
         variant="body1"
         component="p"
         onClick={handleClick}
-        sx={{ mb: 2, cursor: "pointer", fontSize: 20 }}
+        sx={{
+          mb: 2,
+          cursor: isDetailPage ? "text" : "pointer",
+          fontSize: 20,
+        }}
       >
         {displayText}
       </Typography>

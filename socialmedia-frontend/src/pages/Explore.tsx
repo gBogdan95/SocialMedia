@@ -38,8 +38,8 @@ const ExplorePage = () => {
           <Post
             key={post.id}
             post={post}
-            refreshPosts={refreshPosts}
             trimText={true}
+            refreshPosts={refreshPosts}
           />
         ))
       ) : (
