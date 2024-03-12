@@ -22,7 +22,7 @@ public class Post {
     private String title;
 
     @NonNull
-    @Column(name = "text", nullable = false, length = 2000)
+    @Column(name = "text", nullable = false, length = 5000)
     private String text;
 
     @Column(name = "likes", nullable = false)

@@ -35,7 +35,12 @@ const ExplorePage = () => {
     >
       {posts.length > 0 ? (
         posts.map((post) => (
-          <Post key={post.id} post={post} refreshPosts={refreshPosts} />
+          <Post
+            key={post.id}
+            post={post}
+            refreshPosts={refreshPosts}
+            trimText={true}
+          />
         ))
       ) : (
         <Typography>No posts to display</Typography>

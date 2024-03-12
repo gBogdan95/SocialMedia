@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton, Avatar } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
@@ -18,12 +19,18 @@ export interface PostType {
 interface PostProps {
   post: PostType;
   refreshPosts: () => void;
+  trimText?: boolean;
 }
 
-const Post: React.FC<PostProps> = ({ post }) => {
+const Post: React.FC<PostProps> = ({ post, trimText = false }) => {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(post.liked);
   const [likes, setLikes] = useState(post.likes);
+
+  const displayText =
+    trimText && post.text.length > 100
+      ? `${post.text.substring(0, 400)}...`
+      : post.text;
 
   useEffect(() => {
     setLiked(post.liked);
@@ -69,13 +76,25 @@ const Post: React.FC<PostProps> = ({ post }) => {
         },
       }}
     >
-      <Typography variant="subtitle1" component="p" sx={{ fontSize: 25 }}>
-        {post.user.username}
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          mb: 1,
+        }}
+      >
+        <Avatar sx={{ mr: 2, color: "black" }}>
+          <PersonIcon />
+        </Avatar>
+        <Typography variant="subtitle1" component="p" sx={{ fontSize: 25 }}>
+          {post.user.username}
+        </Typography>
+      </Box>
       <Typography
         variant="subtitle1"
         component="p"
-        sx={{ fontWeight: "bold", fontSize: 30, mb: 1 }}
+        onClick={handleClick}
+        sx={{ mb: 1, cursor: "pointer", fontWeight: "bold", fontSize: 30 }}
       >
         {post.title}
       </Typography>
@@ -85,7 +104,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
         onClick={handleClick}
         sx={{ mb: 2, cursor: "pointer", fontSize: 20 }}
       >
-        {post.text}
+        {displayText}
       </Typography>
       <Box
         sx={{
