@@ -1,15 +1,32 @@
-import Box from "@mui/material/Box";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
+import { postService } from "../services/postService";
+import Post, { PostType } from "../components/Post";
+const PostDetails: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [post, setPost] = useState<PostType | null>(null);
 
-const PostDetails = () => {
+  useEffect(() => {
+    const fetchPost = async () => {
+      if (id) {
+        try {
+          const fetchedPost = await postService.fetchPostById(id);
+          setPost(fetchedPost);
+        } catch (error) {
+          console.error("Failed to fetch post", error);
+        }
+      }
+    };
+
+    fetchPost();
+  }, [id]);
+
+  if (!post) return <Typography>Loading post...</Typography>;
+
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100%"
-      width="100%"
-    >
-      <h1>POST DETAILS PAGE</h1>
+    <Box sx={{ p: 3 }}>
+      <Post post={post} trimText={false} refreshPosts={() => {}} />
     </Box>
   );
 };

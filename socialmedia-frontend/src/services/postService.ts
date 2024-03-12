@@ -30,6 +30,27 @@ const fetchPosts = async () => {
   return data;
 };
 
+const fetchPostById = async (postId: string) => {
+  const token = getToken();
+
+  const response = await fetch(`${API_BASE_URL}/user/posts/${postId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Failed to fetch post with ID ${postId}:`, errorText);
+    throw new Error(`Failed to fetch post with ID ${postId}.`);
+  }
+
+  const data = await response.json();
+  return data;
+};
+
 const createPost = async (title: string, postContent: string) => {
   const token = getToken();
   const response = await fetch(`${API_BASE_URL}/user/posts`, {
@@ -94,6 +115,7 @@ const unlikePost = async (postId: string) => {
 
 export const postService = {
   fetchPosts,
+  fetchPostById,
   createPost,
   likePost,
   unlikePost,
