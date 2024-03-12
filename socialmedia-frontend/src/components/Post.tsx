@@ -8,6 +8,7 @@ import { postService } from "../services/postService";
 export interface PostType {
   id: string;
   user: any;
+  title: string;
   text: string;
   likes: number;
   liked: boolean;
@@ -68,12 +69,15 @@ const Post: React.FC<PostProps> = ({ post }) => {
         },
       }}
     >
+      <Typography variant="subtitle1" component="p" sx={{ fontSize: 25 }}>
+        {post.user.username}
+      </Typography>
       <Typography
         variant="subtitle1"
         component="p"
-        sx={{ fontWeight: "bold", fontSize: 25, mb: 1 }}
+        sx={{ fontWeight: "bold", fontSize: 30, mb: 1 }}
       >
-        {post.user.username}
+        {post.title}
       </Typography>
       <Typography
         variant="body1"

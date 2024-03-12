@@ -18,7 +18,11 @@ public class Post {
     private UUID id;
 
     @NonNull
-    @Column(name = "text", nullable = false)
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @NonNull
+    @Column(name = "text", nullable = false, length = 2000)
     private String text;
 
     @Column(name = "likes", nullable = false)

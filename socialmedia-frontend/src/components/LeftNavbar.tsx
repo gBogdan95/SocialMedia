@@ -35,9 +35,9 @@ const LeftNavbar = () => {
     setPostContent("");
   };
 
-  const handleSavePost = async (content: string) => {
+  const handleSavePost = async (title: string, content: string) => {
     try {
-      await postService.createPost(content);
+      await postService.createPost(title, content);
       handleCloseDialog();
       navigate("/explore", { replace: true });
       window.location.reload();

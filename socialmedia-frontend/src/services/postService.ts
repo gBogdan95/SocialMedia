@@ -30,7 +30,7 @@ const fetchPosts = async () => {
   return data;
 };
 
-const createPost = async (postContent: string) => {
+const createPost = async (title: string, postContent: string) => {
   const token = getToken();
   const response = await fetch(`${API_BASE_URL}/user/posts`, {
     method: "POST",
@@ -38,7 +38,7 @@ const createPost = async (postContent: string) => {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ text: postContent }),
+    body: JSON.stringify({ title, text: postContent }),
   });
 
   if (!response.ok) {

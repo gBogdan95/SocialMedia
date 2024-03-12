@@ -16,3 +16,10 @@ export const validateLogin: ValidationFunctions = {
   password: (value: string) =>
     value.trim().length === 0 ? "This field cannot be empty" : "",
 };
+
+export const validatePost: ValidationFunctions = {
+  title: (value: string) =>
+    value.trim().length === 0 ? "Title is required!" : "",
+  content: (value: string) =>
+    value.trim().length === 0 ? "Content is required!" : "",
+};

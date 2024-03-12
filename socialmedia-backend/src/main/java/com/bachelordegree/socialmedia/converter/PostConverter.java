@@ -13,6 +13,7 @@ public class PostConverter {
         Post post = new Post();
         post.setText(postDTO.getText());
         post.setLikes(postDTO.getLikes());
+        post.setTitle(postDTO.getTitle());
         return post;
     }
 
@@ -22,6 +23,7 @@ public class PostConverter {
         postDTO.setText(post.getText());
         postDTO.setLikes(post.getLikes());
         postDTO.setTotalComments(post.getTotalComments());
+        postDTO.setTitle(post.getTitle());
 
         if (post.getUser() != null) {
             UserDTO userDTO = toUserDTO(post.getUser());
@@ -37,6 +39,7 @@ public class PostConverter {
         postDTO.setText(post.getText());
         postDTO.setLikes(post.getLikes());
         postDTO.setTotalComments(post.getTotalComments());
+        postDTO.setTitle(post.getTitle());
 
         if (post.getUser() != null) {
             UserDTO userDTO = toUserDTO(post.getUser());

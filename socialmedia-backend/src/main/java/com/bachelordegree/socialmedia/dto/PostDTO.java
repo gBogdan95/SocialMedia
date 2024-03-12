@@ -14,6 +14,9 @@ public class PostDTO {
     private UUID id;
 
     @NotBlank
+    private String title;
+
+    @NotBlank
     private String text;
 
     private int likes;

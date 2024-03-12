@@ -1,4 +1,3 @@
-// PostDialog.tsx
 import React, { useState } from "react";
 import {
   Dialog,
@@ -13,30 +12,71 @@ import {
 interface PostDialogProps {
   open: boolean;
   handleClose: () => void;
-  handleSavePost: (postContent: string) => void;
+  handleSavePost: (title: string, postContent: string) => void;
 }
 
 const PostDialog: React.FC<PostDialogProps> = ({
   open,
-  handleClose,
+  handleClose: propHandleClose,
   handleSavePost,
 }) => {
+  const [title, setTitle] = useState("");
+  const [titleError, setTitleError] = useState("");
   const [postContent, setPostContent] = useState("");
+  const [contentError, setContentError] = useState("");
+
+  const handleClose = () => {
+    setTitle("");
+    setPostContent("");
+    setTitleError("");
+    setContentError("");
+    propHandleClose();
+  };
 
   const handleSave = () => {
-    handleSavePost(postContent);
-    handleClose();
+    setTitleError("");
+    setContentError("");
+
+    let isValid = true;
+    if (!title.trim()) {
+      setTitleError("Title is required!");
+      isValid = false;
+    }
+    if (!postContent.trim()) {
+      setContentError("Content is required!");
+      isValid = false;
+    }
+
+    if (isValid) {
+      handleSavePost(title, postContent);
+      handleClose();
+    }
   };
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
       <DialogTitle>Create a new post</DialogTitle>
       <DialogContent>
-        <DialogContentText>Write anything it's on your mind</DialogContentText>
+        <DialogContentText>Share something interesting</DialogContentText>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="post-title"
+          label="Title"
+          type="text"
+          fullWidth
+          variant="outlined"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          error={!!titleError}
+          helperText={titleError}
+          sx={{ mb: 2, mt: 4 }}
+        />
         <TextField
           autoFocus
           margin="dense"
           id="post-content"
+          label="Content"
           type="text"
           fullWidth
           variant="outlined"
@@ -44,6 +84,8 @@ const PostDialog: React.FC<PostDialogProps> = ({
           rows={15}
           value={postContent}
           onChange={(e) => setPostContent(e.target.value)}
+          error={!!contentError}
+          helperText={contentError}
         />
       </DialogContent>
       <DialogActions
@@ -69,7 +111,6 @@ const PostDialog: React.FC<PostDialogProps> = ({
         </Button>
         <Button
           onClick={handleSave}
-          disabled={!postContent.trim()}
           sx={{
             fontSize: "1rem",
             padding: "6px 16px",
