@@ -38,12 +38,15 @@ interface PostProps {
   refreshPosts: () => void;
   trimText?: boolean;
   isDetailPage?: boolean;
+  onCommentButtonClick?: () => void;
 }
 
 const Post: React.FC<PostProps> = ({
   post,
   trimText = false,
   isDetailPage = false,
+  refreshPosts,
+  onCommentButtonClick,
 }) => {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(post.liked);
@@ -68,11 +71,13 @@ const Post: React.FC<PostProps> = ({
     setLiked(post.liked);
   }, [post.liked]);
 
-  const handleClick = isDetailPage
-    ? undefined
-    : () => {
-        navigate(`/post/${post.id}`);
-      };
+  const handleClick = () => {
+    if (isDetailPage && onCommentButtonClick) {
+      onCommentButtonClick();
+    } else {
+      navigate(`/post/${post.id}`);
+    }
+  };
 
   const handleEditClick = () => {
     setEditDialogOpen(true);
@@ -82,7 +87,7 @@ const Post: React.FC<PostProps> = ({
     try {
       await postService.updatePost(post.id, title, text);
       setEditDialogOpen(false);
-      window.location.reload();
+      refreshPosts();
     } catch (error) {
       console.error("Failed to update post", error);
     }
