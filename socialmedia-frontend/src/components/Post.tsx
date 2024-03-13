@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import SettingsIcon from "@mui/icons-material/Settings";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { postService } from "../services/postService";
 
 export interface PostType {
@@ -140,6 +142,7 @@ const Post: React.FC<PostProps> = ({
                 "&:hover": {
                   backgroundColor: "lightblue",
                 },
+                color: open ? "#1450A3" : "#40A2D8",
               }}
             >
               <SettingsIcon sx={{ fontSize: "60px" }} />
@@ -159,10 +162,37 @@ const Post: React.FC<PostProps> = ({
               }}
             >
               <Box sx={{ p: 2 }}>
-                <Button sx={{ display: "block", mb: 1 }} onClick={() => {}}>
+                <Button
+                  startIcon={<EditIcon />}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    mb: 1,
+                    width: "200px",
+                    color: "white",
+                    backgroundColor: "#40A2D8",
+                    ":hover": {
+                      backgroundColor: "#1450A3",
+                    },
+                  }}
+                  onClick={() => {}}
+                >
                   Edit
                 </Button>
-                <Button sx={{ display: "block", mb: 1 }} onClick={() => {}}>
+                <Button
+                  startIcon={<DeleteIcon />}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "200px",
+                    color: "white",
+                    backgroundColor: "#D24545",
+                    ":hover": {
+                      backgroundColor: "red",
+                    },
+                  }}
+                  onClick={() => {}}
+                >
                   Delete
                 </Button>
               </Box>
