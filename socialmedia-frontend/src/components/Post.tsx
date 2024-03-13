@@ -6,6 +6,11 @@ import {
   Avatar,
   Popover,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +20,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { postService } from "../services/postService";
+import UpdatePostDialog from "./UpdatePostDialog";
 
 export interface PostType {
   id: string;
@@ -46,6 +52,8 @@ const Post: React.FC<PostProps> = ({
   const currentUser = storedUser ? JSON.parse(storedUser) : null;
   const isCurrentUser = currentUser && post.user.id === currentUser.id;
 
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+
   const displayText =
     trimText && post.text.length > 100
       ? `${post.text.substring(0, 400)}...`
@@ -60,6 +68,20 @@ const Post: React.FC<PostProps> = ({
     : () => {
         navigate(`/post/${post.id}`);
       };
+
+  const handleEditClick = () => {
+    setEditDialogOpen(true);
+  };
+
+  const handleSaveEdit = async (title: string, text: string) => {
+    try {
+      await postService.updatePost(post.id, title, text);
+      setEditDialogOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to update post", error);
+    }
+  };
 
   const toggleLike = async () => {
     if (liked) {
@@ -164,6 +186,7 @@ const Post: React.FC<PostProps> = ({
               <Box sx={{ p: 2 }}>
                 <Button
                   startIcon={<EditIcon />}
+                  onClick={handleEditClick}
                   sx={{
                     display: "flex",
                     justifyContent: "center",
@@ -175,10 +198,17 @@ const Post: React.FC<PostProps> = ({
                       backgroundColor: "#1450A3",
                     },
                   }}
-                  onClick={() => {}}
                 >
                   Edit
                 </Button>
+                <UpdatePostDialog
+                  open={editDialogOpen}
+                  title={post.title}
+                  text={post.text}
+                  onClose={() => setEditDialogOpen(false)}
+                  onSave={handleSaveEdit}
+                />
+
                 <Button
                   startIcon={<DeleteIcon />}
                   sx={{

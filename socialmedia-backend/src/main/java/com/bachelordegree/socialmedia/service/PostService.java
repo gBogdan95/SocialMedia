@@ -56,6 +56,7 @@ public class PostService {
             throw new AccessDeniedException("User does not have permission to update this post");
         }
 
+        post.setTitle((postUpdate.getTitle()));
         post.setText(postUpdate.getText());
         return postRepository.save(post);
     }

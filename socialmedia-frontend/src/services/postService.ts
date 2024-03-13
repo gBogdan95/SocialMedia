@@ -69,6 +69,29 @@ const createPost = async (title: string, postContent: string) => {
 
   return response.json();
 };
+const updatePost = async (
+  postId: string,
+  title: string,
+  postContent: string
+) => {
+  const token = getToken();
+  const response = await fetch(`${API_BASE_URL}/user/posts/${postId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ title, text: postContent }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Failed to update post with ID ${postId}:`, errorText);
+    throw new Error(`Failed to update post with ID ${postId}.`);
+  }
+
+  return response.json();
+};
 
 const likePost = async (postId: string) => {
   const token = getToken();
@@ -117,6 +140,7 @@ export const postService = {
   fetchPosts,
   fetchPostById,
   createPost,
+  updatePost,
   likePost,
   unlikePost,
 };
