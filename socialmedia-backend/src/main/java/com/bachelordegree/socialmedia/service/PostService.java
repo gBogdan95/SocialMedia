@@ -61,6 +61,17 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public void delete(UUID id, String username) throws PostNotFoundException, AccessDeniedException {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
+
+        if (!post.getUser().getUsername().equals(username)) {
+            throw new AccessDeniedException("User does not have permission to delete this post");
+        }
+
+        postRepository.delete(post);
+    }
+
 
     public void delete(UUID id) throws PostNotFoundException {
         Post post = postRepository.findById(id)

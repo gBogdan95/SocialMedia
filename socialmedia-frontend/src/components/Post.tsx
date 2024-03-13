@@ -21,6 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { postService } from "../services/postService";
 import UpdatePostDialog from "./UpdatePostDialog";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 export interface PostType {
   id: string;
@@ -53,6 +54,9 @@ const Post: React.FC<PostProps> = ({
   const isCurrentUser = currentUser && post.user.id === currentUser.id;
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+  const handleOpenConfirmation = () => setIsConfirmationOpen(true);
+  const handleCloseConfirmation = () => setIsConfirmationOpen(false);
 
   const displayText =
     trimText && post.text.length > 100
@@ -80,6 +84,16 @@ const Post: React.FC<PostProps> = ({
       window.location.reload();
     } catch (error) {
       console.error("Failed to update post", error);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      //await postService.deletePost(post.id);
+      handleCloseConfirmation();
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      handleCloseConfirmation();
     }
   };
 
@@ -211,6 +225,7 @@ const Post: React.FC<PostProps> = ({
 
                 <Button
                   startIcon={<DeleteIcon />}
+                  onClick={handleOpenConfirmation}
                   sx={{
                     display: "flex",
                     justifyContent: "center",
@@ -221,10 +236,16 @@ const Post: React.FC<PostProps> = ({
                       backgroundColor: "red",
                     },
                   }}
-                  onClick={() => {}}
                 >
                   Delete
                 </Button>
+                <ConfirmationDialog
+                  open={isConfirmationOpen}
+                  title="Delete Post"
+                  message="Are you sure you want to delete this post?"
+                  onConfirm={handleConfirmDelete}
+                  onCancel={handleCloseConfirmation}
+                />
               </Box>
             </Popover>
           </Box>

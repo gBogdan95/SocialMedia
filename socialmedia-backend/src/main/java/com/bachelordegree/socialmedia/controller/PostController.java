@@ -36,7 +36,6 @@ public class PostController {
 
     private final PostService postService;
     private final PostConverter postConverter;
-    private final UserRepository userRepository;
 
     @GetMapping
     public List<PostDTO> getAll() {
@@ -87,15 +86,18 @@ public class PostController {
         }
     }
 
-
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable @NotNull UUID id) {
+    public void delete(@PathVariable @NotNull UUID id, Authentication authentication) {
         try {
-            postService.delete(id);
+            String username = authentication.getName();
+            postService.delete(id, username);
         } catch (PostNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AccessDeniedException e) {
+            throw new RestException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
+
 
     @PostMapping("/{id}/like")
     public PostDTO like(@PathVariable UUID id, Authentication authentication) {
