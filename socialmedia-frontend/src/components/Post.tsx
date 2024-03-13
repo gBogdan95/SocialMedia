@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, IconButton, Avatar } from "@mui/material";
+import {
+  Box,
+  Typography,
+  IconButton,
+  Avatar,
+  Popover,
+  Button,
+} from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -71,6 +78,19 @@ const Post: React.FC<PostProps> = ({
     setLiked(!liked);
   };
 
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleSettingsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
   return (
     <Box
       sx={{
@@ -93,18 +113,12 @@ const Post: React.FC<PostProps> = ({
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
           justifyContent: "space-between",
+          alignItems: "center",
           mb: 1,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexGrow: 1,
-          }}
-        >
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           <Avatar sx={{ mr: 2, color: "black" }}>
             <PersonIcon />
           </Avatar>
@@ -116,21 +130,44 @@ const Post: React.FC<PostProps> = ({
             {post.user.username}
           </Typography>
         </Box>
+
         {isDetailPage && isCurrentUser && (
-          <IconButton
-            aria-label="settings"
-            onClick={() => {}}
-            sx={{
-              mr: 1,
-              borderRadius: "15px",
-              padding: "12px",
-              "&:hover": {
-                backgroundColor: "lightblue",
-              },
-            }}
-          >
-            <SettingsIcon sx={{ fontSize: "75px" }} />
-          </IconButton>
+          <Box>
+            <IconButton
+              aria-label="settings"
+              onClick={handleSettingsClick}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "lightblue",
+                },
+              }}
+            >
+              <SettingsIcon sx={{ fontSize: "60px" }} />
+            </IconButton>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <Box sx={{ p: 2 }}>
+                <Button sx={{ display: "block", mb: 1 }} onClick={() => {}}>
+                  Edit
+                </Button>
+                <Button sx={{ display: "block", mb: 1 }} onClick={() => {}}>
+                  Delete
+                </Button>
+              </Box>
+            </Popover>
+          </Box>
         )}
       </Box>
       <Typography
