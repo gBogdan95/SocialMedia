@@ -55,6 +55,7 @@ const Post: React.FC<PostProps> = ({
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+
   const handleOpenConfirmation = () => setIsConfirmationOpen(true);
   const handleCloseConfirmation = () => setIsConfirmationOpen(false);
 
@@ -89,8 +90,9 @@ const Post: React.FC<PostProps> = ({
 
   const handleConfirmDelete = async () => {
     try {
-      //await postService.deletePost(post.id);
+      await postService.deletePost(post.id);
       handleCloseConfirmation();
+      navigate("/explore");
     } catch (error) {
       console.error("Error deleting post:", error);
       handleCloseConfirmation();

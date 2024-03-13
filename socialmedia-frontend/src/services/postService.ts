@@ -136,6 +136,26 @@ const unlikePost = async (postId: string) => {
   return response.json();
 };
 
+const deletePost = async (postId: string) => {
+  const token = getToken();
+
+  const response = await fetch(`${API_BASE_URL}/user/posts/${postId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Failed to delete post with ID ${postId}:`, errorText);
+    throw new Error(`Failed to delete post with ID ${postId}.`);
+  }
+
+  return true;
+};
+
 export const postService = {
   fetchPosts,
   fetchPostById,
@@ -143,4 +163,5 @@ export const postService = {
   updatePost,
   likePost,
   unlikePost,
+  deletePost,
 };

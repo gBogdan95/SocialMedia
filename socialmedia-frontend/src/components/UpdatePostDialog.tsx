@@ -67,7 +67,11 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
           sx={{ mb: 2 }}
         />
       </DialogContent>
-      <DialogActions>
+      <DialogActions
+        sx={{
+          marginBottom: "15px",
+        }}
+      >
         <Button
           onClick={onClose}
           sx={{

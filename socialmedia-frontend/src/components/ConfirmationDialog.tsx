@@ -18,7 +18,6 @@ interface ConfirmationDialogProps {
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   open,
-  title,
   message,
   onConfirm,
   onCancel,
@@ -40,7 +39,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
         sx={{ justifyContent: "space-between", padding: "15px 24px" }}
       >
         <Button
-          onClick={onCancel}
+          onClick={onConfirm}
           fullWidth
           sx={{
             color: "white",
@@ -54,7 +53,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           Yes
         </Button>
         <Button
-          onClick={onConfirm}
+          onClick={onCancel}
           fullWidth
           sx={{
             color: "white",
