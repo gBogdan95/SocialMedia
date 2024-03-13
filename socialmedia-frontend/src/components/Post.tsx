@@ -4,6 +4,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { postService } from "../services/postService";
 
 export interface PostType {
@@ -31,6 +32,10 @@ const Post: React.FC<PostProps> = ({
   const navigate = useNavigate();
   const [liked, setLiked] = useState(post.liked);
   const [likes, setLikes] = useState(post.likes);
+
+  const storedUser = localStorage.getItem("user");
+  const currentUser = storedUser ? JSON.parse(storedUser) : null;
+  const isCurrentUser = currentUser && post.user.id === currentUser.id;
 
   const displayText =
     trimText && post.text.length > 100
@@ -89,19 +94,44 @@ const Post: React.FC<PostProps> = ({
         sx={{
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
           mb: 1,
         }}
       >
-        <Avatar sx={{ mr: 2, color: "black" }}>
-          <PersonIcon />
-        </Avatar>
-        <Typography
-          variant="subtitle1"
-          component="p"
-          sx={{ fontSize: 25, cursor: "default" }}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexGrow: 1,
+          }}
         >
-          {post.user.username}
-        </Typography>
+          <Avatar sx={{ mr: 2, color: "black" }}>
+            <PersonIcon />
+          </Avatar>
+          <Typography
+            variant="subtitle1"
+            component="p"
+            sx={{ fontSize: 25, cursor: "default" }}
+          >
+            {post.user.username}
+          </Typography>
+        </Box>
+        {isDetailPage && isCurrentUser && (
+          <IconButton
+            aria-label="settings"
+            onClick={() => {}}
+            sx={{
+              mr: 1,
+              borderRadius: "15px",
+              padding: "12px",
+              "&:hover": {
+                backgroundColor: "lightblue",
+              },
+            }}
+          >
+            <SettingsIcon sx={{ fontSize: "75px" }} />
+          </IconButton>
+        )}
       </Box>
       <Typography
         variant="subtitle1"
