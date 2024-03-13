@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import { postService } from "../services/postService";
 import Post, { PostType } from "../components/Post";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import Comments from "./Comments";
 
 const PostDetails: React.FC = () => {
@@ -40,21 +40,21 @@ const PostDetails: React.FC = () => {
         isDetailPage={true}
         onCommentButtonClick={scrollToComments}
       />
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+      <Box
+        ref={commentsRef}
+        sx={{ display: "flex", justifyContent: "center", mt: 2 }}
+      >
         <Button
           variant="contained"
           color="primary"
           onClick={() => {}}
           sx={{ width: "50%", maxWidth: "600px", mt: 2, mb: 2 }}
-          startIcon={<ArrowDownwardIcon />}
+          startIcon={<AddBoxIcon />}
         >
           Add Comment
         </Button>
       </Box>
-      <Box
-        ref={commentsRef}
-        sx={{ mt: 2, backgroundColor: "#DFF5FF", p: 2, borderRadius: 5 }}
-      >
+      <Box sx={{ mt: 2, backgroundColor: "#DFF5FF", p: 2, borderRadius: 5 }}>
         <Comments />
       </Box>
     </Box>
