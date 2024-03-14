@@ -45,7 +45,6 @@ const Post: React.FC<PostProps> = ({
   post,
   trimText = false,
   isDetailPage = false,
-  refreshPosts,
   onCommentButtonClick,
 }) => {
   const navigate = useNavigate();
@@ -87,7 +86,7 @@ const Post: React.FC<PostProps> = ({
     try {
       await postService.updatePost(post.id, title, text);
       setEditDialogOpen(false);
-      refreshPosts();
+      window.location.reload();
     } catch (error) {
       console.error("Failed to update post", error);
     }

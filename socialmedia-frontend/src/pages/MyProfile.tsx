@@ -5,6 +5,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import currencyImg from "../assets/currency.png";
 import backgroundImg from "../assets/profileBg.jpg";
+import GroupIcon from "@mui/icons-material/Group";
+import Friends from "./Friends";
 
 const MyProfile = () => {
   const { user } = useAuth();
@@ -121,7 +123,26 @@ const MyProfile = () => {
         </Typography>
       </Box>
 
-      <Box bgcolor="red" flex={1} overflow="auto"></Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          fontSize: 24,
+          fontWeight: "bold",
+          color: "white",
+          p: 1,
+          pl: 2,
+          backgroundColor: "#1450A3",
+          textShadow: "2px 2px 4px rgba(0, 0, 0, 1)",
+        }}
+      >
+        <GroupIcon sx={{ marginRight: 1 }} />
+        My Friends:
+      </Box>
+
+      <Box bgcolor="grey" flex={1} overflow="auto">
+        <Friends />
+      </Box>
     </Box>
   );
 };
