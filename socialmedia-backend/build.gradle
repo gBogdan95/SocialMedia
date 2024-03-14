@@ -32,6 +32,7 @@ dependencies {
 	implementation 'org.postgresql:postgresql'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.677'
 }
 
 ext {

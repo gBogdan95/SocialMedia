@@ -2,6 +2,7 @@ package com.bachelordegree.socialmedia.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Cleanup;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +35,12 @@ public class User implements UserDetails {
 
     @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
+    @Column(name = "currency")
+    private int currency;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

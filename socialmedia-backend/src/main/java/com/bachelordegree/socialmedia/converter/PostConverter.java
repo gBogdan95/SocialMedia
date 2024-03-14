@@ -58,6 +58,8 @@ public class PostConverter {
         userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setEmail(user.getEmail());
+        userDTO.setAvatarUrl(user.getAvatarUrl());
+        userDTO.setCurrency(user.getCurrency());
         return userDTO;
     }
 }

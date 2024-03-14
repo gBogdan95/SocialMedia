@@ -31,7 +31,7 @@ public class SocialMediaApplication {
 			Set<Role> roles = new HashSet<>();
 			roles.add(adminRole);
 
-			User admin = new User("admin", passwordEncode.encode("password"), "email@email.com",roles);
+			User admin = new User("admin", passwordEncode.encode("parola"), "email@email.com", roles);
 
 			userRepository.save(admin);
 		};

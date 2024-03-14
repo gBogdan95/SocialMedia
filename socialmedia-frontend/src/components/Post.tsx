@@ -164,8 +164,12 @@ const Post: React.FC<PostProps> = ({
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Avatar sx={{ mr: 2, color: "black" }}>
-            <PersonIcon />
+          <Avatar
+            sx={{ mr: 2, color: "black" }}
+            src={post.user.avatarUrl ? post.user.avatarUrl : ""}
+            alt="User Avatar"
+          >
+            {!post.user.avatarUrl && <PersonIcon />}
           </Avatar>
           <Typography
             variant="subtitle1"

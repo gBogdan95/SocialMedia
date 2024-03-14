@@ -32,7 +32,6 @@ const MainLayout = () => {
         component="aside"
         sx={{
           width: "444px",
-          overflowY: "auto",
           wordBreak: "break-word",
           height: "calc(100vh - 64px)",
           position: "fixed",
