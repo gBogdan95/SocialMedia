@@ -37,7 +37,7 @@ const MainLayout = () => {
           position: "fixed",
           right: 0,
           top: "64px",
-          backgroundColor: "#D3D3D3",
+          backgroundColor: "black",
         }}
       >
         {RightSideContent}

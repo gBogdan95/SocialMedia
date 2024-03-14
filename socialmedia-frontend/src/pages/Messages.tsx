@@ -9,6 +9,7 @@ const Messages = () => {
       justifyContent="center"
       height="100%"
       width="100%"
+      sx={{ backgroundColor: "grey" }}
     >
       <h3>MESSAGES PAGE</h3>
     </Box>
