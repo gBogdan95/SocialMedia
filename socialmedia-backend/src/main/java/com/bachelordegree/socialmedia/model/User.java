@@ -39,6 +39,9 @@ public class User implements UserDetails {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
+    @Column(name = "background_url")
+    private String backgroundUrl;
+
     @Column(name = "currency")
     private int currency;
 

@@ -4,9 +4,9 @@ import { Typography } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import currencyImg from "../assets/currency.png";
-import backgroundImg from "../assets/profileBg.jpg";
 import GroupIcon from "@mui/icons-material/Group";
 import Friends from "./Friends";
+import defaultAvatarImg from "../assets/defaultAvatar.png";
 
 const MyProfile = () => {
   const { user } = useAuth();
@@ -16,13 +16,20 @@ const MyProfile = () => {
     navigate(`/profile/${user?.id}`);
   };
 
+  const backgroundStyle = {
+    backgroundImage: user?.backgroundUrl
+      ? `url(${user.backgroundUrl})`
+      : "none",
+    backgroundColor: user?.backgroundUrl ? "transparent" : "lightblue",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  };
+
   return (
     <Box display="flex" flexDirection="column" height="100vh" width="100%">
       <Box
         sx={{
-          backgroundImage: `url(${backgroundImg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          ...backgroundStyle,
           position: "relative",
           color: "white",
           p: 2,
@@ -63,13 +70,17 @@ const MyProfile = () => {
             borderRadius: "50%",
           }}
         >
-          {user?.avatarUrl && (
-            <img
-              src={user.avatarUrl}
-              alt="avatar"
-              style={{ width: "100%", height: "100%", borderRadius: "50%" }}
-            />
-          )}
+          <Box
+            component="img"
+            src={user?.avatarUrl || defaultAvatarImg}
+            alt="avatar"
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "50%",
+            }}
+          />
         </Box>
 
         <Box
@@ -140,9 +151,7 @@ const MyProfile = () => {
         My Friends:
       </Box>
 
-      <Box bgcolor="grey" flex={1} overflow="auto">
-        <Friends />
-      </Box>
+      <Friends />
     </Box>
   );
 };

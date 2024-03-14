@@ -16,5 +16,6 @@ public class UserDTO {
     private String username;
     private String email;
     private String avatarUrl;
+    private String backgroundUrl;
     private int currency;
 }

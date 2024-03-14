@@ -6,11 +6,6 @@ import {
   Avatar,
   Popover,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { postService } from "../services/postService";
 import UpdatePostDialog from "./UpdatePostDialog";
 import ConfirmationDialog from "./ConfirmationDialog";
+import defaultAvatarImg from "../assets/defaultAvatar.png";
 
 export interface PostType {
   id: string;
@@ -165,7 +161,7 @@ const Post: React.FC<PostProps> = ({
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Avatar
             sx={{ mr: 2, color: "black" }}
-            src={post.user.avatarUrl ? post.user.avatarUrl : ""}
+            src={post.user.avatarUrl || defaultAvatarImg}
             alt="User Avatar"
           >
             {!post.user.avatarUrl && <PersonIcon />}

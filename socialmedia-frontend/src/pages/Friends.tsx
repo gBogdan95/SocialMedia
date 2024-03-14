@@ -9,9 +9,9 @@ const Friends = () => {
       justifyContent="center"
       height="100%"
       width="100%"
-      sx={{ backgroundColor: "grey" }}
+      sx={{ backgroundColor: "grey", overflowY: "auto" }}
     >
-      <h3>FRIENDS PAGE</h3>
+      <h3> FRIENDS PAGE</h3>
     </Box>
   );
 };
