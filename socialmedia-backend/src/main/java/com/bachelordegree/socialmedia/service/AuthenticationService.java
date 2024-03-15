@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import static com.bachelordegree.socialmedia.exception.CustomAuthenticationException.ERR_MSG_LOGIN_FAILED;
 import static com.bachelordegree.socialmedia.exception.UserAlreadyExistsException.ERR_MSG_USER_ALREADY_EXISTS;
@@ -67,7 +66,7 @@ public class AuthenticationService {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getAvatarUrl(), user.getBackgroundUrl(), user.getCurrency());
+            UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getAvatarUrl(), user.getBackgroundUrl(), user.getCurrency(), user.getDescription());
             return new LoginResponseDTO(userDTO, token);
         } catch (AuthenticationException e) {
             throw new CustomAuthenticationException(ERR_MSG_LOGIN_FAILED);

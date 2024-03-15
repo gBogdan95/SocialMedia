@@ -1,13 +1,15 @@
 package com.bachelordegree.socialmedia.converter;
 
 import com.bachelordegree.socialmedia.dto.PostDTO;
-import com.bachelordegree.socialmedia.dto.UserDTO;
 import com.bachelordegree.socialmedia.model.Post;
-import com.bachelordegree.socialmedia.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PostConverter {
+
+    @Autowired
+    private UserConverter userConverter;
 
     public Post toEntity(PostDTO postDTO) {
         Post post = new Post();
@@ -26,8 +28,7 @@ public class PostConverter {
         postDTO.setTitle(post.getTitle());
 
         if (post.getUser() != null) {
-            UserDTO userDTO = toUserDTO(post.getUser());
-            postDTO.setUser(userDTO);
+            postDTO.setUser(userConverter.toDTO(post.getUser()));
         }
 
         return postDTO;
@@ -42,8 +43,7 @@ public class PostConverter {
         postDTO.setTitle(post.getTitle());
 
         if (post.getUser() != null) {
-            UserDTO userDTO = toUserDTO(post.getUser());
-            postDTO.setUser(userDTO);
+            postDTO.setUser(userConverter.toDTO(post.getUser()));
         }
 
         boolean isLiked = post.getLikedByUsers().stream()
@@ -51,16 +51,5 @@ public class PostConverter {
         postDTO.setLiked(isLiked);
 
         return postDTO;
-    }
-
-    private UserDTO toUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setAvatarUrl(user.getAvatarUrl());
-        userDTO.setBackgroundUrl(user.getBackgroundUrl());
-        userDTO.setCurrency(user.getCurrency());
-        return userDTO;
     }
 }
