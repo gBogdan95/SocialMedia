@@ -1,16 +1,43 @@
-import React from "react";
-import Box from "@mui/material/Box";
+import React, { useState, useEffect } from "react";
+import User, { UserType } from "../components/User";
+import { Box, Typography } from "@mui/material";
+import { userService } from "../services/userService";
 
 const People = () => {
+  const [users, setUsers] = useState<UserType[]>([]);
+
+  const fetchAndSetUsers = async () => {
+    try {
+      const data = await userService.fetchUsers();
+      setUsers(data);
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAndSetUsers();
+  }, []);
+
   return (
     <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100%"
-      width="100%"
+      sx={{
+        marginTop: 2.5,
+        marginRight: 2.5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
     >
-      <h1>PEOPLE PAGE</h1>
+      {users.map((user) => (
+        <User
+          key={user.id}
+          id={user.id}
+          username={user.username}
+          avatarUrl={user.avatarUrl}
+          backgroundUrl={user.backgroundUrl}
+        />
+      ))}
     </Box>
   );
 };

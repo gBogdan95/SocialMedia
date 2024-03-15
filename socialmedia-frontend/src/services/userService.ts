@@ -22,8 +22,8 @@ const fetchUsers = async () => {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Failed to fetch posts:", errorText);
-    throw new Error("Failed to fetch posts.");
+    console.error("Failed to fetch users:", errorText);
+    throw new Error("Failed to fetch users.");
   }
 
   const data = await response.json();
@@ -43,8 +43,8 @@ const fetchUserById = async (userId: string) => {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error(`Failed to fetch post with ID ${userId}:`, errorText);
-    throw new Error(`Failed to fetch post with ID ${userId}.`);
+    console.error(`Failed to fetch user with ID ${userId}:`, errorText);
+    throw new Error(`Failed to fetch user with ID ${userId}.`);
   }
 
   const data = await response.json();
