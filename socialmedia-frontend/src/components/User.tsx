@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, Avatar } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
 
@@ -10,7 +11,18 @@ export interface UserType {
   backgroundUrl: string;
 }
 
-const User: React.FC<UserType> = ({ username, avatarUrl, backgroundUrl }) => {
+const User: React.FC<UserType> = ({
+  id,
+  username,
+  avatarUrl,
+  backgroundUrl,
+}) => {
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate(`/profile/${id}`);
+  };
+
   return (
     <Box
       sx={{
@@ -27,7 +39,25 @@ const User: React.FC<UserType> = ({ username, avatarUrl, backgroundUrl }) => {
         marginBottom: 2.5,
         boxShadow: 1,
         position: "relative",
+        cursor: "pointer", // Add cursor pointer to signify it's clickable
+        "&:hover": {
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            zIndex: 1,
+          },
+          "& .viewProfileText": {
+            display: "flex",
+            zIndex: 2,
+          },
+        },
       }}
+      onClick={handleProfileClick}
     >
       <Avatar
         src={avatarUrl || defaultAvatarImg}
@@ -73,6 +103,26 @@ const User: React.FC<UserType> = ({ username, avatarUrl, backgroundUrl }) => {
           {username}
         </Typography>
       </Box>
+      <Typography
+        sx={{
+          display: "none",
+          fontWeight: "bold",
+          fontSize: "60px",
+          color: "white",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 2,
+          backgroundColor: "rgba(0, 0, 0, 1)",
+          borderRadius: "20px",
+          padding: "10px 20px",
+          textShadow: "1px 1px 2px black",
+        }}
+        className="viewProfileText"
+      >
+        View Profile
+      </Typography>
     </Box>
   );
 };

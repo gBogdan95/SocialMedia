@@ -17,11 +17,19 @@ const MyProfile = () => {
     navigate(`/profile/${user?.id}`);
   };
 
+  const backgroundStyle = {
+    backgroundImage: user?.backgroundUrl
+      ? `url(${user.backgroundUrl})`
+      : `url(${defaultBackgroundImg})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  };
+
   return (
     <Box display="flex" flexDirection="column" height="100vh" width="100%">
       <Box
         sx={{
-          backgroundImage: `url(${user.backgroundUrl || defaultBackgroundImg})`,
+          ...backgroundStyle,
           position: "relative",
           color: "white",
           p: 2,
