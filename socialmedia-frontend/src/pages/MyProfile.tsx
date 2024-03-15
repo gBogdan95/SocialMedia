@@ -7,6 +7,7 @@ import currencyImg from "../assets/currency.png";
 import GroupIcon from "@mui/icons-material/Group";
 import Friends from "./Friends";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
+import defaultBackgroundImg from "../assets/defaultBackground.jpg";
 
 const MyProfile = () => {
   const { user } = useAuth();
@@ -16,20 +17,11 @@ const MyProfile = () => {
     navigate(`/profile/${user?.id}`);
   };
 
-  const backgroundStyle = {
-    backgroundImage: user?.backgroundUrl
-      ? `url(${user.backgroundUrl})`
-      : "none",
-    backgroundColor: user?.backgroundUrl ? "transparent" : "lightblue",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  };
-
   return (
     <Box display="flex" flexDirection="column" height="100vh" width="100%">
       <Box
         sx={{
-          ...backgroundStyle,
+          backgroundImage: `url(${user.backgroundUrl || defaultBackgroundImg})`,
           position: "relative",
           color: "white",
           p: 2,

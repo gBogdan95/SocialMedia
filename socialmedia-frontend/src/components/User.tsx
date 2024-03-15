@@ -1,5 +1,7 @@
 import React from "react";
 import { Box, Typography, Avatar } from "@mui/material";
+import defaultAvatarImg from "../assets/defaultAvatar.png";
+import defaultBackgroundImg from "../assets/defaultBackground.jpg";
 
 export interface UserType {
   id: string;
@@ -8,52 +10,69 @@ export interface UserType {
   backgroundUrl: string;
 }
 
-const User: React.FC<UserType> = ({
-  id,
-  username,
-  avatarUrl,
-  backgroundUrl,
-}) => {
+const User: React.FC<UserType> = ({ username, avatarUrl, backgroundUrl }) => {
   return (
     <Box
       sx={{
-        width: "100%",
+        width: "98%",
         height: 150,
-        backgroundImage: `url(${backgroundUrl})`,
+        backgroundImage: `url(${backgroundUrl || defaultBackgroundImg})`,
         backgroundSize: "cover",
         display: "flex",
         alignItems: "center",
+        justifyContent: "center",
         padding: 1,
-        borderRadius: 1,
+        borderRadius: 5,
         overflow: "hidden",
-        marginBottom: 1,
+        marginBottom: 2.5,
         boxShadow: 1,
         position: "relative",
       }}
     >
       <Avatar
-        src={avatarUrl}
+        src={avatarUrl || defaultAvatarImg}
         sx={{
-          width: 100,
-          height: 100,
-          border: "2px solid white",
+          width: 125,
+          height: 125,
           position: "absolute",
           left: 50,
           top: "50%",
           transform: "translateY(-50%)",
+          boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+          borderRadius: "50%",
         }}
       />
-      <Typography
-        variant="h6"
+
+      <Box
         sx={{
-          color: "white",
-          marginLeft: `calc(64px + 300px)`,
-          textShadow: "1px 1px 2px black",
-          fontSize: 70,
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          borderRadius: "20px",
+          p: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+
+          width: "auto",
+          minWidth: 250,
+          maxWidth: "90%",
+          boxSizing: "border-box",
         }}
       >
-        {username}
-      </Typography>
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            fontSize: "50px",
+            color: "white",
+            textShadow: "1px 1px 2px black",
+          }}
+        >
+          {username}
+        </Typography>
+      </Box>
     </Box>
   );
 };
