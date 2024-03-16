@@ -15,7 +15,7 @@ public class UserConverter {
         userDTO.setAvatarUrl(user.getAvatarUrl());
         userDTO.setBackgroundUrl(user.getBackgroundUrl());
         userDTO.setCurrency(user.getCurrency());
-        userDTO.setDescription(userDTO.getDescription());
+        userDTO.setDescription(user.getDescription());
         return userDTO;
     }
 }

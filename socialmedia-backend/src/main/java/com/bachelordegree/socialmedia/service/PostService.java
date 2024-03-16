@@ -46,8 +46,6 @@ public class PostService {
         return postRepository.findAllByUserOrderByCreatedAtDesc(user);
     }
 
-
-
     public Post save(Post post, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));

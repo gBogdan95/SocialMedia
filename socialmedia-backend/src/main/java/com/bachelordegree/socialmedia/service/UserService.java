@@ -4,6 +4,7 @@ import com.bachelordegree.socialmedia.exception.ReplyNotFoundException;
 import com.bachelordegree.socialmedia.model.Reply;
 import com.bachelordegree.socialmedia.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> getAll() {
-        return userRepository.findAll();
+        return userRepository.findAll(Sort.by("username"));
     }
 
     public User getById(UUID id) throws UsernameNotFoundException{

@@ -68,9 +68,11 @@ const ProfileDetails: React.FC = () => {
           <Typography variant="h4" gutterBottom>
             {profile.username}
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            {profile.description}
-          </Typography>
+          {profile.description && (
+            <Typography variant="subtitle1" gutterBottom>
+              Description: {profile.description}
+            </Typography>
+          )}
           <Typography variant="body1">{profile.email}</Typography>
         </Box>
       </Paper>
