@@ -71,7 +71,7 @@ const ProfileDetails: React.FC = () => {
 
   return (
     <Container sx={{ maxWidth: "100%" }}>
-      <Paper elevation={3} sx={{ mt: 2, borderRadius: 2, overflow: "hidden" }}>
+      <Paper elevation={5} sx={{ mt: 2, borderRadius: 2, overflow: "hidden" }}>
         <Box
           sx={{
             backgroundImage: `url(${profile.backgroundUrl || defaultBackgroundImg})`,
@@ -133,21 +133,25 @@ const ProfileDetails: React.FC = () => {
           </Button>
         </Box>
       )}
-      <Box
-        sx={{
-          marginTop: 2.5,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {userPosts.length > 0 ? (
-          userPosts.map((post) => (
-            <Post key={post.id} post={post} trimText={true} />
-          ))
-        ) : (
-          <Typography>This user has no posts yet</Typography>
-        )}
+      <Box sx={{ mt: 2, backgroundColor: "#DFF5FF", p: 2, borderRadius: 5 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            p: 3,
+          }}
+        >
+          {userPosts.length > 0 ? (
+            userPosts.map((post) => (
+              <Post key={post.id} post={post} trimText={true} />
+            ))
+          ) : (
+            <Typography sx={{ fontSize: 30 }}>
+              This user has no posts yet
+            </Typography>
+          )}
+        </Box>
       </Box>
     </Container>
   );
