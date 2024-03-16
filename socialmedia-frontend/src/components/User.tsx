@@ -39,7 +39,7 @@ const User: React.FC<UserType> = ({
         marginBottom: 2.5,
         boxShadow: 1,
         position: "relative",
-        cursor: "pointer", // Add cursor pointer to signify it's clickable
+        cursor: "pointer",
         "&:hover": {
           "&::after": {
             content: '""',
