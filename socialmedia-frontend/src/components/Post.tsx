@@ -31,7 +31,7 @@ export interface PostType {
 
 interface PostProps {
   post: PostType;
-  refreshPosts: () => void;
+  refreshPosts?: () => void;
   trimText?: boolean;
   isDetailPage?: boolean;
   onCommentButtonClick?: () => void;

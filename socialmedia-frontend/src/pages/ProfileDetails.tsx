@@ -13,6 +13,8 @@ import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import MessageIcon from "@mui/icons-material/Message";
+import Post, { PostType } from "../components/Post";
+import { postService } from "../services/postService";
 
 export interface ProfileDetailsType {
   id: string;
@@ -44,6 +46,23 @@ const ProfileDetails: React.FC = () => {
     };
 
     fetchProfile();
+  }, [userId]);
+
+  const [userPosts, setUserPosts] = useState<PostType[]>([]);
+
+  const fetchAndSetUserPosts = async () => {
+    if (!userId) return;
+
+    try {
+      const data = await postService.fetchPostsByUserId(userId);
+      setUserPosts(data);
+    } catch (error) {
+      console.error("Failed to fetch user posts:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAndSetUserPosts();
   }, [userId]);
 
   if (!profile) {
@@ -114,6 +133,22 @@ const ProfileDetails: React.FC = () => {
           </Button>
         </Box>
       )}
+      <Box
+        sx={{
+          marginTop: 2.5,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {userPosts.length > 0 ? (
+          userPosts.map((post) => (
+            <Post key={post.id} post={post} trimText={true} />
+          ))
+        ) : (
+          <Typography>This user has no posts yet</Typography>
+        )}
+      </Box>
     </Container>
   );
 };

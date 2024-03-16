@@ -51,6 +51,30 @@ const fetchPostById = async (postId: string) => {
   return data;
 };
 
+const fetchPostsByUserId = async (userId: string) => {
+  const token = getToken();
+
+  const response = await fetch(`${API_BASE_URL}/user/posts/by-user/${userId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(
+      `Failed to fetch posts for user with ID ${userId}:`,
+      errorText
+    );
+    throw new Error(`Failed to fetch posts for user with ID ${userId}.`);
+  }
+
+  const data = await response.json();
+  return data;
+};
+
 const createPost = async (title: string, postContent: string) => {
   const token = getToken();
   const response = await fetch(`${API_BASE_URL}/user/posts`, {
@@ -159,6 +183,7 @@ const deletePost = async (postId: string) => {
 export const postService = {
   fetchPosts,
   fetchPostById,
+  fetchPostsByUserId,
   createPost,
   updatePost,
   likePost,
