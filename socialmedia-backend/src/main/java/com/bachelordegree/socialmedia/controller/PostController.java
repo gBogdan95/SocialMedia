@@ -7,26 +7,19 @@ import com.bachelordegree.socialmedia.exception.NotLikedException;
 import com.bachelordegree.socialmedia.exception.PostNotFoundException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.Post;
-import com.bachelordegree.socialmedia.model.User;
-import com.bachelordegree.socialmedia.repository.UserRepository;
 import com.bachelordegree.socialmedia.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,6 +50,21 @@ public class PostController {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    @GetMapping("/by-user/{id}")
+    public List<PostDTO> getPostsByUserId(@PathVariable UUID id) {
+        try {
+            List<Post> posts = postService.getAllPostsByUserId(id);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentUsername = authentication.getName();
+            return posts.stream()
+                    .map(post -> postConverter.toDTO(post, currentUsername))
+                    .toList();
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
 
     @PostMapping
     public PostDTO create(@Valid @RequestBody PostDTO postDTO, Authentication authentication) {

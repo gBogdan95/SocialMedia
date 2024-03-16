@@ -40,6 +40,14 @@ public class PostService {
                 .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
     }
 
+    public List<Post> getAllPostsByUserId(UUID id) throws UsernameNotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + id));
+        return postRepository.findAllByUserOrderByCreatedAtDesc(user);
+    }
+
+
+
     public Post save(Post post, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
@@ -115,6 +123,4 @@ public class PostService {
         post.setLikes(Math.max(0, post.getLikes() - 1));
         postRepository.save(post);
     }
-
-
 }
