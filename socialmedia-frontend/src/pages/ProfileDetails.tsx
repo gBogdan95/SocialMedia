@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Avatar, Container, Paper } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Avatar,
+  Container,
+  Paper,
+  Button,
+} from "@mui/material";
 import { useParams } from "react-router-dom";
 import { userService } from "../services/userService";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import MessageIcon from "@mui/icons-material/Message";
 
 export interface ProfileDetailsType {
   id: string;
@@ -17,6 +26,10 @@ export interface ProfileDetailsType {
 const ProfileDetails: React.FC = () => {
   const [profile, setProfile] = useState<ProfileDetailsType | null>(null);
   const { userId } = useParams<{ userId: string }>();
+
+  const storedUser = localStorage.getItem("user");
+  const currentUser = storedUser ? JSON.parse(storedUser) : null;
+  const isCurrentUser = currentUser && profile && profile.id === currentUser.id;
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -38,7 +51,7 @@ const ProfileDetails: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="md">
+    <Container sx={{ maxWidth: "100%" }}>
       <Paper elevation={3} sx={{ mt: 2, borderRadius: 2, overflow: "hidden" }}>
         <Box
           sx={{
@@ -56,26 +69,51 @@ const ProfileDetails: React.FC = () => {
             src={profile.avatarUrl || defaultAvatarImg}
             alt={profile.username}
             sx={{
-              width: 120,
-              height: 120,
-              border: "4px solid white",
+              width: 175,
+              height: 175,
+              ml: 2,
               transform: "translateY(50%)",
             }}
           />
         </Box>
-        <Box sx={{ pt: 7, pb: 2, px: 2 }}>
-          {" "}
-          <Typography variant="h4" gutterBottom>
+        <Box sx={{ pt: 12, pb: 2, px: 5 }}>
+          <Typography variant="h4" gutterBottom style={{ fontWeight: "bold" }}>
             {profile.username}
           </Typography>
           {profile.description && (
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              style={{ wordWrap: "break-word", marginBottom: "10px" }}
+            >
               Description: {profile.description}
             </Typography>
           )}
-          <Typography variant="body1">{profile.email}</Typography>
+          <Typography variant="body1">Email: {profile.email}</Typography>
         </Box>
       </Paper>
+      {!isCurrentUser && (
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {}}
+            sx={{ width: "calc(50% - 8px)", maxWidth: "600px", mr: 1 }}
+            startIcon={<PersonAddIcon />}
+          >
+            Add Friend
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {}}
+            sx={{ width: "calc(50% - 8px)", maxWidth: "600px", ml: 1 }}
+            startIcon={<MessageIcon />}
+          >
+            Message
+          </Button>
+        </Box>
+      )}
     </Container>
   );
 };
