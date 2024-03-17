@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogActions,
@@ -8,34 +8,51 @@ import {
   Button,
   Typography,
 } from "@mui/material";
+import { validatePost } from "../utils/validate";
 
 interface UpdatePostDialogProps {
   open: boolean;
   title: string;
-  text: string;
+  content: string;
   onClose: () => void;
-  onSave: (title: string, text: string) => void;
+  onSave: (title: string, content: string) => void;
 }
 
 const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
   open,
   title,
-  text,
+  content,
   onClose,
   onSave,
 }) => {
-  const [editTitle, setEditTitle] = React.useState(title);
-  const [editText, setEditText] = React.useState(text);
+  const [editTitle, setEditTitle] = useState(title);
+  const [editContent, setEditContent] = useState(content);
+  const [errors, setErrors] = useState({ title: "", content: "" });
 
-  React.useEffect(() => {
-    if (!open) {
+  useEffect(() => {
+    if (open) {
       setEditTitle(title);
-      setEditText(text);
+      setEditContent(content);
+      setErrors({ title: "", content: "" });
     }
-  }, [open, title, text]);
+  }, [open, title, content]);
+
+  const validateField = (name: string, value: string) => {
+    const validationError = validatePost[name] ? validatePost[name](value) : "";
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: validationError }));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    name === "title" ? setEditTitle(value) : setEditContent(value);
+    validateField(name, value);
+  };
 
   const handleSave = () => {
-    onSave(editTitle, editText);
+    if (!errors.title && !errors.content) {
+      onSave(editTitle, editContent);
+      onClose();
+    }
   };
 
   return (
@@ -60,10 +77,12 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
           label="Title"
           type="text"
           fullWidth
-          variant="outlined"
+          name="title"
           value={editTitle}
-          onChange={(e) => setEditTitle(e.target.value)}
-          sx={{ mb: 2, mt: 2 }}
+          onChange={handleChange}
+          error={!!errors.title}
+          helperText={errors.title}
+          sx={{ mb: 2 }}
         />
         <Typography sx={{ fontSize: 25, mt: 2 }}>Change content:</Typography>
         <TextField
@@ -72,11 +91,13 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
           label="Text"
           type="text"
           fullWidth
-          variant="outlined"
+          name="content"
           multiline
           rows={15}
-          value={editText}
-          onChange={(e) => setEditText(e.target.value)}
+          value={editContent}
+          onChange={handleChange}
+          error={!!errors.content}
+          helperText={errors.content}
           sx={{ mb: 2 }}
         />
       </DialogContent>
@@ -118,7 +139,7 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
               color: "gray",
             },
           }}
-          disabled={!editTitle.trim() || !editText.trim()}
+          disabled={!editTitle.trim() || !editContent.trim()}
         >
           Save
         </Button>

@@ -8,6 +8,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
+import { validatePost } from "../utils/validate";
 
 interface PostDialogProps {
   open: boolean;
@@ -20,36 +21,32 @@ const PostDialog: React.FC<PostDialogProps> = ({
   handleClose: propHandleClose,
   handleSavePost,
 }) => {
-  const [title, setTitle] = useState("");
-  const [titleError, setTitleError] = useState("");
-  const [postContent, setPostContent] = useState("");
-  const [contentError, setContentError] = useState("");
+  const [formData, setFormData] = useState({ title: "", content: "" });
+  const [errors, setErrors] = useState({ title: "", content: "" });
 
   const handleClose = () => {
-    setTitle("");
-    setPostContent("");
-    setTitleError("");
-    setContentError("");
+    setFormData({ title: "", content: "" });
+    setErrors({ title: "", content: "" });
     propHandleClose();
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+
+    const error = validatePost[name](value);
+    setErrors({ ...errors, [name]: error });
+  };
+
   const handleSave = () => {
-    setTitleError("");
-    setContentError("");
+    const titleError = validatePost.title(formData.title);
+    const contentError = validatePost.content(formData.content);
 
-    let isValid = true;
-    if (!title.trim()) {
-      setTitleError("Title is required!");
-      isValid = false;
-    }
-    if (!postContent.trim()) {
-      setContentError("Content is required!");
-      isValid = false;
-    }
-
-    if (isValid) {
-      handleSavePost(title, postContent);
+    if (!titleError && !contentError) {
+      handleSavePost(formData.title, formData.content);
       handleClose();
+    } else {
+      setErrors({ title: titleError, content: contentError });
     }
   };
 
@@ -75,12 +72,12 @@ const PostDialog: React.FC<PostDialogProps> = ({
           label="Title"
           type="text"
           fullWidth
-          variant="outlined"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          error={!!titleError}
-          helperText={titleError}
-          sx={{ mb: 2, mt: 2 }}
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          error={!!errors.title}
+          helperText={errors.title}
+          sx={{ mb: 2 }}
         />
         <Typography sx={{ fontSize: 25, mt: 2 }}>
           Share something intersing:
@@ -92,15 +89,16 @@ const PostDialog: React.FC<PostDialogProps> = ({
           label="Content"
           type="text"
           fullWidth
-          variant="outlined"
+          name="content"
+          value={formData.content}
+          onChange={handleChange}
+          error={!!errors.content}
+          helperText={errors.content}
           multiline
           rows={15}
-          value={postContent}
-          onChange={(e) => setPostContent(e.target.value)}
-          error={!!contentError}
-          helperText={contentError}
         />
       </DialogContent>
+
       <DialogActions
         sx={{
           marginBottom: "15px",
@@ -133,10 +131,6 @@ const PostDialog: React.FC<PostDialogProps> = ({
             backgroundColor: "#40A2D8",
             "&:hover": {
               backgroundColor: "#1450A3",
-            },
-            "&.Mui-disabled": {
-              backgroundColor: "lightgray",
-              color: "gray",
             },
           }}
         >

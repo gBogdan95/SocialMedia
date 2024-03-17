@@ -225,7 +225,7 @@ const Post: React.FC<PostProps> = ({
                 <UpdatePostDialog
                   open={editDialogOpen}
                   title={post.title}
-                  text={post.text}
+                  content={post.text}
                   onClose={() => setEditDialogOpen(false)}
                   onSave={handleSaveEdit}
                 />
