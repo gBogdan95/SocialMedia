@@ -25,33 +25,32 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
   onClose,
   onSave,
 }) => {
-  const [editTitle, setEditTitle] = useState(title);
-  const [editContent, setEditContent] = useState(content);
+  const [formData, setFormData] = useState({ title, content });
   const [errors, setErrors] = useState({ title: "", content: "" });
 
   useEffect(() => {
     if (open) {
-      setEditTitle(title);
-      setEditContent(content);
+      setFormData({ title, content });
       setErrors({ title: "", content: "" });
     }
   }, [open, title, content]);
 
-  const validateField = (name: string, value: string) => {
-    const validationError = validatePost[name] ? validatePost[name](value) : "";
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: validationError }));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    name === "title" ? setEditTitle(value) : setEditContent(value);
-    validateField(name, value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    const error = validatePost[name](value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   const handleSave = () => {
-    if (!errors.title && !errors.content) {
-      onSave(editTitle, editContent);
+    const titleError = validatePost.title(formData.title);
+    const contentError = validatePost.content(formData.content);
+
+    if (!titleError && !contentError) {
+      onSave(formData.title, formData.content);
       onClose();
+    } else {
+      setErrors({ title: titleError, content: contentError });
     }
   };
 
@@ -78,7 +77,7 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
           type="text"
           fullWidth
           name="title"
-          value={editTitle}
+          value={formData.title}
           onChange={handleChange}
           error={!!errors.title}
           helperText={errors.title}
@@ -94,7 +93,7 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
           name="content"
           multiline
           rows={15}
-          value={editContent}
+          value={formData.content}
           onChange={handleChange}
           error={!!errors.content}
           helperText={errors.content}
@@ -139,7 +138,7 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
               color: "gray",
             },
           }}
-          disabled={!editTitle.trim() || !editContent.trim()}
+          disabled={!formData.title.trim() || !formData.content.trim()}
         >
           Save
         </Button>

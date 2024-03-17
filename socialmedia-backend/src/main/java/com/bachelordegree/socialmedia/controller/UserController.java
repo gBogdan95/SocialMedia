@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping("update-profile/{id}")
-    public UserDTO updateProfile(@PathVariable UUID id, @Valid @RequestBody UserProfileUpdateDTO updateDTO) {
+    public UserDTO updateProfile(@PathVariable UUID id, @Validated @RequestBody UserProfileUpdateDTO updateDTO) {
         try {
             User updatedUser = userService.updateUserProfile(id, updateDTO);
             return userConverter.toDTO(updatedUser);
@@ -56,6 +57,4 @@ public class UserController {
             throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating user profile: " + e.getMessage());
         }
     }
-
-
 }

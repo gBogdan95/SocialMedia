@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
   Button,
@@ -161,6 +160,12 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
         </Button>
         <Button
           onClick={handleFormSubmit}
+          disabled={
+            !!errors.username ||
+            !!errors.email ||
+            !formData.username.trim() ||
+            !formData.email.trim()
+          }
           sx={{
             fontSize: "1rem",
             padding: "6px 16px",

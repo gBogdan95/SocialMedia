@@ -83,7 +83,6 @@ const PostDialog: React.FC<PostDialogProps> = ({
           Share something intersing:
         </Typography>
         <TextField
-          autoFocus
           margin="dense"
           id="post-content"
           label="Content"
