@@ -3,9 +3,11 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   TextField,
   Button,
+  Typography,
 } from "@mui/material";
 import { validateRegister } from "../utils/validate";
 import { userService } from "../services/userService";
@@ -74,8 +76,21 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-      <DialogTitle>Edit Profile</DialogTitle>
+      <DialogTitle
+        sx={{
+          fontSize: 24,
+          fontWeight: "bold",
+          backgroundColor: "#1450A3",
+          textShadow: "2px 2px 4px rgba(0, 0, 0, 1)",
+          color: "white",
+        }}
+      >
+        Edit Profile
+      </DialogTitle>
       <DialogContent>
+        <Typography sx={{ fontSize: 25, mt: 2 }}>
+          Change username/email:
+        </Typography>
         <TextField
           autoFocus
           margin="dense"
@@ -89,7 +104,7 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
           onChange={handleFormChange}
           error={!!errors.username}
           helperText={errors.username}
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, mt: 2 }}
         />
         <TextField
           margin="dense"
@@ -103,8 +118,11 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
           onChange={handleFormChange}
           error={!!errors.email}
           helperText={errors.email}
-          sx={{ mb: 2 }}
+          sx={{ mb: 5 }}
         />
+        <Typography sx={{ fontSize: 25, mb: 1 }}>
+          Tell something about you:
+        </Typography>
         <TextField
           margin="dense"
           id="description"
@@ -116,13 +134,13 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
           value={formData.description}
           onChange={handleFormChange}
           multiline
-          rows={4}
+          rows={5}
           sx={{ mb: 2 }}
         />
       </DialogContent>
       <DialogActions
         sx={{
-          padding: "20px",
+          marginBottom: "15px",
         }}
       >
         <Button
@@ -132,6 +150,7 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
             padding: "6px 16px",
             width: "125px",
             color: "white",
+            mr: 1,
             backgroundColor: "#40A2D8",
             "&:hover": {
               backgroundColor: "#1450A3",
@@ -147,6 +166,7 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
             padding: "6px 16px",
             width: "125px",
             color: "white",
+            mr: 2,
             backgroundColor: "#40A2D8",
             "&:hover": {
               backgroundColor: "#1450A3",

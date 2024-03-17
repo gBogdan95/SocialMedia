@@ -6,6 +6,7 @@ import {
   DialogTitle,
   TextField,
   Button,
+  Typography,
 } from "@mui/material";
 
 interface UpdatePostDialogProps {
@@ -39,8 +40,19 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle id="form-dialog-title">Edit Post</DialogTitle>
+      <DialogTitle
+        sx={{
+          fontSize: 24,
+          fontWeight: "bold",
+          backgroundColor: "#1450A3",
+          textShadow: "2px 2px 4px rgba(0, 0, 0, 1)",
+          color: "white",
+        }}
+      >
+        Edit Post
+      </DialogTitle>
       <DialogContent>
+        <Typography sx={{ fontSize: 25, mt: 2 }}>Change title:</Typography>
         <TextField
           autoFocus
           margin="dense"
@@ -51,8 +63,9 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
           variant="outlined"
           value={editTitle}
           onChange={(e) => setEditTitle(e.target.value)}
-          sx={{ mb: 2, mt: 4 }}
+          sx={{ mb: 2, mt: 2 }}
         />
+        <Typography sx={{ fontSize: 25, mt: 2 }}>Change content:</Typography>
         <TextField
           margin="dense"
           id="text"

@@ -3,10 +3,10 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   TextField,
   DialogActions,
   Button,
+  Typography,
 } from "@mui/material";
 
 interface PostDialogProps {
@@ -55,9 +55,19 @@ const PostDialog: React.FC<PostDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-      <DialogTitle>Create a new post</DialogTitle>
+      <DialogTitle
+        sx={{
+          fontSize: 24,
+          fontWeight: "bold",
+          backgroundColor: "#1450A3",
+          textShadow: "2px 2px 4px rgba(0, 0, 0, 1)",
+          color: "white",
+        }}
+      >
+        Create a new post
+      </DialogTitle>
       <DialogContent>
-        <DialogContentText>Share something interesting</DialogContentText>
+        <Typography sx={{ fontSize: 25, mt: 2 }}>Choose a title:</Typography>
         <TextField
           autoFocus
           margin="dense"
@@ -70,8 +80,11 @@ const PostDialog: React.FC<PostDialogProps> = ({
           onChange={(e) => setTitle(e.target.value)}
           error={!!titleError}
           helperText={titleError}
-          sx={{ mb: 2, mt: 4 }}
+          sx={{ mb: 2, mt: 2 }}
         />
+        <Typography sx={{ fontSize: 25, mt: 2 }}>
+          Share something intersing:
+        </Typography>
         <TextField
           autoFocus
           margin="dense"
