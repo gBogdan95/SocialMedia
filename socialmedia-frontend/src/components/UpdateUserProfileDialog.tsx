@@ -51,26 +51,23 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
   };
 
   const handleFormSubmit = async () => {
-    if (!Object.values(errors).some((error) => error)) {
-      try {
-        await userService.updateUserProfile(
-          profileId,
-          formData.username,
-          formData.email,
-          formData.description
-        );
-        handleClose();
-      } catch (error) {
-        const errorMessage =
-          (error as Error).message || "An unknown error occurred";
-        if (
-          errorMessage.toLowerCase().includes("this username already exists")
-        ) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            username: errorMessage,
-          }));
-        }
+    try {
+      await userService.updateUserProfile(
+        profileId,
+        formData.username,
+        formData.email,
+        formData.description
+      );
+      handleClose();
+      window.location.reload();
+    } catch (error) {
+      const errorMessage =
+        (error as Error).message || "An unknown error occurred";
+      if (errorMessage.toLowerCase().includes("this username already exists")) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          username: errorMessage,
+        }));
       }
     }
   };

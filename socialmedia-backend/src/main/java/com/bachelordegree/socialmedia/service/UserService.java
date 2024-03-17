@@ -52,7 +52,9 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
 
-        if (userRepository.findByUsername(updateDTO.getUsername()).isPresent()) {
+        User existingUser = userRepository.findByUsername(updateDTO.getUsername()).orElse(null);
+
+        if (existingUser != null && !existingUser.getId().equals(userId)) {
             throw new UserAlreadyExistsException(ERR_MSG_USER_ALREADY_EXISTS);
         }
 

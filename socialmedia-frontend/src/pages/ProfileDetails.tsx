@@ -67,30 +67,6 @@ const ProfileDetails: React.FC = () => {
     fetchAndSetUserPosts();
   }, [userId]);
 
-  const updateUserProfile = async (
-    username: string,
-    email: string,
-    description: string
-  ) => {
-    if (!profile) {
-      return;
-    }
-    try {
-      await userService.updateUserProfile(
-        profile.id,
-        username,
-        email,
-        description
-      );
-      setIsEditDialogOpen(false);
-    } catch (error) {
-      const errorMessage =
-        (error as Error).message || "An unknown error occurred";
-
-      console.error("Update error:", errorMessage);
-    }
-  };
-
   if (!profile) {
     return <Typography>Loading profile...</Typography>;
   }
