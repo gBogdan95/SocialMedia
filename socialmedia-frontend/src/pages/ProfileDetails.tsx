@@ -70,7 +70,7 @@ const ProfileDetails: React.FC = () => {
   }
 
   return (
-    <Container sx={{ maxWidth: "100%" }}>
+    <Box sx={{ maxWidth: "98%", ml: 0.5, mr: 3 }}>
       <Paper elevation={5} sx={{ mt: 2, borderRadius: 2, overflow: "hidden" }}>
         <Box
           sx={{
@@ -153,7 +153,7 @@ const ProfileDetails: React.FC = () => {
           )}
         </Box>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
