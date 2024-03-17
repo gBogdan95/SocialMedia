@@ -2,6 +2,7 @@ package com.bachelordegree.socialmedia.service;
 
 import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
 import com.bachelordegree.socialmedia.exception.ReplyNotFoundException;
+import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.Reply;
 import com.bachelordegree.socialmedia.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.bachelordegree.socialmedia.exception.ReplyNotFoundException.ERR_MSG_REPLY_NOT_FOUND;
+import static com.bachelordegree.socialmedia.exception.UserAlreadyExistsException.ERR_MSG_USER_ALREADY_EXISTS;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -46,9 +48,13 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
     }
 
-    public User updateUserProfile(UUID userId, UserProfileUpdateDTO updateDTO) throws UsernameNotFoundException {
+    public User updateUserProfile(UUID userId, UserProfileUpdateDTO updateDTO) throws UsernameNotFoundException, UserAlreadyExistsException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+
+        if (userRepository.findByUsername(updateDTO.getUsername()).isPresent()) {
+            throw new UserAlreadyExistsException(ERR_MSG_USER_ALREADY_EXISTS);
+        }
 
         user.setUsername(updateDTO.getUsername());
         user.setEmail(updateDTO.getEmail());
@@ -56,5 +62,6 @@ public class UserService implements UserDetailsService {
 
         return userRepository.save(user);
     }
+
 
 }

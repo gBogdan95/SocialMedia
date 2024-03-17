@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Avatar,
-  Container,
-  Paper,
-  Button,
-} from "@mui/material";
+import { Box, Typography, Avatar, Paper, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { userService } from "../services/userService";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
@@ -17,6 +10,7 @@ import Post, { PostType } from "../components/Post";
 import { postService } from "../services/postService";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import UpdateUserProfileDialog from "../components/UpdateUserProfileDialog";
 
 export interface ProfileDetailsType {
   id: string;
@@ -35,7 +29,13 @@ const ProfileDetails: React.FC = () => {
   const currentUser = storedUser ? JSON.parse(storedUser) : null;
   const isCurrentUser = currentUser && profile && profile.id === currentUser.id;
 
-  const [open, setOpen] = useState(false);
+  const [userPosts, setUserPosts] = useState<PostType[]>([]);
+
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+  const handleEditDialogClose = () => {
+    setIsEditDialogOpen(false);
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -52,8 +52,6 @@ const ProfileDetails: React.FC = () => {
     fetchProfile();
   }, [userId]);
 
-  const [userPosts, setUserPosts] = useState<PostType[]>([]);
-
   const fetchAndSetUserPosts = async () => {
     if (!userId) return;
 
@@ -68,6 +66,30 @@ const ProfileDetails: React.FC = () => {
   useEffect(() => {
     fetchAndSetUserPosts();
   }, [userId]);
+
+  const updateUserProfile = async (
+    username: string,
+    email: string,
+    description: string
+  ) => {
+    if (!profile) {
+      return;
+    }
+    try {
+      await userService.updateUserProfile(
+        profile.id,
+        username,
+        email,
+        description
+      );
+      setIsEditDialogOpen(false);
+    } catch (error) {
+      const errorMessage =
+        (error as Error).message || "An unknown error occurred";
+
+      console.error("Update error:", errorMessage);
+    }
+  };
 
   if (!profile) {
     return <Typography>Loading profile...</Typography>;
@@ -100,8 +122,6 @@ const ProfileDetails: React.FC = () => {
           />
         </Box>
         <Box sx={{ pt: 12, pb: 2, px: 5, position: "relative" }}>
-          {" "}
-          {/* Adjust the styling as needed */}
           <Typography variant="h4" gutterBottom style={{ fontWeight: "bold" }}>
             {profile.username}
           </Typography>
@@ -116,22 +136,40 @@ const ProfileDetails: React.FC = () => {
           )}
           <Typography variant="body1">Email: {profile.email}</Typography>
           {isCurrentUser && (
-            <IconButton
-              sx={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                color: open ? "#1450A3" : "#40A2D8",
-                "&:hover": {
-                  backgroundColor: "lightblue",
-                },
-                fontSize: "2rem",
-              }}
-              onClick={() => {}}
-              aria-label="edit profile"
-            >
-              <EditIcon sx={{ fontSize: "inherit" }} />
-            </IconButton>
+            <>
+              <IconButton
+                sx={{
+                  position: "absolute",
+                  top: "15px",
+                  right: "30px",
+                  color: "#40A2D8",
+                  "&:hover": {
+                    backgroundColor: "lightblue",
+                  },
+                }}
+                onClick={() => setIsEditDialogOpen(true)}
+                aria-label="edit profile"
+              >
+                <EditIcon
+                  sx={{
+                    fontSize: "60px",
+                    "&:hover": {
+                      color: "#1450A3",
+                    },
+                  }}
+                />
+              </IconButton>
+              <UpdateUserProfileDialog
+                open={isEditDialogOpen}
+                handleClose={handleEditDialogClose}
+                profileId={profile.id}
+                initialFormData={{
+                  username: profile.username,
+                  email: profile.email,
+                  description: profile.description,
+                }}
+              />
+            </>
           )}
         </Box>
       </Paper>

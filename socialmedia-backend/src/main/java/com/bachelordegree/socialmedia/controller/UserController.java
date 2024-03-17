@@ -4,6 +4,7 @@ import com.bachelordegree.socialmedia.converter.UserConverter;
 import com.bachelordegree.socialmedia.dto.UserDTO;
 import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
 import com.bachelordegree.socialmedia.exception.RestException;
+import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.UserService;
 import jakarta.validation.Valid;
@@ -49,9 +50,12 @@ public class UserController {
             return userConverter.toDTO(updatedUser);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UserAlreadyExistsException e) {
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {
             throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating user profile: " + e.getMessage());
         }
     }
+
 
 }

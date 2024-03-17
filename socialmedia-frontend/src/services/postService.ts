@@ -93,6 +93,7 @@ const createPost = async (title: string, postContent: string) => {
 
   return response.json();
 };
+
 const updatePost = async (
   postId: string,
   title: string,

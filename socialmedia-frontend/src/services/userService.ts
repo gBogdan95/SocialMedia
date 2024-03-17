@@ -51,7 +51,37 @@ const fetchUserById = async (userId: string) => {
   return data;
 };
 
+const updateUserProfile = async (
+  userId: string,
+  username: string,
+  email: string,
+  description: string
+) => {
+  const token = getToken();
+
+  const response = await fetch(
+    `${API_BASE_URL}/user/users/update-profile/${userId}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, email, description }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    const errorMessage = errorData.message || "Update failed";
+    throw new Error(errorMessage);
+  }
+
+  return response.json();
+};
+
 export const userService = {
   fetchUsers,
   fetchUserById,
+  updateUserProfile,
 };
