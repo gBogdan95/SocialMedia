@@ -28,8 +28,8 @@ import static com.bachelordegree.socialmedia.exception.PostNotFoundException.ERR
 public class PostService {
 
     private final PostRepository postRepository;
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
     public List<Post> getAll() {
         return postRepository.findAllByOrderByCreatedAtDesc();

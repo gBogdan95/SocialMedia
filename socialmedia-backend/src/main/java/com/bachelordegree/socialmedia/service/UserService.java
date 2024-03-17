@@ -1,5 +1,6 @@
 package com.bachelordegree.socialmedia.service;
 
+import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
 import com.bachelordegree.socialmedia.exception.ReplyNotFoundException;
 import com.bachelordegree.socialmedia.model.Reply;
 import com.bachelordegree.socialmedia.model.User;
@@ -44,4 +45,16 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
     }
+
+    public User updateUserProfile(UUID userId, UserProfileUpdateDTO updateDTO) throws UsernameNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+
+        user.setUsername(updateDTO.getUsername());
+        user.setEmail(updateDTO.getEmail());
+        user.setDescription(updateDTO.getDescription());
+
+        return userRepository.save(user);
+    }
+
 }
