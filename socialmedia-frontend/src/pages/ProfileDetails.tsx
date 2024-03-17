@@ -15,6 +15,8 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import MessageIcon from "@mui/icons-material/Message";
 import Post, { PostType } from "../components/Post";
 import { postService } from "../services/postService";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
 
 export interface ProfileDetailsType {
   id: string;
@@ -32,6 +34,8 @@ const ProfileDetails: React.FC = () => {
   const storedUser = localStorage.getItem("user");
   const currentUser = storedUser ? JSON.parse(storedUser) : null;
   const isCurrentUser = currentUser && profile && profile.id === currentUser.id;
+
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -95,7 +99,9 @@ const ProfileDetails: React.FC = () => {
             }}
           />
         </Box>
-        <Box sx={{ pt: 12, pb: 2, px: 5 }}>
+        <Box sx={{ pt: 12, pb: 2, px: 5, position: "relative" }}>
+          {" "}
+          {/* Adjust the styling as needed */}
           <Typography variant="h4" gutterBottom style={{ fontWeight: "bold" }}>
             {profile.username}
           </Typography>
@@ -109,6 +115,24 @@ const ProfileDetails: React.FC = () => {
             </Typography>
           )}
           <Typography variant="body1">Email: {profile.email}</Typography>
+          {isCurrentUser && (
+            <IconButton
+              sx={{
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                color: open ? "#1450A3" : "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "lightblue",
+                },
+                fontSize: "2rem",
+              }}
+              onClick={() => {}}
+              aria-label="edit profile"
+            >
+              <EditIcon sx={{ fontSize: "inherit" }} />
+            </IconButton>
+          )}
         </Box>
       </Paper>
       {!isCurrentUser && (
