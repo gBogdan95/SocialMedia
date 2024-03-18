@@ -32,6 +32,7 @@ const ProfileDetails: React.FC = () => {
   const [userPosts, setUserPosts] = useState<PostType[]>([]);
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleEditDialogClose = () => {
     setIsEditDialogOpen(false);
@@ -84,21 +85,62 @@ const ProfileDetails: React.FC = () => {
             alignItems: "flex-end",
             justifyContent: "space-between",
             p: 2,
+            position: "relative",
           }}
         >
-          <Avatar
-            src={profile.avatarUrl || defaultAvatarImg}
-            alt={profile.username}
+          <Box
+            onClick={() => {}}
             sx={{
+              cursor: "pointer",
               width: 175,
               height: 175,
               ml: 2,
-              transform: "translateY(50%)",
+              position: "relative",
+              bottom: "-50%",
+              zIndex: 1,
+              overflow: "hidden",
             }}
-          />
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <Avatar
+              src={profile.avatarUrl || defaultAvatarImg}
+              alt={profile.username}
+              sx={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
+            {isHovered && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  left: 0,
+                  backgroundColor: "rgba(0, 0, 0, 0.7)",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  //backdropFilter: "blur(2px)",
+                  transition: "opacity 0.3s",
+                  zIndex: 2,
+                  borderRadius: "50%",
+                }}
+              >
+                <Typography variant="h6">Change Avatar</Typography>
+              </Box>
+            )}
+          </Box>
         </Box>
         <Box sx={{ pt: 12, pb: 2, px: 5, position: "relative" }}>
-          <Typography variant="h4" gutterBottom style={{ fontWeight: "bold" }}>
+          <Typography
+            variant="h4"
+            gutterBottom
+            style={{ fontWeight: "bold", marginTop: "10px" }}
+          >
             {profile.username}
           </Typography>
           {profile.description && (

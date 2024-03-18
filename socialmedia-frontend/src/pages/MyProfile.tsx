@@ -48,6 +48,7 @@ const MyProfile = () => {
               bottom: 0,
               backgroundColor: "rgba(0, 0, 0, 0.6)",
               zIndex: 1,
+              backdropFilter: "blur(2px)",
             },
             "& .profileHoverText": {
               cursor: "pointer",
@@ -121,10 +122,10 @@ const MyProfile = () => {
           sx={{
             display: "none",
             fontWeight: "bold",
-            fontSize: 35,
+            fontSize: 50,
             color: "white",
             position: "absolute",
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            //backgroundColor: "rgba(0, 0, 0, 0.7)",
             borderRadius: "20px",
             p: 2,
           }}
