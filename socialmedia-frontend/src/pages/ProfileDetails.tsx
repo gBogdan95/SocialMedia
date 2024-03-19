@@ -73,7 +73,34 @@ const ProfileDetails: React.FC = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: "98%", ml: 0.5, mr: 3 }}>
+    <Box sx={{ maxWidth: "98%", ml: 0.5, mr: 3, position: "relative" }}>
+      {isCurrentUser && (
+        <IconButton
+          sx={{
+            position: "absolute",
+            top: "15px",
+            right: "30px",
+            color: "lightgrey",
+            zIndex: 1,
+            backgroundColor: "rgba(0, 0, 0, 0.65)",
+            borderRadius: "50px",
+            "&:hover": {
+              backgroundColor: "black",
+            },
+          }}
+          onClick={() => {}}
+          aria-label="edit background"
+        >
+          <EditIcon
+            sx={{
+              fontSize: "60px",
+              "&:hover": {
+                color: "white",
+              },
+            }}
+          />
+        </IconButton>
+      )}
       <Paper elevation={5} sx={{ mt: 2, borderRadius: 2, overflow: "hidden" }}>
         <Box
           sx={{
@@ -124,7 +151,7 @@ const ProfileDetails: React.FC = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  //backdropFilter: "blur(2px)",
+                  backdropFilter: "blur(2px)",
                   transition: "opacity 0.3s",
                   zIndex: 2,
                   borderRadius: "50%",
