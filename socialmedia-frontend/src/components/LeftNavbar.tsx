@@ -124,8 +124,8 @@ const LeftNavbar = () => {
       </Drawer>
       <PostDialog
         open={openDialog}
-        handleClose={handleCloseDialog}
-        handleSavePost={handleSavePost}
+        onClose={handleCloseDialog}
+        onSave={handleSavePost}
       />
     </>
   );

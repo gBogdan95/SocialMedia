@@ -12,22 +12,18 @@ import { validatePost } from "../utils/validate";
 
 interface PostDialogProps {
   open: boolean;
-  handleClose: () => void;
-  handleSavePost: (title: string, postContent: string) => void;
+  onClose: () => void;
+  onSave: (title: string, postContent: string) => void;
 }
 
-const PostDialog: React.FC<PostDialogProps> = ({
-  open,
-  handleClose: propHandleClose,
-  handleSavePost,
-}) => {
+const PostDialog: React.FC<PostDialogProps> = ({ open, onClose, onSave }) => {
   const [formData, setFormData] = useState({ title: "", content: "" });
   const [errors, setErrors] = useState({ title: "", content: "" });
 
   const handleClose = () => {
     setFormData({ title: "", content: "" });
     setErrors({ title: "", content: "" });
-    propHandleClose();
+    onClose();
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +39,7 @@ const PostDialog: React.FC<PostDialogProps> = ({
     const contentError = validatePost.content(formData.content);
 
     if (!titleError && !contentError) {
-      handleSavePost(formData.title, formData.content);
+      onSave(formData.title, formData.content);
       handleClose();
     } else {
       setErrors({ title: titleError, content: contentError });
