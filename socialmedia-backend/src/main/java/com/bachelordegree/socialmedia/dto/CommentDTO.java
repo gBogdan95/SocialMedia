@@ -11,7 +11,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CommentDTO {
 
-    @NotNull
     private UUID id;
 
     @NotBlank
@@ -19,4 +18,9 @@ public class CommentDTO {
 
     private int likes;
 
+    private int totalReplies;
+
+    private UserDTO user;
+
+    private boolean isLiked;
 }

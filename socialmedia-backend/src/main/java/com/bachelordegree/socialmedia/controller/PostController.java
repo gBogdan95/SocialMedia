@@ -31,8 +31,7 @@ public class PostController {
     private final PostConverter postConverter;
 
     @GetMapping
-    public List<PostDTO> getAll() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public List<PostDTO> getAll(Authentication authentication) {
         String currentUsername = authentication.getName();
 
         return postService.getAll().stream()
@@ -52,10 +51,9 @@ public class PostController {
     }
 
     @GetMapping("/by-user/{id}")
-    public List<PostDTO> getPostsByUserId(@PathVariable UUID id) {
+    public List<PostDTO> getByUserId(@PathVariable UUID id, Authentication authentication) {
         try {
             List<Post> posts = postService.getAllPostsByUserId(id);
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String currentUsername = authentication.getName();
             return posts.stream()
                     .map(post -> postConverter.toDTO(post, currentUsername))
@@ -75,8 +73,6 @@ public class PostController {
             return postConverter.toDTO(post);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
-        } catch (Exception e) {
-            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating post: " + e.getMessage());
         }
     }
 
@@ -106,7 +102,6 @@ public class PostController {
         }
     }
 
-
     @PostMapping("/{id}/like")
     public PostDTO like(@PathVariable UUID id, Authentication authentication) {
         try {
@@ -116,8 +111,6 @@ public class PostController {
             return postConverter.toDTO(post);
         } catch (PostNotFoundException | AlreadyLikedException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (Exception e) {
-            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error liking post: " + e.getMessage());
         }
     }
 
@@ -132,8 +125,6 @@ public class PostController {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (NotLikedException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (Exception e) {
-            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error unliking post: " + e.getMessage());
         }
     }
 }

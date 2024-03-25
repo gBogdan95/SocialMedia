@@ -78,18 +78,10 @@ public class PostService {
         postRepository.delete(post);
     }
 
-
-    public void delete(UUID id) throws PostNotFoundException {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
-
-        postRepository.delete(post);
-    }
-
     @Transactional
     public void likePost(UUID postId, String username) throws PostNotFoundException, AlreadyLikedException {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
+                .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
@@ -107,7 +99,7 @@ public class PostService {
     @Transactional
     public void unlikePost(UUID postId, String username) throws PostNotFoundException, NotLikedException {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + postId));
+                .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
