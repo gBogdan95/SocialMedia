@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import CreateButton from "./CreateButton";
 import NavbarButton from "./NavbarButton";
-import PostDialog from "./PostDialog";
+import CreatePostDialog from "./CreatePostDialog";
 import { postService } from "../services/postService";
 import backgroundImage from "../assets/leftNavbarBg.jpg";
 import SearchIcon from "@mui/icons-material/Search";
@@ -122,7 +122,7 @@ const LeftNavbar = () => {
           ))}
         </Box>
       </Drawer>
-      <PostDialog
+      <CreatePostDialog
         open={openDialog}
         onClose={handleCloseDialog}
         onSave={handleSavePost}

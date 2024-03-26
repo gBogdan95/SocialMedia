@@ -40,7 +40,7 @@ public class CommentService {
     }
 
     public List<Comment> getCommentsByPostId(UUID postId) {
-        return commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId);
+        return commentRepository.findAllByPostIdOrderByCreatedAtAsc(postId);
     }
 
     public Comment save(Comment comment, UUID postId, String username) throws PostNotFoundException {

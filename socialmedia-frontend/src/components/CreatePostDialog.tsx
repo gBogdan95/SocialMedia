@@ -10,13 +10,17 @@ import {
 } from "@mui/material";
 import { validatePost } from "../utils/validate";
 
-interface PostDialogProps {
+interface CreatePostDialogProps {
   open: boolean;
   onClose: () => void;
   onSave: (title: string, postContent: string) => void;
 }
 
-const PostDialog: React.FC<PostDialogProps> = ({ open, onClose, onSave }) => {
+const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
+  open,
+  onClose,
+  onSave,
+}) => {
   const [formData, setFormData] = useState({ title: "", content: "" });
   const [errors, setErrors] = useState({ title: "", content: "" });
 
@@ -136,4 +140,4 @@ const PostDialog: React.FC<PostDialogProps> = ({ open, onClose, onSave }) => {
   );
 };
 
-export default PostDialog;
+export default CreatePostDialog;

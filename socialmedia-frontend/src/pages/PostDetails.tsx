@@ -6,12 +6,33 @@ import { commentService } from "../services/commentService";
 import Post, { PostType } from "../components/Post";
 import Comment, { CommentType } from "../components/Comment";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import CreateCommentDialog from "../components/CreateCommentDialog";
 
 const PostDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<PostType | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);
   const commentsRef = useRef<HTMLDivElement>(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+
+  const handleAddCommentClick = () => {
+    setCreateDialogOpen(true);
+  };
+
+  const handleCloseCreateDialog = () => {
+    setCreateDialogOpen(false);
+  };
+
+  const handleCreateComment = async (content: string) => {
+    if (!id) return;
+    try {
+      const newComment = await commentService.createComment(id, content);
+      setComments((prevComments) => [...prevComments, newComment]);
+      handleCloseCreateDialog();
+    } catch (error) {
+      console.error("Failed to create comment", error);
+    }
+  };
 
   useEffect(() => {
     const fetchPostAndComments = async () => {
@@ -40,7 +61,6 @@ const PostDetails: React.FC = () => {
     <Box sx={{ pt: 3, pr: 3, pb: 3, pl: 0 }}>
       <Post
         post={post}
-        refreshPosts={() => {}}
         trimText={false}
         isDetailPage={true}
         onCommentButtonClick={scrollToComments}
@@ -52,17 +72,28 @@ const PostDetails: React.FC = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => {}}
+          onClick={handleAddCommentClick}
           sx={{ width: "50%", maxWidth: "600px", mt: 2, mb: 2 }}
           startIcon={<AddBoxIcon />}
         >
           Add Comment
         </Button>
+        <CreateCommentDialog
+          open={createDialogOpen}
+          onClose={handleCloseCreateDialog}
+          onSave={handleCreateComment}
+        />
       </Box>
       <Box sx={{ mt: 2, backgroundColor: "#DFF5FF", p: 2, borderRadius: 5 }}>
-        {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} trimText={true} />
-        ))}
+        {comments.length > 0 ? (
+          comments.map((comment) => (
+            <Comment key={comment.id} comment={comment} trimText={true} />
+          ))
+        ) : (
+          <Typography sx={{ textAlign: "center", fontSize: 30 }}>
+            This post has no comments yet.
+          </Typography>
+        )}
       </Box>
     </Box>
   );
