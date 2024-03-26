@@ -16,16 +16,18 @@ public class PostConverter {
         post.setText(postDTO.getText());
         post.setLikes(postDTO.getLikes());
         post.setTitle(postDTO.getTitle());
+        post.setImageUrl(postDTO.getImageUrl());
         return post;
     }
 
     public PostDTO toDTO(Post post) {
         PostDTO postDTO = new PostDTO();
         postDTO.setId(post.getId());
+        postDTO.setTitle(post.getTitle());
         postDTO.setText(post.getText());
+        postDTO.setImageUrl(post.getImageUrl());
         postDTO.setLikes(post.getLikes());
         postDTO.setTotalComments(post.getTotalComments());
-        postDTO.setTitle(post.getTitle());
 
         if (post.getUser() != null) {
             postDTO.setUser(userConverter.toDTO(post.getUser()));
@@ -37,10 +39,11 @@ public class PostConverter {
     public PostDTO toDTO(Post post, String currentUsername) {
         PostDTO postDTO = new PostDTO();
         postDTO.setId(post.getId());
+        postDTO.setTitle(post.getTitle());
         postDTO.setText(post.getText());
+        postDTO.setImageUrl(post.getImageUrl());
         postDTO.setLikes(post.getLikes());
         postDTO.setTotalComments(post.getTotalComments());
-        postDTO.setTitle(post.getTitle());
 
         if (post.getUser() != null) {
             postDTO.setUser(userConverter.toDTO(post.getUser()));

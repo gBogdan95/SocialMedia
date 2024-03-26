@@ -25,6 +25,9 @@ public class Post {
     @Column(name = "text", nullable = false, length = 5000)
     private String text;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "likes", nullable = false)
     private int likes;
 

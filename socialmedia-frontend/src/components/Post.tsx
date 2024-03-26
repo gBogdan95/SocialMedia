@@ -7,7 +7,6 @@ import {
   Popover,
   Button,
 } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
@@ -310,6 +309,7 @@ const Post: React.FC<PostProps> = ({
           mb: 2,
           cursor: isDetailPage ? "text" : "pointer",
           fontSize: 20,
+          whiteSpace: "pre-wrap",
         }}
       >
         {parseTextToLinkElements(displayText).map((element, index) => (

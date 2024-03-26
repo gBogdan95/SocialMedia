@@ -263,7 +263,10 @@ const Comment: React.FC<CommentProps> = ({ comment, trimText = false }) => {
           </Box>
         )}
       </Box>
-      <Typography variant="body2" sx={{ mt: 2, mb: 1, fontSize: 20 }}>
+      <Typography
+        variant="body2"
+        sx={{ mt: 2, mb: 1, fontSize: 20, whiteSpace: "pre-wrap" }}
+      >
         {parseTextToLinkElements(displayText)}
         {trimText && comment.text.length > 300 && !isTextExpanded && (
           <Link
