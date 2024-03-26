@@ -125,7 +125,6 @@ const MyProfile = () => {
             fontSize: 50,
             color: "white",
             position: "absolute",
-            //backgroundColor: "rgba(0, 0, 0, 0.7)",
             borderRadius: "20px",
             p: 2,
           }}

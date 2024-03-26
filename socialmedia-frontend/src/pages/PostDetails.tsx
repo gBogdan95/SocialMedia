@@ -2,28 +2,33 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import { postService } from "../services/postService";
+import { commentService } from "../services/commentService";
 import Post, { PostType } from "../components/Post";
+import Comment, { CommentType } from "../components/Comment";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import Comments from "./Comments";
 
 const PostDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<PostType | null>(null);
+  const [comments, setComments] = useState<CommentType[]>([]);
   const commentsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchPostAndComments = async () => {
       if (id) {
         try {
           const fetchedPost = await postService.fetchPostById(id);
           setPost(fetchedPost);
+          const fetchedComments =
+            await commentService.fetchCommentsByPostId(id);
+          setComments(fetchedComments);
         } catch (error) {
-          console.error("Failed to fetch post", error);
+          console.error("Failed to fetch post or comments", error);
         }
       }
     };
 
-    fetchPost();
+    fetchPostAndComments();
   }, [id]);
 
   const scrollToComments = () =>
@@ -55,7 +60,9 @@ const PostDetails: React.FC = () => {
         </Button>
       </Box>
       <Box sx={{ mt: 2, backgroundColor: "#DFF5FF", p: 2, borderRadius: 5 }}>
-        <Comments />
+        {comments.map((comment) => (
+          <Comment key={comment.id} comment={comment} />
+        ))}
       </Box>
     </Box>
   );

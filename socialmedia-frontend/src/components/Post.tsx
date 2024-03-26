@@ -6,7 +6,6 @@ import {
   Avatar,
   Popover,
   Button,
-  Container,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
@@ -197,7 +196,7 @@ const Post: React.FC<PostProps> = ({
             src={post.user.avatarUrl || defaultAvatarImg}
             alt="User Avatar"
           >
-            {!post.user.avatarUrl && <PersonIcon />}
+            {!post.user.avatarUrl}
           </Avatar>
           <Typography
             variant="subtitle1"

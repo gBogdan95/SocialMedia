@@ -23,3 +23,8 @@ export const validatePost: ValidationFunctions = {
   content: (value: string) =>
     value.trim().length === 0 ? "Content is required!" : "",
 };
+
+export const validateComment: ValidationFunctions = {
+  content: (value: string) =>
+    value.trim().length === 0 ? "Content is required!" : "",
+};
