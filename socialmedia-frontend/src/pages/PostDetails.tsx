@@ -61,7 +61,7 @@ const PostDetails: React.FC = () => {
       </Box>
       <Box sx={{ mt: 2, backgroundColor: "#DFF5FF", p: 2, borderRadius: 5 }}>
         {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
+          <Comment key={comment.id} comment={comment} trimText={true} />
         ))}
       </Box>
     </Box>

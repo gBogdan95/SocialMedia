@@ -80,7 +80,7 @@ const createComment = async (postId: string, text: string) => {
 const updateComment = async (commentId: string, text: string) => {
   const token = getToken();
 
-  const response = await fetch(`${API_BASE_URL}/comments/${commentId}`, {
+  const response = await fetch(`${API_BASE_URL}/user/comments/${commentId}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
