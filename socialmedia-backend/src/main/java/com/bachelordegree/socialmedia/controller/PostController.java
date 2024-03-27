@@ -63,7 +63,6 @@ public class PostController {
         }
     }
 
-
     @PostMapping
     public PostDTO create(@Valid @RequestBody PostDTO postDTO, Authentication authentication) {
         try {
