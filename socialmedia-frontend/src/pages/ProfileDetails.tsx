@@ -24,6 +24,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import UpdateUserProfileDialog from "../components/UpdateUserProfileDialog";
 import { friendshipService } from "../services/friendshipService";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ConfirmationDialog from "../components/ConfirmationDialog";
 
 export interface ProfileDetailsType {
   id: string;
@@ -51,6 +52,11 @@ const ProfileDetails: React.FC = () => {
   const [isFriendRequestErrorDialogOpen, setIsFriendRequestErrorDialogOpen] =
     useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+
+  const handleOpenConfirmation = () => setIsConfirmationOpen(true);
+  const handleCloseConfirmation = () => setIsConfirmationOpen(false);
 
   const handleEditDialogClose = () => {
     setIsEditDialogOpen(false);
@@ -295,11 +301,11 @@ const ProfileDetails: React.FC = () => {
             <Button
               variant="contained"
               color="error"
-              onClick={handleDeleteFriendClick}
+              onClick={handleOpenConfirmation}
               sx={{ width: "calc(50% - 8px)", maxWidth: "600px", mr: 1 }}
               startIcon={<DeleteIcon />}
             >
-              Delete Friend
+              Remove Friend
             </Button>
           ) : (
             <Button
@@ -312,6 +318,13 @@ const ProfileDetails: React.FC = () => {
               Add Friend
             </Button>
           )}
+          <ConfirmationDialog
+            open={isConfirmationOpen}
+            title="Remove Friend"
+            message="Are you sure you want to delete this friend?"
+            onConfirm={handleDeleteFriendClick}
+            onCancel={handleCloseConfirmation}
+          />
           <Dialog
             open={isAddFriendDialogOpen}
             onClose={handleDialogClose}
