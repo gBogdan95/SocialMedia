@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
@@ -8,10 +8,26 @@ import GroupIcon from "@mui/icons-material/Group";
 import Friends from "./Friends";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
+import { friendshipService } from "../services/friendshipService";
+import Friend, { FriendType } from "../components/Friend";
 
 const MyProfile = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [friends, setFriends] = useState<FriendType[]>([]);
+
+  const fetchAndSetFriends = async () => {
+    try {
+      const data = await friendshipService.listFriends();
+      setFriends(data);
+    } catch (error) {
+      console.error("Failed to fetch friends:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAndSetFriends();
+  }, []);
 
   const handleProfileClick = () => {
     navigate(`/profile/${user?.id}`);
@@ -151,7 +167,23 @@ const MyProfile = () => {
         My Friends:
       </Box>
 
-      <Friends />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {friends.map((user) => (
+          <Friend
+            key={user.id}
+            id={user.id}
+            username={user.username}
+            avatarUrl={user.avatarUrl}
+            backgroundUrl={user.backgroundUrl}
+          />
+        ))}
+      </Box>
     </Box>
   );
 };
