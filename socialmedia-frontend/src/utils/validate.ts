@@ -28,3 +28,10 @@ export const validateComment: ValidationFunctions = {
   content: (value: string) =>
     value.trim().length === 0 ? "Content is required!" : "",
 };
+
+export const validateUpdateProfile: ValidationFunctions = {
+  phoneNumber: (value: string) =>
+    /^\d{1,10}$/.test(value) ? "" : "Invalid phone number",
+  name: (value: string) =>
+    value.length <= 16 ? "" : "Name must not exceed 16 characters",
+};

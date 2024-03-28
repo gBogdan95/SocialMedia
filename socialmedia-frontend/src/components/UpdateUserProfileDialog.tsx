@@ -8,7 +8,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { validateRegister } from "../utils/validate";
+import { validateUpdateProfile } from "../utils/validate";
 import { userService } from "../services/userService";
 
 interface UpdateUserProfileDialogProps {
@@ -45,8 +45,8 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
 
-    const validationError = validateRegister[name]
-      ? validateRegister[name](value)
+    const validationError = validateUpdateProfile[name]
+      ? validateUpdateProfile[name](value)
       : "";
     setErrors({ ...errors, [name]: validationError });
   };
@@ -171,6 +171,7 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
               color: "gray",
             },
           }}
+          disabled={!!errors.name || !!errors.phoneNumber}
         >
           Save
         </Button>
