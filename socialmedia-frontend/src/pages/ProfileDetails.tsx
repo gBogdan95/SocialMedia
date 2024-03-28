@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Avatar, Paper, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Avatar,
+  Paper,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { useParams } from "react-router-dom";
 import { userService } from "../services/userService";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
@@ -11,9 +22,11 @@ import { postService } from "../services/postService";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import UpdateUserProfileDialog from "../components/UpdateUserProfileDialog";
+import { friendshipService } from "../services/friendshipService";
 
 export interface ProfileDetailsType {
   id: string;
+  username: string;
   name: string;
   description: string;
   phoneNumber: string;
@@ -32,10 +45,38 @@ const ProfileDetails: React.FC = () => {
   const [userPosts, setUserPosts] = useState<PostType[]>([]);
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isAddFriendDialogOpen, setIsAddFriendDialogOpen] = useState(false);
+  const [isFriendRequestErrorDialogOpen, setIsFriendRequestErrorDialogOpen] =
+    useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const handleEditDialogClose = () => {
     setIsEditDialogOpen(false);
+  };
+
+  const handleAddFriendClick = async () => {
+    if (!userId) return;
+    try {
+      const userDetails = await userService.fetchUserById(userId);
+      const username = userDetails.username;
+      await friendshipService.sendFriendRequest(username);
+      setIsAddFriendDialogOpen(true);
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message.includes(
+          "Friend request already sent or users are already friends"
+        )
+      ) {
+        setIsFriendRequestErrorDialogOpen(true);
+      } else {
+        console.error("Failed to send friend request:", error);
+      }
+    }
+  };
+
+  const handleDialogClose = () => {
+    setIsAddFriendDialogOpen(false);
   };
 
   useEffect(() => {
@@ -168,6 +209,13 @@ const ProfileDetails: React.FC = () => {
             gutterBottom
             style={{ fontWeight: "bold", marginTop: "10px" }}
           >
+            {profile.username}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            gutterBottom
+            style={{ fontWeight: "bold", marginTop: "10px" }}
+          >
             {profile.name}
           </Typography>
           {profile.description && (
@@ -231,12 +279,79 @@ const ProfileDetails: React.FC = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => {}}
+            onClick={handleAddFriendClick}
             sx={{ width: "calc(50% - 8px)", maxWidth: "600px", mr: 1 }}
             startIcon={<PersonAddIcon />}
           >
             Add Friend
           </Button>
+          <Dialog
+            open={isAddFriendDialogOpen}
+            onClose={handleDialogClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent>
+              <DialogContentText
+                id="alert-dialog-description"
+                sx={{ fontSize: 20, color: "black", p: 2 }}
+              >
+                Your friend request has been sent successfully.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions
+              sx={{
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                onClick={handleDialogClose}
+                color="primary"
+                variant="contained"
+                size="large"
+                sx={{
+                  width: "60%",
+                  mb: 2,
+                }}
+              >
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={isFriendRequestErrorDialogOpen}
+            onClose={() => setIsFriendRequestErrorDialogOpen(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent>
+              <DialogContentText
+                id="alert-dialog-description"
+                sx={{ fontSize: 19, color: "red", p: 2, fontWeight: "bold" }}
+              >
+                You have already a pending friend request to this user.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions
+              sx={{
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                onClick={() => setIsFriendRequestErrorDialogOpen(false)}
+                color="primary"
+                variant="contained"
+                size="large"
+                sx={{
+                  width: "60%",
+                  mb: 2,
+                }}
+              >
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
           <Button
             variant="contained"
             color="primary"
