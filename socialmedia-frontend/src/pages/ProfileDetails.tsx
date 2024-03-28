@@ -23,6 +23,7 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import UpdateUserProfileDialog from "../components/UpdateUserProfileDialog";
 import { friendshipService } from "../services/friendshipService";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export interface ProfileDetailsType {
   id: string;
@@ -45,6 +46,7 @@ const ProfileDetails: React.FC = () => {
   const [userPosts, setUserPosts] = useState<PostType[]>([]);
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [friendshipStatus, setFriendshipStatus] = useState("NONE");
   const [isAddFriendDialogOpen, setIsAddFriendDialogOpen] = useState(false);
   const [isFriendRequestErrorDialogOpen, setIsFriendRequestErrorDialogOpen] =
     useState(false);
@@ -64,9 +66,7 @@ const ProfileDetails: React.FC = () => {
     } catch (error) {
       if (
         error instanceof Error &&
-        error.message.includes(
-          "Friend request already sent or users are already friends"
-        )
+        error.message.includes("Friend request already sent")
       ) {
         setIsFriendRequestErrorDialogOpen(true);
       } else {
@@ -75,23 +75,38 @@ const ProfileDetails: React.FC = () => {
     }
   };
 
+  const handleDeleteFriendClick = async () => {
+    if (!userId) return;
+    try {
+      await friendshipService.removeFriend(userId);
+      setFriendshipStatus("NONE");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting the friend:", error);
+    }
+  };
+
   const handleDialogClose = () => {
     setIsAddFriendDialogOpen(false);
   };
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileAndFriendshipStatus = async () => {
       if (userId) {
         try {
           const profileData = await userService.fetchUserById(userId);
           setProfile(profileData);
+
+          const status = await friendshipService.checkFriendshipStatus(userId);
+          setFriendshipStatus(status);
+          console.log(status);
         } catch (error) {
-          console.error("Failed to fetch profile details:", error);
+          console.error("Failed to fetch data:", error);
         }
       }
     };
 
-    fetchProfile();
+    fetchProfileAndFriendshipStatus();
   }, [userId]);
 
   const fetchAndSetUserPosts = async () => {
@@ -276,15 +291,27 @@ const ProfileDetails: React.FC = () => {
       </Paper>
       {!isCurrentUser && (
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAddFriendClick}
-            sx={{ width: "calc(50% - 8px)", maxWidth: "600px", mr: 1 }}
-            startIcon={<PersonAddIcon />}
-          >
-            Add Friend
-          </Button>
+          {friendshipStatus === "ACCEPTED" ? (
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleDeleteFriendClick}
+              sx={{ width: "calc(50% - 8px)", maxWidth: "600px", mr: 1 }}
+              startIcon={<DeleteIcon />}
+            >
+              Delete Friend
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddFriendClick}
+              sx={{ width: "calc(50% - 8px)", maxWidth: "600px", mr: 1 }}
+              startIcon={<PersonAddIcon />}
+            >
+              Add Friend
+            </Button>
+          )}
           <Dialog
             open={isAddFriendDialogOpen}
             onClose={handleDialogClose}

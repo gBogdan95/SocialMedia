@@ -18,25 +18,26 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
 
     public void sendFriendRequest(User requester, User receiver) {
-        if (requester.getUsername().equals(receiver.getUsername())) {
-            throw new IllegalArgumentException("Cannot send friend request to oneself.");
+        if (requester.getId().equals(receiver.getId())) {
+            throw new IllegalArgumentException("Cannot send a friend request to oneself.");
         }
 
-        boolean exists = friendshipRepository.existsByRequesterAndReceiverAndStatus(
-                requester, receiver, FriendshipStatus.PENDING) ||
-                friendshipRepository.existsByRequesterAndReceiverAndStatus(
-                        requester, receiver, FriendshipStatus.ACCEPTED);
+        Optional<Friendship> existingFriendship = friendshipRepository.findFriendshipBetweenUsers(requester.getId(), receiver.getId());
 
-        if (exists) {
-            throw new IllegalStateException("Friend request already sent or users are already friends.");
+        if (existingFriendship.isPresent()) {
+            FriendshipStatus status = existingFriendship.get().getStatus();
+            if (status == FriendshipStatus.PENDING) {
+                throw new IllegalStateException("Friend request already sent.");
+            } else if (status == FriendshipStatus.ACCEPTED) {
+                throw new IllegalStateException("Users are already friends.");
+            }
+        } else {
+            Friendship friendRequest = new Friendship();
+            friendRequest.setRequester(requester);
+            friendRequest.setReceiver(receiver);
+            friendRequest.setStatus(FriendshipStatus.PENDING);
+            friendshipRepository.save(friendRequest);
         }
-
-        Friendship friendRequest = new Friendship();
-        friendRequest.setRequester(requester);
-        friendRequest.setReceiver(receiver);
-        friendRequest.setStatus(FriendshipStatus.PENDING);
-
-        friendshipRepository.save(friendRequest);
     }
 
     public void acceptFriendRequest(UUID friendshipId, User receiver) {

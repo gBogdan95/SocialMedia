@@ -123,6 +123,29 @@ const removeFriend = async (friendId: string) => {
   }
 };
 
+const checkFriendshipStatus = async (friendId: string) => {
+  const token = getToken();
+
+  const response = await fetch(
+    `${API_BASE_URL}/user/friendships/status/${friendId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to check friendship status: ${errorText}`);
+  }
+
+  const status = await response.json();
+  return status;
+};
+
 export const friendshipService = {
   sendFriendRequest,
   acceptFriendRequest,
@@ -130,4 +153,5 @@ export const friendshipService = {
   listPendingFriendRequests,
   listFriends,
   removeFriend,
+  checkFriendshipStatus,
 };
