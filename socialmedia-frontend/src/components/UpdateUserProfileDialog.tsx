@@ -16,8 +16,8 @@ interface UpdateUserProfileDialogProps {
   handleClose: () => void;
   profileId: string;
   initialFormData: {
-    username: string;
-    email: string;
+    name: string;
+    phoneNumber: string;
     description: string;
   };
 }
@@ -30,14 +30,14 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
 }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({
-    username: "",
-    email: "",
+    name: "",
+    phoneNumber: "",
   });
 
   useEffect(() => {
     if (open) {
       setFormData(initialFormData);
-      setErrors({ username: "", email: "" });
+      setErrors({ name: "", phoneNumber: "" });
     }
   }, [open, initialFormData]);
 
@@ -55,8 +55,8 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
     try {
       await userService.updateUserProfile(
         profileId,
-        formData.username,
-        formData.email,
+        formData.name,
+        formData.phoneNumber,
         formData.description
       );
       handleClose();
@@ -64,10 +64,10 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
     } catch (error) {
       const errorMessage =
         (error as Error).message || "An unknown error occurred";
-      if (errorMessage.toLowerCase().includes("this username already exists")) {
+      if (errorMessage.toLowerCase().includes("this name already exists")) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          username: errorMessage,
+          name: errorMessage,
         }));
       }
     }
@@ -88,40 +88,23 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
       </DialogTitle>
       <DialogContent>
         <Typography sx={{ fontSize: 25, mt: 2 }}>
-          Change username/email:
+          Add your personal informations:
         </Typography>
         <TextField
           autoFocus
           margin="dense"
-          id="username"
-          label="Username"
+          id="name"
+          label="Name"
           type="text"
           fullWidth
           variant="outlined"
-          name="username"
-          value={formData.username}
+          name="name"
+          value={formData.name}
           onChange={handleFormChange}
-          error={!!errors.username}
-          helperText={errors.username}
+          error={!!errors.name}
+          helperText={errors.name}
           sx={{ mb: 2, mt: 2 }}
         />
-        <TextField
-          margin="dense"
-          id="email"
-          label="Email Address"
-          type="email"
-          fullWidth
-          variant="outlined"
-          name="email"
-          value={formData.email}
-          onChange={handleFormChange}
-          error={!!errors.email}
-          helperText={errors.email}
-          sx={{ mb: 5 }}
-        />
-        <Typography sx={{ fontSize: 25, mb: 1 }}>
-          Tell something about you:
-        </Typography>
         <TextField
           margin="dense"
           id="description"
@@ -135,6 +118,19 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
           multiline
           rows={5}
           sx={{ mb: 2 }}
+        />
+        <TextField
+          margin="dense"
+          id="phoneNumber"
+          label="Phone Number"
+          type="phoneNumber"
+          fullWidth
+          variant="outlined"
+          name="phoneNumber"
+          value={formData.phoneNumber}
+          onChange={handleFormChange}
+          error={!!errors.phoneNumber}
+          helperText={errors.phoneNumber}
         />
       </DialogContent>
       <DialogActions
@@ -160,12 +156,6 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
         </Button>
         <Button
           onClick={handleFormSubmit}
-          disabled={
-            !!errors.username ||
-            !!errors.email ||
-            !formData.username.trim() ||
-            !formData.email.trim()
-          }
           sx={{
             fontSize: "1rem",
             padding: "6px 16px",

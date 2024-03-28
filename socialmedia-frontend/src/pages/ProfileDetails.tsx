@@ -14,9 +14,9 @@ import UpdateUserProfileDialog from "../components/UpdateUserProfileDialog";
 
 export interface ProfileDetailsType {
   id: string;
-  username: string;
+  name: string;
   description: string;
-  email: string;
+  phoneNumber: string;
   avatarUrl: string;
   backgroundUrl: string;
 }
@@ -132,7 +132,7 @@ const ProfileDetails: React.FC = () => {
           >
             <Avatar
               src={profile.avatarUrl || defaultAvatarImg}
-              alt={profile.username}
+              alt={profile.name}
               sx={{
                 width: "100%",
                 height: "100%",
@@ -168,7 +168,7 @@ const ProfileDetails: React.FC = () => {
             gutterBottom
             style={{ fontWeight: "bold", marginTop: "10px" }}
           >
-            {profile.username}
+            {profile.name}
           </Typography>
           {profile.description && (
             <Typography
@@ -179,7 +179,15 @@ const ProfileDetails: React.FC = () => {
               Description: {profile.description}
             </Typography>
           )}
-          <Typography variant="body1">Email: {profile.email}</Typography>
+          {profile.phoneNumber && (
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              style={{ wordWrap: "break-word", marginBottom: "10px" }}
+            >
+              Phone Number: {profile.phoneNumber}
+            </Typography>
+          )}
           {isCurrentUser && (
             <>
               <IconButton
@@ -209,8 +217,8 @@ const ProfileDetails: React.FC = () => {
                 handleClose={handleEditDialogClose}
                 profileId={profile.id}
                 initialFormData={{
-                  username: profile.username,
-                  email: profile.email,
+                  name: profile.name,
+                  phoneNumber: profile.phoneNumber,
                   description: profile.description,
                 }}
               />

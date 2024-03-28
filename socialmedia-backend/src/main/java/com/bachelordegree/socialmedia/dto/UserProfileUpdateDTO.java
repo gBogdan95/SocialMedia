@@ -10,10 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProfileUpdateDTO {
-    @NotBlank
-    private String username;
-    @NotBlank
-    @Email
-    private String email;
+    private String name;
+    private String phoneNumber;
     private String description;
 }

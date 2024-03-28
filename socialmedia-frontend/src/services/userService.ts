@@ -53,8 +53,8 @@ const fetchUserById = async (userId: string) => {
 
 const updateUserProfile = async (
   userId: string,
-  username: string,
-  email: string,
+  name: string,
+  phoneNumber: string,
   description: string
 ) => {
   const token = getToken();
@@ -67,7 +67,7 @@ const updateUserProfile = async (
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, email, description }),
+      body: JSON.stringify({ name, phoneNumber, description }),
     }
   );
 

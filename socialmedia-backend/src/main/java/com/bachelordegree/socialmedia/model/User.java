@@ -45,6 +45,12 @@ public class User implements UserDetails {
     @Column(name = "currency")
     private int currency;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Column(name = "description")
     private String description;
 

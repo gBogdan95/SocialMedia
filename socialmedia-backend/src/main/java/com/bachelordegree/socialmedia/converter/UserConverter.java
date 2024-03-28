@@ -1,6 +1,7 @@
 package com.bachelordegree.socialmedia.converter;
 
 import com.bachelordegree.socialmedia.dto.UserDTO;
+import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
 import com.bachelordegree.socialmedia.model.User;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,8 @@ public class UserConverter {
         userDTO.setAvatarUrl(user.getAvatarUrl());
         userDTO.setBackgroundUrl(user.getBackgroundUrl());
         userDTO.setCurrency(user.getCurrency());
+        userDTO.setName(user.getName());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setDescription(user.getDescription());
         return userDTO;
     }
