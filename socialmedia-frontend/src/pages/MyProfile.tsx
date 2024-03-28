@@ -5,7 +5,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import currencyImg from "../assets/currency.png";
 import GroupIcon from "@mui/icons-material/Group";
-import Friends from "./Friends";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
 import { friendshipService } from "../services/friendshipService";
@@ -168,21 +167,29 @@ const MyProfile = () => {
       </Box>
 
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
+        display="flex"
+        flexDirection="column"
+        height="100vh"
+        width="100%"
+        overflow="auto"
       >
-        {friends.map((user) => (
-          <Friend
-            key={user.id}
-            id={user.id}
-            username={user.username}
-            avatarUrl={user.avatarUrl}
-            backgroundUrl={user.backgroundUrl}
-          />
-        ))}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {friends.map((user) => (
+            <Friend
+              key={user.id}
+              id={user.id}
+              username={user.username}
+              avatarUrl={user.avatarUrl}
+              backgroundUrl={user.backgroundUrl}
+            />
+          ))}
+        </Box>
       </Box>
     </Box>
   );

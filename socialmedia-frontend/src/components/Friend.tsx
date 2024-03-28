@@ -57,8 +57,8 @@ const Friend: React.FC<FriendType> = ({
       <Avatar
         src={avatarUrl || defaultAvatarImg}
         sx={{
-          width: 65,
-          height: 65,
+          width: 60,
+          height: 60,
           position: "absolute",
           left: 20,
           top: "50%",
@@ -74,7 +74,7 @@ const Friend: React.FC<FriendType> = ({
           transform: "translate(-50%, -50%)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
           borderRadius: "10px",
-          p: 0,
+          p: 0.5,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -87,7 +87,7 @@ const Friend: React.FC<FriendType> = ({
         <Typography
           sx={{
             fontWeight: "bold",
-            fontSize: "19px",
+            fontSize: "18px",
             color: "white",
             textShadow: "1px 1px 2px black",
           }}
