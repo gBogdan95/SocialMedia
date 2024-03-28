@@ -6,6 +6,7 @@ import com.bachelordegree.socialmedia.dto.FriendshipDTO;
 import com.bachelordegree.socialmedia.dto.UserDTO;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.Friendship;
+import com.bachelordegree.socialmedia.model.FriendshipStatus;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.FriendshipService;
 import com.bachelordegree.socialmedia.service.UserService;
@@ -116,6 +117,17 @@ public class FriendshipController {
             friendshipService.removeFriend(user, friendId);
         } catch (EntityNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, "Friendship not found.");
+        }
+    }
+
+    @GetMapping("/status/{friendId}")
+    public FriendshipStatus checkFriendshipStatus(@PathVariable UUID friendId, Authentication authentication) {
+        String username = authentication.getName();
+        try {
+            User user = (User) userService.loadUserByUsername(username);
+            return friendshipService.checkFriendshipStatus(user.getId(), friendId);
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
         }
     }
 }

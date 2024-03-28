@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -88,4 +89,10 @@ public class FriendshipService {
 
         friendshipRepository.delete(friendship);
     }
+
+    public FriendshipStatus checkFriendshipStatus(UUID userId, UUID friendId) {
+        Optional<Friendship> friendship = friendshipRepository.findByUsers(userId, friendId);
+        return friendship.map(Friendship::getStatus).orElse(FriendshipStatus.NONE);
+    }
+
 }

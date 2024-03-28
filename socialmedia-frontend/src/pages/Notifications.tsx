@@ -35,24 +35,27 @@ const NotificationsPage = () => {
     fetchFriendRequests();
   }, []);
 
-  const handleAccept = async (friendRequestId: string) => {};
+  const handleAccept = async (friendRequestId: string) => {
+    try {
+      await friendshipService.acceptFriendRequest(friendRequestId);
+      setFriendRequests(
+        friendRequests.filter((request) => request.id !== friendRequestId)
+      );
+    } catch (error) {
+      console.error("Failed to accept friend request:", error);
+    }
+  };
 
-  const handleDecline = async (friendRequestId: string) => {};
-
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
+  const handleDecline = async (friendRequestId: string) => {
+    try {
+      await friendshipService.declineFriendRequest(friendRequestId);
+      setFriendRequests(
+        friendRequests.filter((request) => request.id !== friendRequestId)
+      );
+    } catch (error) {
+      console.error("Failed to decline friend request:", error);
+    }
+  };
 
   if (error) {
     return <Typography color="error">{error}</Typography>;
@@ -72,7 +75,9 @@ const NotificationsPage = () => {
           />
         ))
       ) : (
-        <Typography>No new notifications</Typography>
+        <Typography sx={{ fontSize: 30, textAlign: "center", mt: 50 }}>
+          You don't have notifications
+        </Typography>
       )}
     </Box>
   );
