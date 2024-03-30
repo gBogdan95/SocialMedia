@@ -9,11 +9,20 @@ import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
 import { friendshipService } from "../services/friendshipService";
 import Friend, { FriendType } from "../components/Friend";
+import { userService } from "../services/userService";
+
+interface UserDetails {
+  id: string;
+  username: string;
+  avatarUrl?: string;
+  backgroundUrl?: string;
+  currency?: string;
+}
 
 const MyProfile = () => {
-  const { user } = useAuth();
   const navigate = useNavigate();
   const [friends, setFriends] = useState<FriendType[]>([]);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
 
   const fetchAndSetFriends = async () => {
     try {
@@ -24,17 +33,34 @@ const MyProfile = () => {
     }
   };
 
+  const fetchUserDetails = async () => {
+    try {
+      const userString = localStorage.getItem("user");
+      const user = userString ? JSON.parse(userString) : null;
+
+      if (user && user.id) {
+        const userData = await userService.fetchUserById(user.id);
+        setUserDetails(userData);
+      }
+    } catch (error) {
+      console.error("Failed to fetch user details:", error);
+    }
+  };
+
   useEffect(() => {
     fetchAndSetFriends();
+    fetchUserDetails();
   }, []);
 
   const handleProfileClick = () => {
-    navigate(`/profile/${user?.id}`);
+    if (userDetails) {
+      navigate(`/profile/${userDetails.id}`);
+    }
   };
 
   const backgroundStyle = {
-    backgroundImage: user?.backgroundUrl
-      ? `url(${user.backgroundUrl})`
+    backgroundImage: userDetails?.backgroundUrl
+      ? `url(${userDetails.backgroundUrl})`
       : `url(${defaultBackgroundImg})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -88,7 +114,7 @@ const MyProfile = () => {
         >
           <Box
             component="img"
-            src={user?.avatarUrl || defaultAvatarImg}
+            src={userDetails?.avatarUrl || defaultAvatarImg}
             alt="avatar"
             sx={{
               width: "100%",
@@ -109,7 +135,7 @@ const MyProfile = () => {
           }}
         >
           <Typography sx={{ fontWeight: "bold", fontSize: 30, color: "white" }}>
-            {user?.username}
+            {userDetails?.username}
           </Typography>
         </Box>
 
@@ -123,7 +149,7 @@ const MyProfile = () => {
           }}
         >
           <Typography sx={{ fontSize: 28, color: "white", mr: 1 }}>
-            Currency: {user?.currency}
+            Currency: {userDetails?.currency}
           </Typography>
           <Box
             component="img"

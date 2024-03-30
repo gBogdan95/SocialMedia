@@ -50,9 +50,13 @@ public class PostService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
+        user.setCurrency(user.getCurrency() + 10);
+        userRepository.save(user);
+
         post.setUser(user);
         return postRepository.save(post);
     }
+
 
     public Post update(UUID id, Post postUpdate, String username) throws PostNotFoundException, AccessDeniedException {
         Post post = postRepository.findById(id)

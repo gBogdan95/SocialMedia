@@ -50,6 +50,9 @@ public class CommentService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
 
+        user.setCurrency(user.getCurrency() + 5);
+        userRepository.save(user);
+
         comment.setUser(user);
         comment.setPost(post);
         return commentRepository.save(comment);

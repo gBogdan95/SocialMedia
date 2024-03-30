@@ -26,8 +26,8 @@ const PostDetails: React.FC = () => {
   const handleCreateComment = async (content: string) => {
     if (!id) return;
     try {
-      const newComment = await commentService.createComment(id, content);
-      setComments((prevComments) => [...prevComments, newComment]);
+      await commentService.createComment(id, content);
+      window.location.reload();
       handleCloseCreateDialog();
     } catch (error) {
       console.error("Failed to create comment", error);
