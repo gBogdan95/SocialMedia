@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface FriendshipRepository extends JpaRepository<Friendship, UUID> {
-    boolean existsByRequesterAndReceiverAndStatus(User requester, User receiver, FriendshipStatus status);
     List<Friendship> findByReceiverAndStatus(User receiver, FriendshipStatus status);
     List<Friendship> findAllByRequesterAndStatus(User requester, FriendshipStatus status);
     List<Friendship> findAllByReceiverAndStatus(User receiver, FriendshipStatus status);
@@ -24,5 +23,4 @@ public interface FriendshipRepository extends JpaRepository<Friendship, UUID> {
 
     @Query("SELECT f FROM Friendship f WHERE (f.requester.id = :userId AND f.receiver.id = :friendId) OR (f.requester.id = :friendId AND f.receiver.id = :userId)")
     Optional<Friendship> findByUsers(@Param("userId") UUID userId, @Param("friendId") UUID friendId);
-
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -81,6 +82,7 @@ public class FriendshipService {
 
         return friendships.stream()
                 .map(friendship -> friendship.getRequester().equals(user) ? friendship.getReceiver() : friendship.getRequester())
+                .sorted(Comparator.comparing(User::getUsername))
                 .toList();
     }
 

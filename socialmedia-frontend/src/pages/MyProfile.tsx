@@ -204,6 +204,7 @@ const MyProfile = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            mb: 8,
           }}
         >
           {friends.map((user) => (

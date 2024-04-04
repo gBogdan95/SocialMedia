@@ -38,8 +38,8 @@ public class FriendshipController {
     public void sendFriendRequest(@PathVariable String receiverUsername, Authentication authentication) {
         String requesterUsername = authentication.getName();
         try {
-            User requester = (User) userService.loadUserByUsername(requesterUsername);
-            User receiver = (User) userService.loadUserByUsername(receiverUsername);
+            User requester = userService.loadUserByUsername(requesterUsername);
+            User receiver = userService.loadUserByUsername(receiverUsername);
 
             friendshipService.sendFriendRequest(requester, receiver);
         } catch (UsernameNotFoundException e) {
@@ -53,7 +53,7 @@ public class FriendshipController {
     public void acceptFriendRequest(@PathVariable UUID friendshipId, Authentication authentication) {
         String receiverUsername = authentication.getName();
         try {
-            User receiver = (User) userService.loadUserByUsername(receiverUsername);
+            User receiver = userService.loadUserByUsername(receiverUsername);
 
             friendshipService.acceptFriendRequest(friendshipId, receiver);
         } catch (UsernameNotFoundException e) {
@@ -69,7 +69,7 @@ public class FriendshipController {
     public void declineFriendRequest(@PathVariable UUID friendshipId, Authentication authentication) {
         String receiverUsername = authentication.getName();
         try {
-            User receiver = (User) userService.loadUserByUsername(receiverUsername);
+            User receiver = userService.loadUserByUsername(receiverUsername);
 
             friendshipService.declineFriendRequest(friendshipId, receiver);
         } catch (UsernameNotFoundException e) {
@@ -85,7 +85,7 @@ public class FriendshipController {
     public List<FriendshipDTO> getPendingFriendRequests(Authentication authentication) {
         String username = authentication.getName();
         try {
-            User user = (User) userService.loadUserByUsername(username);
+            User user = userService.loadUserByUsername(username);
             List<Friendship> friendRequests = friendshipService.listPendingFriendRequests(user);
             return friendRequests.stream()
                     .map(friendshipConverter::toDTO)
@@ -99,7 +99,7 @@ public class FriendshipController {
     public List<UserDTO> listFriends(Authentication authentication) {
         String username = authentication.getName();
         try {
-            User user = (User) userService.loadUserByUsername(username);
+            User user = userService.loadUserByUsername(username);
             List<User> friends = friendshipService.listFriends(user);
             return friends.stream()
                     .map(userConverter::toDTO)
@@ -113,7 +113,7 @@ public class FriendshipController {
     public void removeFriend(@PathVariable UUID friendId, Authentication authentication) {
         String username = authentication.getName();
         try {
-            User user = (User) userService.loadUserByUsername(username);
+            User user = userService.loadUserByUsername(username);
             friendshipService.removeFriend(user, friendId);
         } catch (EntityNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, "Friendship not found.");
@@ -124,7 +124,7 @@ public class FriendshipController {
     public FriendshipStatus checkFriendshipStatus(@PathVariable UUID friendId, Authentication authentication) {
         String username = authentication.getName();
         try {
-            User user = (User) userService.loadUserByUsername(username);
+            User user =  userService.loadUserByUsername(username);
             return friendshipService.checkFriendshipStatus(user.getId(), friendId);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
