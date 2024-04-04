@@ -2,6 +2,7 @@ package com.bachelordegree.socialmedia.controller;
 
 import com.bachelordegree.socialmedia.dto.MessageContentDTO;
 import com.bachelordegree.socialmedia.dto.MessageDTO;
+import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.MessageService;
 import com.bachelordegree.socialmedia.service.UserService;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/user/messages")
@@ -30,10 +30,9 @@ public class MessageController {
 
             return messageService.sendMessage(sender, receiver, messageContentDTO);
         } catch (UsernameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-
 }

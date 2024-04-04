@@ -31,7 +31,8 @@ public class Message {
     @Column(nullable = false)
     private LocalDateTime sentAt = LocalDateTime.now();
 
-    @Column
-    private LocalDateTime readAt;
+    @Column(nullable = false)
+    private boolean read;
+
 }
 

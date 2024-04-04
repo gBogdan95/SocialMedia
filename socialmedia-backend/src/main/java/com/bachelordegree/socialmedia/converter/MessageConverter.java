@@ -22,7 +22,7 @@ public class MessageConverter {
                 userConverter.toDTO(message.getReceiver()),
                 message.getText(),
                 message.getSentAt(),
-                message.getReadAt());
+                message.isRead());
     }
 }
 

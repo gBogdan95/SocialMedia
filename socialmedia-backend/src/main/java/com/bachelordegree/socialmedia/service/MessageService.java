@@ -36,6 +36,5 @@ public class MessageService {
 
         return messageConverter.toDTO(message);
     }
-
 }
 

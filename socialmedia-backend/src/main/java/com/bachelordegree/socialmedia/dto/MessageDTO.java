@@ -16,5 +16,5 @@ public class MessageDTO {
     private UserDTO receiver;
     private String text;
     private LocalDateTime sentAt;
-    private LocalDateTime readAt;
+    private boolean read;
 }
