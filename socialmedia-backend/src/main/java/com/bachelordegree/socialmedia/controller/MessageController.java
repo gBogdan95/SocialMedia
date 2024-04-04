@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user/messages")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -35,4 +37,20 @@ public class MessageController {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+    @GetMapping("/{otherUsername}")
+    public List<MessageDTO> getMessagesBetweenUsers(@PathVariable String otherUsername, Authentication authentication) {
+        try {
+            String callerUsername = authentication.getName();
+            User caller = userService.loadUserByUsername(callerUsername);
+            User otherUser = userService.loadUserByUsername(otherUsername);
+
+            return messageService.getMessagesBetweenUsers(caller, otherUser);
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
 }

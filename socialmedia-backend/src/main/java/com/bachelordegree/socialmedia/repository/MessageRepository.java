@@ -8,6 +8,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, UUID> {
-    List<Message> findBySenderAndReceiver(User sender, User receiver);
+    List<Message> findBySenderAndReceiverOrReceiverAndSenderOrderBySentAtAsc(User sender, User receiver, User receiver2, User sender2);
 }
-
