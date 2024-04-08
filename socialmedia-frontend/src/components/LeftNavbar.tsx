@@ -10,10 +10,10 @@ import CreatePostDialog from "./CreatePostDialog";
 import { postService } from "../services/postService";
 import backgroundImage from "../assets/leftNavbarBg.jpg";
 import SearchIcon from "@mui/icons-material/Search";
-import LockIcon from "@mui/icons-material/Lock";
 import PeopleIcon from "@mui/icons-material/People";
 import ShopIcon from "@mui/icons-material/Shop";
 import SettingsIcon from "@mui/icons-material/Settings";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const LeftNavbar = () => {
   const { isAuthenticated } = useAuth();
@@ -24,6 +24,20 @@ const LeftNavbar = () => {
 
   const handleNavigation = (path: string) => {
     navigate(path);
+  };
+
+  const handleProfileNavigation = () => {
+    const userJson = localStorage.getItem("user");
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      if (user && user.id) {
+        navigate(`/profile/${user.id}`);
+      } else {
+        console.error("User ID is missing");
+      }
+    } else {
+      console.error("No user data found in local storage");
+    }
   };
 
   const handleOpenDialog = () => {
@@ -59,9 +73,10 @@ const LeftNavbar = () => {
       icon: <SearchIcon />,
     },
     {
-      label: "GROUPS",
-      path: "/groups",
-      icon: <LockIcon />,
+      label: "PROFILE",
+      path: "/profile",
+      icon: <AccountCircleIcon />,
+      handleClick: handleProfileNavigation,
     },
     {
       label: "PEOPLE",
@@ -117,7 +132,9 @@ const LeftNavbar = () => {
               label={button.label}
               icon={button.icon}
               isActive={isActive(button.path)}
-              handleClick={() => handleNavigation(button.path)}
+              handleClick={
+                button.handleClick || (() => handleNavigation(button.path))
+              }
             />
           ))}
         </Box>

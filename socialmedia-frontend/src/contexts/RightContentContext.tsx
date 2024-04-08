@@ -6,7 +6,7 @@ import React, {
   ReactElement,
   useEffect,
 } from "react";
-import MyProfile from "../pages/MyProfile";
+import Home from "../pages/Home";
 import Notifications from "../pages/Notifications";
 import Messages from "../pages/Messages";
 
@@ -27,7 +27,7 @@ interface RightContentProviderProps {
 }
 
 const defaultContentMap: { [key: string]: ReactElement } = {
-  myProfile: <MyProfile />,
+  home: <Home />,
   notifications: <Notifications />,
   messages: <Messages />,
 };
@@ -39,7 +39,7 @@ export const RightContentProvider: React.FC<RightContentProviderProps> = ({
 
   useEffect(() => {
     const defaultContentId =
-      localStorage.getItem("defaultRightContent") || "myProfile";
+      localStorage.getItem("defaultRightContent") || "home";
     const defaultContent =
       defaultContentMap[defaultContentId as keyof typeof defaultContentMap];
     if (defaultContent) {

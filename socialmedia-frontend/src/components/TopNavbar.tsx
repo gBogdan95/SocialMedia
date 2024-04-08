@@ -5,10 +5,10 @@ import { useAuth } from "../contexts/AuthContext";
 import NotificationsIcon from "@mui/icons-material/NotificationsActive";
 import EmailIcon from "@mui/icons-material/Email";
 import LogoutIcon from "@mui/icons-material/Logout";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import logo from "../assets/logo.png";
 import { useRightContent } from "../contexts/RightContentContext";
-import MyProfile from "../pages/MyProfile";
+import Home from "../pages/Home";
+import HomeIcon from "@mui/icons-material/Home";
 import Notifications from "../pages/Notifications";
 import Messages from "../pages/Messages";
 
@@ -16,7 +16,7 @@ export default function TopNavbar() {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
   const initialActiveButton =
-    localStorage.getItem("defaultRightContent") || "myProfile";
+    localStorage.getItem("defaultRightContent") || "home";
   const [activeButton, setActiveButton] = useState<string | null>(
     initialActiveButton
   );
@@ -32,8 +32,8 @@ export default function TopNavbar() {
   };
 
   const handleLogout = () => {
-    localStorage.setItem("defaultRightContent", "myProfile");
-    setActiveButton("myProfile");
+    localStorage.setItem("defaultRightContent", "home");
+    setActiveButton("home");
     logout();
     navigate("/");
   };
@@ -78,29 +78,30 @@ export default function TopNavbar() {
             <>
               <Button
                 color="inherit"
-                onClick={() => handleButtonClick("myProfile", <MyProfile />)}
-                startIcon={<AccountCircleIcon />}
+                onClick={() => handleButtonClick("home", <Home />)}
+                startIcon={<HomeIcon />}
                 sx={{
                   textTransform: "none",
                   height: "100%",
                   minHeight: "64px",
+                  width: "106.5px",
                   backgroundColor:
-                    activeButton === "myProfile" ? "#1450A3" : "#inherit",
+                    activeButton === "home" ? "#1450A3" : "#inherit",
                   "&:hover": {
                     backgroundColor: "#1450A3",
                   },
                   "&:focus": {
                     backgroundColor:
-                      activeButton === "myProfile" ? "#1450A3" : "#inherit",
+                      activeButton === "home" ? "#1450A3" : "#inherit",
                     outline: "none",
                   },
                   "&:active": {
                     backgroundColor:
-                      activeButton === "myProfile" ? "#1450A3" : "#inherit",
+                      activeButton === "home" ? "#1450A3" : "#inherit",
                   },
                 }}
               >
-                My Profile
+                Home
               </Button>
               <Button
                 color="inherit"
