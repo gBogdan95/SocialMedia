@@ -1,5 +1,6 @@
 package com.bachelordegree.socialmedia.controller;
 
+import com.bachelordegree.socialmedia.dto.ConversationOverviewDTO;
 import com.bachelordegree.socialmedia.dto.MessageContentDTO;
 import com.bachelordegree.socialmedia.dto.MessageDTO;
 import com.bachelordegree.socialmedia.exception.RestException;

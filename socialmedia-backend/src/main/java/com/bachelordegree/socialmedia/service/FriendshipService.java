@@ -97,5 +97,4 @@ public class FriendshipService {
         Optional<Friendship> friendship = friendshipRepository.findByUsers(userId, friendId);
         return friendship.map(Friendship::getStatus).orElse(FriendshipStatus.NONE);
     }
-
 }

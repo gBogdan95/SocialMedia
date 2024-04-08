@@ -1,7 +1,7 @@
 package com.bachelordegree.socialmedia.service;
 
-import com.bachelordegree.socialmedia.converter.ConversationConverter;
 import com.bachelordegree.socialmedia.converter.MessageConverter;
+import com.bachelordegree.socialmedia.converter.UserConverter;
 import com.bachelordegree.socialmedia.dto.MessageContentDTO;
 import com.bachelordegree.socialmedia.dto.MessageDTO;
 import com.bachelordegree.socialmedia.model.Conversation;
@@ -10,33 +10,21 @@ import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.repository.ConversationRepository;
 import com.bachelordegree.socialmedia.repository.MessageRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MessageService {
 
     private final MessageRepository messageRepository;
     private final ConversationRepository conversationRepository;
-    private final UserService userService;
+    private final UserConverter userConverter;
     private final MessageConverter messageConverter;
-    private final ConversationConverter conversationConverter;
 
-    @Autowired
-    public MessageService(MessageRepository messageRepository, ConversationRepository conversationRepository,
-                          UserService userService, MessageConverter messageConverter,
-                          ConversationConverter conversationConverter) {
-        this.messageRepository = messageRepository;
-        this.conversationRepository = conversationRepository;
-        this.userService = userService;
-        this.messageConverter = messageConverter;
-        this.conversationConverter = conversationConverter;
-    }
 
     @Transactional
     public MessageDTO sendMessage(User sender, User receiver, MessageContentDTO messageContentDTO) {
@@ -76,7 +64,7 @@ public class MessageService {
         Optional<Conversation> conversation = conversationRepository
                 .findFirstByParticipantOneAndParticipantTwoOrParticipantOneAndParticipantTwo(caller, otherUser, otherUser, caller);
 
-        if (!conversation.isPresent()) {
+        if (conversation.isEmpty()) {
             throw new IllegalArgumentException("No conversation found between the specified users.");
         }
 
