@@ -4,17 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageDTO {
+public class ConversationDTO {
     private UUID id;
-    private UUID conversationId;
-    private UserDTO sender;
-    private String text;
-    private LocalDateTime sentAt;
-    private boolean read;
+    private UserDTO participantOne;
+    private UserDTO participantTwo;
+    private MessageDTO lastMessage;
 }

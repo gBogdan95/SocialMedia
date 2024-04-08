@@ -27,8 +27,8 @@ public class MessageController {
     public MessageDTO sendMessage(@PathVariable String receiverUsername, @RequestBody MessageContentDTO messageContentDTO, Authentication authentication) {
         try {
             String senderUsername = authentication.getName();
-            User sender =  userService.loadUserByUsername(senderUsername);
-            User receiver =  userService.loadUserByUsername(receiverUsername);
+            User sender = userService.loadUserByUsername(senderUsername);
+            User receiver = userService.loadUserByUsername(receiverUsername);
 
             return messageService.sendMessage(sender, receiver, messageContentDTO);
         } catch (UsernameNotFoundException e) {
@@ -52,5 +52,4 @@ public class MessageController {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
-
 }

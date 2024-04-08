@@ -22,8 +22,8 @@ public class Message {
     private User sender;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id", nullable = false)
-    private User receiver;
+    @JoinColumn(name = "conversation_id", nullable = false)
+    private Conversation conversation;
 
     @Column(nullable = false)
     private String text;
@@ -33,6 +33,4 @@ public class Message {
 
     @Column(nullable = false)
     private boolean read;
-
 }
-

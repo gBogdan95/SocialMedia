@@ -18,11 +18,11 @@ public class MessageConverter {
     public MessageDTO toDTO(Message message) {
         return new MessageDTO(
                 message.getId(),
+                message.getConversation().getId(),
                 userConverter.toDTO(message.getSender()),
-                userConverter.toDTO(message.getReceiver()),
                 message.getText(),
                 message.getSentAt(),
-                message.isRead());
+                message.isRead()
+        );
     }
 }
-
