@@ -19,7 +19,7 @@ const FriendRequestNotification: React.FC<FriendRequestNotificationProps> = ({
   return (
     <Box
       sx={{
-        p: 2,
+        p: 3,
         border: "1px solid",
         borderRadius: "4px",
         width: "92.05%",

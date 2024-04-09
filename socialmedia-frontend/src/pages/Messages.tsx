@@ -1,17 +1,35 @@
-import React from "react";
-import Box from "@mui/material/Box";
+// Messages.tsx
+import React, { useEffect, useState } from "react";
+import { Box } from "@mui/material";
+import Conversation, { ConversationType } from "../components/Conversation";
+import { messageService } from "../services/messageService";
 
-const Messages = () => {
+const Messages: React.FC = () => {
+  const [conversations, setConversations] = useState<ConversationType[]>([]);
+
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        const conversationsData = await messageService.getAllConversations();
+        setConversations(conversationsData);
+      } catch (error) {
+        console.error("Failed to load conversations:", error);
+      }
+    };
+
+    fetchConversations();
+  }, []);
+
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100%"
-      width="100%"
-      sx={{ backgroundColor: "grey" }}
-    >
-      <h3>MESSAGES PAGE</h3>
+    <Box>
+      {conversations.map((conversation) => (
+        <Conversation
+          key={conversation.conversationId}
+          conversationId={conversation.conversationId}
+          otherParticipant={conversation.otherParticipant}
+          lastMessage={conversation.lastMessage}
+        />
+      ))}
     </Box>
   );
 };
