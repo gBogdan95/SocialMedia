@@ -37,6 +37,15 @@ const Conversation: React.FC<ConversationType> = ({
 
   const avatarUrl = otherParticipant.avatarUrl || defaultAvatarImg;
 
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
   return (
     <Box
       sx={{
@@ -44,10 +53,11 @@ const Conversation: React.FC<ConversationType> = ({
         alignItems: "center",
         backgroundColor: "#F5F7F8",
         width: "100%",
-        padding: 3,
+        padding: 4,
         borderRadius: 1,
         border: 1,
         boxShadow: 1,
+        overflow: "hidden",
         cursor: "pointer",
         "&:hover": {
           backgroundColor: "action.hover",
@@ -57,20 +67,37 @@ const Conversation: React.FC<ConversationType> = ({
     >
       <Avatar
         src={avatarUrl}
-        sx={{ width: 80, height: 80, marginRight: 5 }}
+        sx={{ width: 70, height: 70, marginRight: 3, ml: 2 }}
         alt={otherParticipant.username}
       />
-      <Box sx={{ flex: 1 }}>
-        <Typography variant="subtitle1" noWrap sx={{ fontSize: 30 }}>
-          {otherParticipant.username}
-        </Typography>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Typography variant="subtitle1" noWrap sx={{ fontSize: 22 }}>
+            {otherParticipant.username}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            noWrap
+            sx={{ fontSize: 25 }}
+          >
+            {lastMessage.text}
+          </Typography>
+        </Box>
         <Typography
-          variant="body2"
+          variant="caption"
           color="text.secondary"
           noWrap
-          sx={{ fontSize: 25 }}
+          sx={{ fontSize: 16, mr: 1.5 }}
         >
-          {lastMessage.text}
+          {formatTime(lastMessage.sentAt)}
         </Typography>
       </Box>
     </Box>

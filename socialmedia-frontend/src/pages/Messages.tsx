@@ -1,4 +1,3 @@
-// Messages.tsx
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Conversation, { ConversationType } from "../components/Conversation";
@@ -21,15 +20,31 @@ const Messages: React.FC = () => {
   }, []);
 
   return (
-    <Box>
-      {conversations.map((conversation) => (
-        <Conversation
-          key={conversation.conversationId}
-          conversationId={conversation.conversationId}
-          otherParticipant={conversation.otherParticipant}
-          lastMessage={conversation.lastMessage}
-        />
-      ))}
+    <Box
+      display="flex"
+      flexDirection="column"
+      height="100vh"
+      width="100%"
+      overflow="auto"
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: -0.1,
+          mb: 5.7,
+        }}
+      >
+        {conversations.map((conversation) => (
+          <Conversation
+            key={conversation.conversationId}
+            conversationId={conversation.conversationId}
+            otherParticipant={conversation.otherParticipant}
+            lastMessage={conversation.lastMessage}
+          />
+        ))}
+      </Box>
     </Box>
   );
 };
