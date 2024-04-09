@@ -11,8 +11,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ConversationRepository extends JpaRepository<Conversation, UUID> {
-    @Query("SELECT c FROM Conversation c WHERE c.participantOne = :user OR c.participantTwo = :user")
-    List<Conversation> findAllByParticipant(@Param("user") User user);
+    @Query("SELECT c FROM Conversation c LEFT JOIN c.lastMessage m WHERE c.participantOne = :user OR c.participantTwo = :user ORDER BY m.sentAt DESC")
+    List<Conversation> findAllByParticipantOrderByLastMessageSentAtDesc(@Param("user") User user);
 
     Optional<Conversation> findFirstByParticipantOneAndParticipantTwoOrParticipantOneAndParticipantTwo(
             User participantOne, User participantTwo, User participantTwoReversed, User participantOneReversed);

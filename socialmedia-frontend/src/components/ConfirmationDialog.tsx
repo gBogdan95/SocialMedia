@@ -4,7 +4,6 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   Button,
 } from "@mui/material";
 

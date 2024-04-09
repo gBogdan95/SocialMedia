@@ -46,6 +46,9 @@ const Conversation: React.FC<ConversationType> = ({
     });
   };
 
+  const isReadFontWeight = lastMessage.read ? "normal" : "bold";
+  const isReadColor = lastMessage.read ? "text.secondary" : "black";
+
   return (
     <Box
       sx={{
@@ -86,7 +89,11 @@ const Conversation: React.FC<ConversationType> = ({
             variant="body2"
             color="text.secondary"
             noWrap
-            sx={{ fontSize: 25 }}
+            sx={{
+              fontSize: 25,
+              fontWeight: isReadFontWeight,
+              color: isReadColor,
+            }}
           >
             {lastMessage.text}
           </Typography>
@@ -95,7 +102,12 @@ const Conversation: React.FC<ConversationType> = ({
           variant="caption"
           color="text.secondary"
           noWrap
-          sx={{ fontSize: 16, mr: 1.5 }}
+          sx={{
+            fontSize: 16,
+            fontWeight: isReadFontWeight,
+            mr: 1.5,
+            color: isReadColor,
+          }}
         >
           {formatTime(lastMessage.sentAt)}
         </Typography>

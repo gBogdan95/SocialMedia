@@ -22,7 +22,7 @@ public class ConversationService {
 
     @Transactional
     public List<ConversationOverviewDTO> getAllConversationsForUser(User user) {
-        List<Conversation> conversations = conversationRepository.findAllByParticipant(user);
+        List<Conversation> conversations = conversationRepository.findAllByParticipantOrderByLastMessageSentAtDesc(user);
         return conversations.stream()
                 .map(conversation -> {
                     User otherParticipant = conversation.getParticipantOne().equals(user) ? conversation.getParticipantTwo() : conversation.getParticipantOne();
@@ -34,4 +34,5 @@ public class ConversationService {
                     );
                 }).toList();
     }
+
 }

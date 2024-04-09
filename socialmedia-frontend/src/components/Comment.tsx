@@ -254,7 +254,7 @@ const Comment: React.FC<CommentProps> = ({ comment, trimText = false }) => {
                 <ConfirmationDialog
                   open={isConfirmationOpen}
                   title="Delete Post"
-                  message="Are you sure you want to delete this post?"
+                  message="Are you sure you want to delete this comment?"
                   onConfirm={handleConfirmDelete}
                   onCancel={handleCloseConfirmation}
                 />
