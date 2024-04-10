@@ -8,12 +8,12 @@ import {
   Typography,
   List,
   ListItem,
-  ListItemText,
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import { messageService } from "../services/messageService";
+import { getCurrentUsername, formatTime } from "../utils/utils";
 
 export interface ParticipantType {
   id: string;
@@ -57,30 +57,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const getCurrentUsername = () => {
-    const storedUserData = localStorage.getItem("user");
-    if (storedUserData) {
-      try {
-        const userObject = JSON.parse(storedUserData);
-        return userObject.username;
-      } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
-        return null;
-      }
-    }
-    return null;
-  };
-
   const currentUserUsername = getCurrentUsername();
-
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
 
   useEffect(() => {
     if (open) {

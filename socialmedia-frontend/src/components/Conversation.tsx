@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Avatar } from "@mui/material";
 import ConversationDialog from "./ConversationDialog";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
+import { getCurrentUsername, formatTime } from "../utils/utils";
 
 export interface ParticipantType {
   id: string;
@@ -39,20 +40,6 @@ const Conversation: React.FC<ConversationType> = ({
     setOpen(false);
   };
 
-  const getCurrentUsername = () => {
-    const storedUserData = localStorage.getItem("user");
-    if (storedUserData) {
-      try {
-        const userObject = JSON.parse(storedUserData);
-        return userObject.username;
-      } catch (error) {
-        console.error("Error parsing user data from local storage:", error);
-        return null;
-      }
-    }
-    return null;
-  };
-
   const currentUserUsername = getCurrentUsername();
 
   const isMessageFromCurrentUser =
@@ -63,15 +50,6 @@ const Conversation: React.FC<ConversationType> = ({
   const isReadColor = isRead ? "text.secondary" : "black";
 
   const avatarUrl = otherParticipant.avatarUrl || defaultAvatarImg;
-
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  };
 
   return (
     <>
