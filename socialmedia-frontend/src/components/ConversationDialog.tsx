@@ -235,7 +235,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
           minRows={1}
-          maxRows={4}
+          maxRows={8}
           sx={{
             "& .MuiOutlinedInput-root": {
               paddingRight: "50px",
