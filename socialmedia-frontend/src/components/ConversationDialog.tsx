@@ -71,6 +71,15 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
 
   const currentUserUsername = getCurrentUsername();
 
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
   useEffect(() => {
     if (open) {
       setLoading(true);
@@ -96,31 +105,57 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
     }
     return (
       <List
-        sx={{ maxHeight: 400, overflow: "auto", bgcolor: "background.paper" }}
+        sx={{ maxHeight: 500, overflowY: "auto", bgcolor: "background.paper" }}
       >
         {messages.map((message, index) => (
           <ListItem
             key={index}
             sx={{
+              display: "flex",
               justifyContent:
+                message.sender.username === currentUserUsername
+                  ? "flex-end"
+                  : "flex-start",
+              flexDirection: "column",
+              alignItems:
                 message.sender.username === currentUserUsername
                   ? "flex-end"
                   : "flex-start",
             }}
           >
-            <ListItemText
-              primary={message.text}
+            <Box
               sx={{
+                maxWidth: "70%",
                 backgroundColor:
                   message.sender.username === currentUserUsername
                     ? "#bbdefb"
                     : "#e0f2f1",
                 borderRadius: 1,
-                padding: 1,
-                maxWidth: "70%",
-                wordWrap: "break-word",
+                padding: "8px 12px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "8px",
               }}
-            />
+            >
+              <Typography
+                variant="body1"
+                sx={{ wordBreak: "break-word", flexGrow: 1 }}
+              >
+                {message.text}
+              </Typography>
+              <Typography
+                variant="caption"
+                sx={{
+                  marginLeft: 2,
+                  whiteSpace: "nowrap",
+                  fontSize: "0.775rem",
+                  paddingLeft: "8px",
+                }}
+              >
+                {formatTime(message.sentAt)}
+              </Typography>
+            </Box>
           </ListItem>
         ))}
       </List>
