@@ -9,7 +9,6 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { userService } from "../services/userService";
@@ -25,6 +24,7 @@ import UpdateUserProfileDialog from "../components/UpdateUserProfileDialog";
 import { friendshipService } from "../services/friendshipService";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationDialog from "../components/ConfirmationDialog";
+import ConversationDialog from "../components/ConversationDialog";
 
 export interface ProfileDetailsType {
   id: string;
@@ -49,6 +49,7 @@ const ProfileDetails: React.FC = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [friendshipStatus, setFriendshipStatus] = useState("NONE");
   const [isAddFriendDialogOpen, setIsAddFriendDialogOpen] = useState(false);
+  const [isMessageDialogOpen, setIsMessageDialogOpen] = useState(false);
   const [isFriendRequestErrorDialogOpen, setIsFriendRequestErrorDialogOpen] =
     useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -395,12 +396,25 @@ const ProfileDetails: React.FC = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => {}}
+            onClick={() => setIsMessageDialogOpen(true)}
             sx={{ width: "calc(50% - 8px)", maxWidth: "600px", ml: 1 }}
             startIcon={<MessageIcon />}
           >
             Message
           </Button>
+          <ConversationDialog
+            open={isMessageDialogOpen}
+            onClose={() => setIsMessageDialogOpen(false)}
+            participant={
+              profile
+                ? {
+                    id: profile.id,
+                    username: profile.username,
+                    avatarUrl: profile.avatarUrl,
+                  }
+                : { id: "", username: "", avatarUrl: defaultAvatarImg }
+            }
+          />
         </Box>
       )}
       <Box sx={{ mt: 2, backgroundColor: "#DFF5FF", p: 2, borderRadius: 5 }}>
