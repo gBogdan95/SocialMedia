@@ -9,7 +9,9 @@ import {
   List,
   ListItem,
   ListItemText,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import { messageService } from "../services/messageService";
 
@@ -105,7 +107,12 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
     }
     return (
       <List
-        sx={{ maxHeight: 500, overflowY: "auto", bgcolor: "background.paper" }}
+        sx={{
+          minHeight: 500,
+          maxHeight: 500,
+          overflowY: "auto",
+          bgcolor: "background.paper",
+        }}
       >
         {messages.map((message, index) => (
           <ListItem
@@ -174,6 +181,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
           textShadow: "2px 2px 4px rgba(0, 0, 0, 1)",
           fontSize: 24,
           fontWeight: "bold",
+          position: "relative",
         }}
       >
         <Avatar
@@ -187,6 +195,19 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
           }}
         />
         <Box sx={{ flex: 1, textAlign: "left" }}>{participant.username}</Box>
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 25,
+            top: "50%",
+            transform: "translateY(-50%)",
+            color: "white",
+          }}
+        >
+          <CloseIcon sx={{ width: 35, height: 35 }} />
+        </IconButton>
       </DialogTitle>
       {renderMessages()}
     </Dialog>
