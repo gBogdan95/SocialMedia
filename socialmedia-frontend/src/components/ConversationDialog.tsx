@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -8,9 +8,12 @@ import {
   Typography,
   List,
   ListItem,
+  TextField,
   IconButton,
+  InputAdornment,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import SendIcon from "@mui/icons-material/Send";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import { messageService } from "../services/messageService";
 import { getCurrentUsername, formatTime } from "../utils/utils";
@@ -56,8 +59,15 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [messageText, setMessageText] = useState("");
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const currentUserUsername = getCurrentUsername();
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     if (open) {
@@ -74,6 +84,34 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
         });
     }
   }, [open, participant.username]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSendMessage = async () => {
+    if (messageText.trim() === "") {
+      console.log("No message to send");
+      return;
+    }
+    try {
+      const sentMessage = await messageService.sendMessage(
+        participant.username,
+        messageText
+      );
+      console.log("Message sent successfully:", sentMessage);
+
+      setMessages((prevMessages) => [...prevMessages, sentMessage]);
+
+      setMessageText("");
+      scrollToBottom();
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Failed to send message:", error.message);
+        setError("Failed to send message: " + error.message);
+      }
+    }
+  };
 
   const renderMessages = () => {
     if (loading) {
@@ -142,6 +180,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
             </Box>
           </ListItem>
         ))}
+        <div ref={messagesEndRef} />
       </List>
     );
   };
@@ -187,6 +226,45 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
         </IconButton>
       </DialogTitle>
       {renderMessages()}
+      <Box sx={{ position: "relative", padding: 2 }}>
+        <TextField
+          multiline
+          fullWidth
+          variant="outlined"
+          placeholder="Type a message..."
+          value={messageText}
+          onChange={(e) => setMessageText(e.target.value)}
+          minRows={1}
+          maxRows={4}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              paddingRight: "50px",
+            },
+            "& .MuiOutlinedInput-input": {
+              paddingRight: "0 !important",
+            },
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleSendMessage}
+                  sx={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    margin: "auto",
+                    height: "100%",
+                  }}
+                >
+                  <SendIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Box>
     </Dialog>
   );
 };
