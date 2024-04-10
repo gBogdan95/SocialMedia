@@ -105,6 +105,32 @@ export default function TopNavbar() {
               </Button>
               <Button
                 color="inherit"
+                onClick={() => handleButtonClick("messages", <Messages />)}
+                startIcon={<EmailIcon />}
+                sx={{
+                  textTransform: "none",
+                  height: "100%",
+                  minHeight: "64px",
+                  backgroundColor:
+                    activeButton === "messages" ? "#1450A3" : "inherit",
+                  "&:hover": {
+                    backgroundColor: "#1450A3",
+                  },
+                  "&:focus": {
+                    backgroundColor:
+                      activeButton === "messages" ? "#1450A3" : "inherit",
+                    outline: "none",
+                  },
+                  "&:active": {
+                    backgroundColor:
+                      activeButton === "messages" ? "#1450A3" : "inherit",
+                  },
+                }}
+              >
+                Messages
+              </Button>
+              <Button
+                color="inherit"
                 onClick={() =>
                   handleButtonClick("notifications", <Notifications />)
                 }
@@ -130,32 +156,6 @@ export default function TopNavbar() {
                 }}
               >
                 Notifications
-              </Button>
-              <Button
-                color="inherit"
-                onClick={() => handleButtonClick("messages", <Messages />)}
-                startIcon={<EmailIcon />}
-                sx={{
-                  textTransform: "none",
-                  height: "100%",
-                  minHeight: "64px",
-                  backgroundColor:
-                    activeButton === "messages" ? "#1450A3" : "inherit",
-                  "&:hover": {
-                    backgroundColor: "#1450A3",
-                  },
-                  "&:focus": {
-                    backgroundColor:
-                      activeButton === "messages" ? "#1450A3" : "inherit",
-                    outline: "none",
-                  },
-                  "&:active": {
-                    backgroundColor:
-                      activeButton === "messages" ? "#1450A3" : "inherit",
-                  },
-                }}
-              >
-                Messages
               </Button>
               <Button
                 color="inherit"
