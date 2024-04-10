@@ -68,7 +68,7 @@ public class MessageService {
             throw new IllegalArgumentException("No conversation found between the specified users.");
         }
 
-        List<Message> messages = messageRepository.findByConversationOrderBySentAtDesc(conversation.get());
+        List<Message> messages = messageRepository.findByConversationOrderBySentAtAsc(conversation.get());
 
         messages.stream()
                 .filter(message -> !message.isRead() && !message.getSender().equals(caller))

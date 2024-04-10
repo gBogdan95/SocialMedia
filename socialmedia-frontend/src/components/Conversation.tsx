@@ -38,6 +38,29 @@ const Conversation: React.FC<ConversationType> = ({
     setOpen(false);
   };
 
+  const getCurrentUsername = () => {
+    const storedUserData = localStorage.getItem("user");
+    if (storedUserData) {
+      try {
+        const userObject = JSON.parse(storedUserData);
+        return userObject.username;
+      } catch (error) {
+        console.error("Error parsing user data from local storage:", error);
+        return null;
+      }
+    }
+    return null;
+  };
+
+  const currentUserUsername = getCurrentUsername();
+
+  const isMessageFromCurrentUser =
+    lastMessage.sender.username === currentUserUsername;
+  const isRead = lastMessage.read || isMessageFromCurrentUser;
+
+  const isReadFontWeight = isRead ? "normal" : "bold";
+  const isReadColor = isRead ? "text.secondary" : "black";
+
   const avatarUrl = otherParticipant.avatarUrl || defaultAvatarImg;
 
   const formatTime = (dateString: string) => {
@@ -48,9 +71,6 @@ const Conversation: React.FC<ConversationType> = ({
       hour12: false,
     });
   };
-
-  const isReadFontWeight = lastMessage.read ? "normal" : "bold";
-  const isReadColor = lastMessage.read ? "text.secondary" : "black";
 
   return (
     <>
