@@ -236,6 +236,12 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
           onChange={(e) => setMessageText(e.target.value)}
           minRows={1}
           maxRows={8}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSendMessage();
+            }
+          }}
           sx={{
             "& .MuiOutlinedInput-root": {
               paddingRight: "50px",
