@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, Avatar } from "@mui/material";
 import ConversationDialog from "./ConversationDialog";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import { getCurrentUsername, formatTime } from "../utils/utils";
 
@@ -51,6 +52,11 @@ const Conversation: React.FC<ConversationType> = ({
 
   const avatarUrl = otherParticipant.avatarUrl || defaultAvatarImg;
 
+  const trimmedMessage =
+    lastMessage.text.length > 22
+      ? `${lastMessage.text.substring(0, 22)}...`
+      : lastMessage.text;
+
   return (
     <>
       <Box
@@ -82,33 +88,46 @@ const Conversation: React.FC<ConversationType> = ({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            paddingRight: 2,
           }}
         >
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <Typography variant="subtitle1" noWrap sx={{ fontSize: 22 }}>
               {otherParticipant.username}
             </Typography>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              noWrap
-              sx={{
-                fontSize: 25,
-                fontWeight: isReadFontWeight,
-                color: isReadColor,
-              }}
-            >
-              {lastMessage.text}
-            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {isMessageFromCurrentUser && (
+                <DoneAllIcon
+                  sx={{
+                    color: lastMessage.read ? "primary.main" : "text.secondary",
+                    fontSize: 20,
+                    mr: 0.5,
+                  }}
+                />
+              )}
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  fontSize: 16,
+                  fontWeight: isReadFontWeight,
+                  color: isReadColor,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  flexGrow: 1,
+                }}
+              >
+                {trimmedMessage}
+              </Typography>
+            </Box>
           </Box>
           <Typography
             variant="caption"
             color="text.secondary"
-            noWrap
             sx={{
               fontSize: 16,
               fontWeight: isReadFontWeight,
-              mr: 1.5,
               color: isReadColor,
             }}
           >
