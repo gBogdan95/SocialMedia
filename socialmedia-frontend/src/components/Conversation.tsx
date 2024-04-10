@@ -35,6 +35,7 @@ const Conversation: React.FC<ConversationType> = ({
   };
 
   const handleClose = () => {
+    window.location.reload();
     setOpen(false);
   };
 
