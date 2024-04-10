@@ -243,6 +243,9 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
             "& .MuiOutlinedInput-input": {
               paddingRight: "0 !important",
             },
+            "& .MuiOutlinedInput-multiline": {
+              paddingRight: "48px !important",
+            },
           }}
           InputProps={{
             endAdornment: (
@@ -251,11 +254,9 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                   onClick={handleSendMessage}
                   sx={{
                     position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    margin: "auto",
-                    height: "100%",
+                    right: 2,
+                    bottom: 8,
+                    color: "primary.main",
                   }}
                 >
                   <SendIcon />
