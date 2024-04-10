@@ -15,6 +15,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { messageService } from "../services/messageService";
 import { getCurrentUsername, formatTime } from "../utils/utils";
 
@@ -155,28 +156,37 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                 borderRadius: 1,
                 padding: "8px 12px",
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: "row",
+                alignItems: "center", // This ensures vertical centering
                 marginBottom: "8px",
               }}
             >
               <Typography
                 variant="body1"
-                sx={{ wordBreak: "break-word", flexGrow: 1 }}
+                sx={{ wordBreak: "break-word", flexGrow: 1, marginRight: 1 }}
               >
                 {message.text}
               </Typography>
-              <Typography
-                variant="caption"
-                sx={{
-                  marginLeft: 2,
-                  whiteSpace: "nowrap",
-                  fontSize: "0.775rem",
-                  paddingLeft: "8px",
-                }}
-              >
-                {formatTime(message.sentAt)}
-              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    whiteSpace: "nowrap",
+                    fontSize: "0.775rem",
+                  }}
+                >
+                  {formatTime(message.sentAt)}
+                </Typography>
+                {message.sender.username === currentUserUsername && (
+                  <DoneAllIcon
+                    sx={{
+                      fontSize: "1.2rem",
+                      color: message.read ? "primary.main" : "text.secondary",
+                      marginLeft: 1,
+                    }}
+                  />
+                )}
+              </Box>
             </Box>
           </ListItem>
         ))}
