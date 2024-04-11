@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Avatar } from "@mui/material";
 import ConversationDialog from "./ConversationDialog";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import FiberNewIcon from "@mui/icons-material/FiberNew";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import { getCurrentUsername, formatTime } from "../utils/utils";
 
@@ -125,12 +126,25 @@ const Conversation: React.FC<ConversationType> = ({
           <Typography
             variant="caption"
             color="text.secondary"
+            noWrap
             sx={{
               fontSize: 16,
               fontWeight: isReadFontWeight,
+              mr: 1.5,
               color: isReadColor,
+              display: "flex",
+              alignItems: "center",
             }}
           >
+            {!isMessageFromCurrentUser && !lastMessage.read && (
+              <FiberNewIcon
+                sx={{
+                  color: "secondary.main",
+                  fontSize: "2rem",
+                  mr: 0.2,
+                }}
+              />
+            )}
             {formatTime(lastMessage.sentAt)}
           </Typography>
         </Box>
