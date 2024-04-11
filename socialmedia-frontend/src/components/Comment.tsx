@@ -16,6 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateCommentDialog from "./UpdateCommentDialog";
 import ConfirmationDialog from "./ConfirmationDialog";
+import { parseTextToLinkElements } from "../utils/utils";
 
 export interface CommentType {
   id: string;
@@ -100,38 +101,6 @@ const Comment: React.FC<CommentProps> = ({ comment, trimText = false }) => {
 
   const handleShowMoreClick = () => {
     setIsTextExpanded(!isTextExpanded);
-  };
-
-  const parseTextToLinkElements = (text: string): React.ReactNode[] => {
-    const urlRegex = /(\bhttps?:\/\/\S+)/gi;
-    const elements: React.ReactNode[] = [];
-    let lastIndex = 0;
-
-    text.replace(urlRegex, (match, url, offset) => {
-      const textBeforeUrl = text.substring(lastIndex, offset);
-      if (textBeforeUrl) {
-        elements.push(textBeforeUrl);
-      }
-      elements.push(
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#0645AD" }}
-        >
-          {url}
-        </a>
-      );
-      lastIndex = offset + match.length;
-      return match;
-    });
-
-    const remainingText = text.substring(lastIndex);
-    if (remainingText) {
-      elements.push(remainingText);
-    }
-
-    return elements;
   };
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);

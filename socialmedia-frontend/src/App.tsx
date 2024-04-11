@@ -5,9 +5,9 @@ import Login from "./pages/Login";
 import { AuthProvider } from "./contexts/AuthContext";
 import MainLayout from "./components/MainLayout";
 import TopNavbar from "./components/TopNavbar";
-import Explore from "./pages/Explore";
+import Posts from "./pages/Posts";
 import Groups from "./pages/Groups";
-import People from "./pages/People";
+import Users from "./pages/Users";
 import Shop from "./pages/Shop";
 import Settings from "./pages/Settings";
 import { RightContentProvider } from "./contexts/RightContentContext";
@@ -27,11 +27,11 @@ function App() {
             <Route path="/register" element={<Register />} />
 
             <Route path="/" element={<MainLayout />}>
-              <Route path="explore" element={<Explore />} />
+              <Route path="explore" element={<Posts />} />
               <Route path="post/:id" element={<PostDetails />} />
               <Route path="profile/:userId" element={<ProfileDetails />} />
               <Route path="groups" element={<Groups />} />
-              <Route path="people" element={<People />} />
+              <Route path="people" element={<Users />} />
               <Route path="shop" element={<Shop />} />
               <Route path="settings" element={<Settings />} />
             </Route>

@@ -3,7 +3,7 @@ import Post, { PostType } from "../components/Post";
 import { Box, Typography } from "@mui/material";
 import { postService } from "../services/postService";
 
-const ExplorePage = () => {
+const Posts = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
 
   const fetchAndSetPosts = async () => {
@@ -49,4 +49,4 @@ const ExplorePage = () => {
   );
 };
 
-export default ExplorePage;
+export default Posts;

@@ -17,6 +17,7 @@ import { postService } from "../services/postService";
 import UpdatePostDialog from "./UpdatePostDialog";
 import ConfirmationDialog from "./ConfirmationDialog";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
+import { parseTextToLinkElements } from "../utils/utils";
 
 export interface PostType {
   id: string;
@@ -60,38 +61,6 @@ const Post: React.FC<PostProps> = ({
     trimText && post.text.length > 100
       ? `${post.text.substring(0, 400)}...`
       : post.text;
-
-  const parseTextToLinkElements = (text: string): React.ReactNode[] => {
-    const urlRegex = /(\bhttps?:\/\/\S+)/gi;
-    const elements: React.ReactNode[] = [];
-    let lastIndex = 0;
-
-    text.replace(urlRegex, (match, url, offset) => {
-      const textBeforeUrl = text.substring(lastIndex, offset);
-      if (textBeforeUrl) {
-        elements.push(textBeforeUrl);
-      }
-      elements.push(
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#0645AD" }}
-        >
-          {url}
-        </a>
-      );
-      lastIndex = offset + match.length;
-      return match;
-    });
-
-    const remainingText = text.substring(lastIndex);
-    if (remainingText) {
-      elements.push(remainingText);
-    }
-
-    return elements;
-  };
 
   useEffect(() => {
     setLiked(post.liked);

@@ -3,7 +3,7 @@ import User, { UserType } from "../components/User";
 import { Box } from "@mui/material";
 import { userService } from "../services/userService";
 
-const People = () => {
+const Users = () => {
   const [users, setUsers] = useState<UserType[]>([]);
 
   const fetchAndSetUsers = async () => {
@@ -42,4 +42,4 @@ const People = () => {
   );
 };
 
-export default People;
+export default Users;

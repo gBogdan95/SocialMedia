@@ -68,7 +68,7 @@ const LeftNavbar = () => {
 
   const buttons = [
     {
-      label: "EXPLORE",
+      label: "POSTS",
       path: "/explore",
       icon: <SearchIcon />,
     },
@@ -79,7 +79,7 @@ const LeftNavbar = () => {
       handleClick: handleProfileNavigation,
     },
     {
-      label: "PEOPLE",
+      label: "USERS",
       path: "/people",
       icon: <PeopleIcon />,
     },
