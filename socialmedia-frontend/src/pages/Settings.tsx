@@ -2,10 +2,21 @@ import React from "react";
 import { Box, Button, Typography, Checkbox } from "@mui/material";
 
 const Settings: React.FC = () => {
+  // Separate states for different functionalities
   const [blockMessages, setBlockMessages] = React.useState(false);
+  const [blockFriendRequests, setBlockFriendRequests] = React.useState(false);
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Handlers for each checkbox
+  const handleBlockMessagesChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setBlockMessages(event.target.checked);
+  };
+
+  const handleBlockFriendRequestsChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setBlockFriendRequests(event.target.checked);
   };
 
   return (
@@ -36,7 +47,7 @@ const Settings: React.FC = () => {
         </Typography>
         <Box sx={{ border: 1, borderColor: "black" }}>
           {["Change Username", "Change Password", "Change Email"].map(
-            (text, index) => (
+            (text) => (
               <Button
                 key={text}
                 variant="text"
@@ -52,6 +63,7 @@ const Settings: React.FC = () => {
                   "&:hover": {
                     bgcolor: "lightgrey",
                   },
+                  bgcolor: "#F5F7F8",
                   borderRadius: 0,
                   boxShadow: "none",
                 }}
@@ -95,7 +107,7 @@ const Settings: React.FC = () => {
           >
             <Checkbox
               checked={blockMessages}
-              onChange={handleCheckboxChange}
+              onChange={handleBlockMessagesChange}
               name="blockMessages"
               sx={{
                 "& .MuiSvgIcon-root": {
@@ -103,11 +115,20 @@ const Settings: React.FC = () => {
                 },
               }}
             />
-            <Typography sx={{ fontSize: 20, fontWeight: "bold", mr: 2 }}>
+            <Typography
+              sx={{
+                fontSize: 20,
+                fontWeight: "bold",
+                mr: 2,
+                cursor: "default",
+              }}
+            >
               Block messages from non-friends
             </Typography>
           </Box>
-          <Typography sx={{ fontSize: 16, wordBreak: "break-word" }}>
+          <Typography
+            sx={{ fontSize: 16, wordBreak: "break-word", cursor: "default" }}
+          >
             By selecting this option you will no longer receive messages from
             users that are not in your friendlist.
           </Typography>
@@ -129,22 +150,30 @@ const Settings: React.FC = () => {
             }}
           >
             <Checkbox
-              checked={blockMessages}
-              onChange={handleCheckboxChange}
-              name="blockMessages"
+              checked={blockFriendRequests}
+              onChange={handleBlockFriendRequestsChange}
+              name="blockFriendRequests"
               sx={{
                 "& .MuiSvgIcon-root": {
                   fontSize: "2rem",
                 },
               }}
             />
-            <Typography sx={{ fontSize: 20, fontWeight: "bold", mr: 2 }}>
+            <Typography
+              sx={{
+                fontSize: 20,
+                fontWeight: "bold",
+                mr: 2,
+                cursor: "default",
+              }}
+            >
               Block friend requests
             </Typography>
           </Box>
-          <Typography sx={{ fontSize: 16, wordBreak: "break-word" }}>
-            By selecting this option you will no longer receive receive friend
-            requests.
+          <Typography
+            sx={{ fontSize: 16, wordBreak: "break-word", cursor: "default" }}
+          >
+            By selecting this option you will no longer receive friend requests.
           </Typography>
         </Box>
       </Box>
