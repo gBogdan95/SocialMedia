@@ -1,17 +1,21 @@
 import React from "react";
 import { Box } from "@mui/material";
 import LeftNavbar from "./LeftNavbar";
+import { Outlet, Navigate, useLocation } from "react-router-dom";
 import { useRightContent } from "../contexts/RightContentContext";
-import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const MainLayout = () => {
   const { content: RightSideContent } = useRightContent();
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
 
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
+
+  const noOverflowRoutes = ["/settings", "/shop"];
+  const shouldHideOverflow = noOverflowRoutes.includes(location.pathname);
 
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
@@ -19,7 +23,7 @@ const MainLayout = () => {
       <Box
         component="main"
         sx={{
-          overflowY: "scroll",
+          overflowY: shouldHideOverflow ? "hidden" : "scroll",
           flexGrow: 1,
           height: "calc(100vh - 64px)",
           marginRight: "444px",
