@@ -1,13 +1,12 @@
 package com.bachelordegree.socialmedia.dto;
 
-
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class UsernameUpdateRequestDTO {
-    @NotEmpty(message = "New username is required")
-    private String newUsername;
+public class PasswordUpdateRequestDTO {
+    @NotEmpty(message = "Current password is required")
+    private String currentPassword;
     @NotEmpty(message = "Password is required")
-    private String password;
+    private String newPassword;
 }

@@ -1,6 +1,8 @@
 package com.bachelordegree.socialmedia.controller;
 
+import com.bachelordegree.socialmedia.dto.EmailUpdateRequestDTO;
 import com.bachelordegree.socialmedia.dto.LoginResponseDTO;
+import com.bachelordegree.socialmedia.dto.PasswordUpdateRequestDTO;
 import com.bachelordegree.socialmedia.dto.UsernameUpdateRequestDTO;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
@@ -35,6 +37,34 @@ public class SettingsController {
             throw new RestException(HttpStatus.UNAUTHORIZED, "Invalid password");
         } catch (Exception e) {
             throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the username");
+        }
+    }
+
+    @PutMapping("/update-password/{userId}")
+    public LoginResponseDTO updatePassword(@PathVariable UUID userId,
+                                           @Valid @RequestBody PasswordUpdateRequestDTO request) {
+        try {
+            return settingsService.updatePassword(userId, request.getCurrentPassword(), request.getNewPassword());
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, "User not found");
+        } catch (AuthenticationException e) {
+            throw new RestException(HttpStatus.UNAUTHORIZED, "Invalid current password");
+        } catch (Exception e) {
+            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the password");
+        }
+    }
+
+    @PutMapping("/update-email/{userId}")
+    public LoginResponseDTO updateEmail(@PathVariable UUID userId,
+                                        @Valid @RequestBody EmailUpdateRequestDTO request) {
+        try {
+            return settingsService.updateEmail(userId, request.getPassword(), request.getNewEmail());
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, "User not found");
+        } catch (AuthenticationException e) {
+            throw new RestException(HttpStatus.UNAUTHORIZED, "Invalid password");
+        } catch (Exception e) {
+            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the email");
         }
     }
 }

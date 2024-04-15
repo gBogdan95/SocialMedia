@@ -55,5 +55,40 @@ public class SettingsService {
 
         return new LoginResponseDTO(userDTO, newToken);
     }
-}
 
+    public LoginResponseDTO updatePassword(UUID userId, String currentPassword, String newPassword) throws Exception {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getUsername(), currentPassword)
+        );
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        String newToken = tokenService.generateJwt(authentication);
+
+        UserDTO userDTO = userConverter.toDTO(user);
+
+        return new LoginResponseDTO(userDTO, newToken);
+    }
+
+    public LoginResponseDTO updateEmail(UUID userId, String password, String newEmail) throws Exception {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getUsername(), password)
+        );
+
+        user.setEmail(newEmail);
+        User updatedUser = userRepository.save(user);
+
+        String newToken = tokenService.generateJwt(authentication);
+
+        UserDTO userDTO = userConverter.toDTO(updatedUser);
+
+        return new LoginResponseDTO(userDTO, newToken);
+    }
+}
