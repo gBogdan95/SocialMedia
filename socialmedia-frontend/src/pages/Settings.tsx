@@ -2,12 +2,14 @@ import React from "react";
 import { Box, Button, Typography, Checkbox } from "@mui/material";
 import ChangeUsernameDialog from "../components/ChangeUsernameDialog";
 import ChangeEmailDialog from "../components/ChangeEmailDialog";
+import ChangePasswordDialog from "../components/ChangePasswordDialog";
 
 const Settings: React.FC = () => {
   const [blockMessages, setBlockMessages] = React.useState(false);
   const [blockFriendRequests, setBlockFriendRequests] = React.useState(false);
   const [isUsernameDialogOpen, setIsUsernameDialogOpen] = React.useState(false);
   const [isEmailDialogOpen, setIsEmailDialogOpen] = React.useState(false);
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = React.useState(false);
 
   const storedUserJSON = localStorage.getItem("user");
   const storedUser = storedUserJSON ? JSON.parse(storedUserJSON) : null;
@@ -30,8 +32,11 @@ const Settings: React.FC = () => {
   };
 
   const toggleEmailDialog = () => {
-    // New function to toggle email dialog
     setIsEmailDialogOpen(!isEmailDialogOpen);
+  };
+
+  const togglePasswordDialog = () => {
+    setIsPasswordDialogOpen(!isPasswordDialogOpen);
   };
 
   if (!userId) {
@@ -74,7 +79,9 @@ const Settings: React.FC = () => {
                     ? toggleUsernameDialog
                     : text === "Change Email"
                       ? toggleEmailDialog
-                      : undefined
+                      : text === "Change Password"
+                        ? togglePasswordDialog
+                        : undefined
                 }
                 variant="text"
                 fullWidth
@@ -107,6 +114,11 @@ const Settings: React.FC = () => {
             userId={userId}
             open={isEmailDialogOpen}
             onClose={toggleEmailDialog}
+          />
+          <ChangePasswordDialog
+            userId={userId}
+            open={isPasswordDialogOpen}
+            onClose={togglePasswordDialog}
           />
         </Box>
         <Typography

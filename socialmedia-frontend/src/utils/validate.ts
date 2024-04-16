@@ -1,5 +1,5 @@
 interface ValidationFunctions {
-  [key: string]: (value: string) => string;
+  [key: string]: (...args: any[]) => string;
 }
 
 export const validateRegister: ValidationFunctions = {
@@ -41,4 +41,13 @@ export const validateChangeEmail: ValidationFunctions = {
     /\S+@\S+\.\S+/.test(value) ? "" : "Email must be a valid email address",
   password: (value: string) =>
     value.trim().length === 0 ? "Password cannot be empty" : "",
+};
+
+export const validateChangePassword: ValidationFunctions = {
+  currentPassword: (value: string) =>
+    value.trim().length === 0 ? "Current password is required" : "",
+  newPassword: (value: string) =>
+    value.length >= 6 ? "" : "Password must be at least 6 characters",
+  confirmPassword: (value: string, newPassword: string) =>
+    value === newPassword ? "" : "Passwords do not match",
 };
