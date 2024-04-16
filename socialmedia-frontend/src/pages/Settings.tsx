@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, Typography, Checkbox } from "@mui/material";
 import ChangeUsernameDialog from "../components/ChangeUsernameDialog";
 import ChangeEmailDialog from "../components/ChangeEmailDialog";
 import ChangePasswordDialog from "../components/ChangePasswordDialog";
+import { settingsService } from "../services/settingsService";
+import { userService } from "../services/userService";
 
 const Settings: React.FC = () => {
   const [blockMessages, setBlockMessages] = React.useState(false);
@@ -15,16 +17,42 @@ const Settings: React.FC = () => {
   const storedUser = storedUserJSON ? JSON.parse(storedUserJSON) : null;
   const userId = storedUser ? storedUser.id : null;
 
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      if (userId) {
+        try {
+          const user = await userService.fetchUserById(userId);
+          setBlockFriendRequests(!user.allowingFriendRequests);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    fetchCurrentUser();
+  }, [userId]);
+
   const handleBlockMessagesChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setBlockMessages(event.target.checked);
   };
 
-  const handleBlockFriendRequestsChange = (
+  const handleBlockFriendRequestsChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setBlockFriendRequests(event.target.checked);
+    const newSetting = event.target.checked;
+    setBlockFriendRequests(newSetting);
+    try {
+      const updatedUser = await settingsService.updateFriendRequestSetting(
+        userId,
+        !newSetting
+      );
+      setBlockFriendRequests(!updatedUser.allowingFriendRequests);
+    } catch (error) {
+      console.error("Failed to update friend request setting", error);
+      setBlockFriendRequests(!newSetting);
+    }
   };
 
   const toggleUsernameDialog = () => {

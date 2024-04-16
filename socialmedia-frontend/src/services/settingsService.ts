@@ -95,8 +95,37 @@ const updateEmail = async (
   return await response.json();
 };
 
+const updateFriendRequestSetting = async (
+  userId: string,
+  isAllowingFriendRequests: boolean
+) => {
+  const token = getToken();
+
+  const response = await fetch(
+    `${API_BASE_URL}/user/settings/update-friend-request-setting/${userId}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isAllowingFriendRequests }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    const errorMessage =
+      errorData.message || "Friend request setting update failed";
+    throw new Error(errorMessage);
+  }
+
+  return await response.json();
+};
+
 export const settingsService = {
   updateUsername,
   updatePassword,
   updateEmail,
+  updateFriendRequestSetting,
 };
