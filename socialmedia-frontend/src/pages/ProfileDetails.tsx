@@ -34,6 +34,7 @@ export interface ProfileDetailsType {
   phoneNumber: string;
   avatarUrl: string;
   backgroundUrl: string;
+  email: string;
 }
 
 const ProfileDetails: React.FC = () => {
@@ -236,10 +237,19 @@ const ProfileDetails: React.FC = () => {
           <Typography
             variant="subtitle1"
             gutterBottom
-            style={{ fontWeight: "bold", marginTop: "10px" }}
+            style={{ marginTop: "10px" }}
           >
-            {profile.name}
+            Email: {profile.email}
           </Typography>
+          {profile.name && (
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              style={{ marginBottom: "10px" }}
+            >
+              Name: {profile.name}
+            </Typography>
+          )}
           {profile.description && (
             <Typography
               variant="subtitle1"
@@ -253,7 +263,7 @@ const ProfileDetails: React.FC = () => {
             <Typography
               variant="subtitle1"
               gutterBottom
-              style={{ wordWrap: "break-word", marginBottom: "10px" }}
+              style={{ marginBottom: "10px" }}
             >
               Phone Number: {profile.phoneNumber}
             </Typography>
