@@ -53,6 +53,10 @@ const ProfileDetails: React.FC = () => {
   const [isMessageDialogOpen, setIsMessageDialogOpen] = useState(false);
   const [isFriendRequestErrorDialogOpen, setIsFriendRequestErrorDialogOpen] =
     useState(false);
+  const [
+    isFriendRequestNotAllowedDialogOpen,
+    setIsFriendRequestNotAllowedDialogOpen,
+  ] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -72,13 +76,19 @@ const ProfileDetails: React.FC = () => {
       await friendshipService.sendFriendRequest(username);
       setIsAddFriendDialogOpen(true);
     } catch (error) {
-      if (
-        error instanceof Error &&
-        error.message.includes("Friend request already sent")
-      ) {
-        setIsFriendRequestErrorDialogOpen(true);
-      } else {
-        console.error("Failed to send friend request:", error);
+      console.error("Failed to send friend request:", error);
+      if (error instanceof Error) {
+        if (
+          error.message.includes(
+            "This user doesn't allow receiving friend requests"
+          )
+        ) {
+          setIsFriendRequestNotAllowedDialogOpen(true);
+        } else if (error.message.includes("Friend request already sent")) {
+          setIsFriendRequestErrorDialogOpen(true);
+        } else {
+          alert("Failed to send friend request: " + error.message);
+        }
       }
     }
   };
@@ -391,6 +401,39 @@ const ProfileDetails: React.FC = () => {
             >
               <Button
                 onClick={() => setIsFriendRequestErrorDialogOpen(false)}
+                color="primary"
+                variant="contained"
+                size="large"
+                sx={{
+                  width: "60%",
+                  mb: 2,
+                }}
+              >
+                Ok
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={isFriendRequestNotAllowedDialogOpen}
+            onClose={() => setIsFriendRequestNotAllowedDialogOpen(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogContent>
+              <DialogContentText
+                id="alert-dialog-description"
+                sx={{ fontSize: 19, color: "red", p: 2, fontWeight: "bold" }}
+              >
+                This user doesn't allow receiving friend requests.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions
+              sx={{
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                onClick={() => setIsFriendRequestNotAllowedDialogOpen(false)}
                 color="primary"
                 variant="contained"
                 size="large"
