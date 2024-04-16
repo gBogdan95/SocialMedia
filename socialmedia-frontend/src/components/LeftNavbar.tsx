@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { Box, Drawer } from "@mui/material";
-
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import CreateButton from "./CreateButton";
@@ -32,6 +31,20 @@ const LeftNavbar = () => {
       const user = JSON.parse(userJson);
       if (user && user.id) {
         navigate(`/profile/${user.id}`);
+      } else {
+        console.error("User ID is missing");
+      }
+    } else {
+      console.error("No user data found in local storage");
+    }
+  };
+
+  const handleSettingsNavigation = () => {
+    const userJson = localStorage.getItem("user");
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      if (user && user.id) {
+        navigate(`/settings/${user.id}`);
       } else {
         console.error("User ID is missing");
       }
@@ -92,6 +105,7 @@ const LeftNavbar = () => {
       label: "SETTINGS",
       path: "/settings",
       icon: <SettingsIcon />,
+      handleClick: handleSettingsNavigation, // Adjusted to use the new settings navigation function
     },
   ];
 

@@ -1,12 +1,15 @@
 import React from "react";
 import { Box, Button, Typography, Checkbox } from "@mui/material";
+import ChangeUsernameDialog from "../components/ChangeUsernameDialog";
+import { useParams, Navigate } from "react-router-dom";
 
 const Settings: React.FC = () => {
-  // Separate states for different functionalities
   const [blockMessages, setBlockMessages] = React.useState(false);
   const [blockFriendRequests, setBlockFriendRequests] = React.useState(false);
+  const [isUsernameDialogOpen, setIsUsernameDialogOpen] = React.useState(false);
 
-  // Handlers for each checkbox
+  const { userId } = useParams<{ userId?: string }>();
+
   const handleBlockMessagesChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -18,6 +21,14 @@ const Settings: React.FC = () => {
   ) => {
     setBlockFriendRequests(event.target.checked);
   };
+
+  const toggleUsernameDialog = () => {
+    setIsUsernameDialogOpen(!isUsernameDialogOpen);
+  };
+
+  if (!userId) {
+    return <div>User ID not found!</div>;
+  }
 
   return (
     <Box
@@ -50,6 +61,9 @@ const Settings: React.FC = () => {
             (text) => (
               <Button
                 key={text}
+                onClick={
+                  text === "Change Username" ? toggleUsernameDialog : undefined
+                }
                 variant="text"
                 fullWidth
                 sx={{
@@ -72,6 +86,11 @@ const Settings: React.FC = () => {
               </Button>
             )
           )}
+          <ChangeUsernameDialog
+            userId={userId}
+            open={isUsernameDialogOpen}
+            onClose={toggleUsernameDialog}
+          />
         </Box>
         <Typography
           variant="h6"
