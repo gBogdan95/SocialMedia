@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Avatar,
-  Paper,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-} from "@mui/material";
+import { Box, Typography, Avatar, Paper, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { userService } from "../services/userService";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
@@ -47,7 +37,7 @@ const ProfileDetails: React.FC = () => {
   }>({
     open: false,
     message: "",
-    color: "black", // Default color
+    color: "black",
   });
   const { userId } = useParams<{ userId: string }>();
 
@@ -84,7 +74,7 @@ const ProfileDetails: React.FC = () => {
     } catch (error) {
       console.error("Failed to send friend request:", error);
       let message = "Failed to send friend request.";
-      let color = "red"; // Default error color
+      let color = "red";
       if (error instanceof Error) {
         if (
           error.message.includes(
@@ -95,7 +85,6 @@ const ProfileDetails: React.FC = () => {
         } else if (error.message.includes("Friend request already sent")) {
           message = "You have already a pending friend request to this user.";
         } else {
-          // Keep generic error message and red color
         }
       }
       setDialogInfo({ open: true, message, color });
