@@ -39,20 +39,6 @@ const LeftNavbar = () => {
     }
   };
 
-  const handleSettingsNavigation = () => {
-    const userJson = localStorage.getItem("user");
-    if (userJson) {
-      const user = JSON.parse(userJson);
-      if (user && user.id) {
-        navigate(`/settings/${user.id}`);
-      } else {
-        console.error("User ID is missing");
-      }
-    } else {
-      console.error("No user data found in local storage");
-    }
-  };
-
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -105,7 +91,6 @@ const LeftNavbar = () => {
       label: "SETTINGS",
       path: "/settings",
       icon: <SettingsIcon />,
-      handleClick: handleSettingsNavigation, // Adjusted to use the new settings navigation function
     },
   ];
 

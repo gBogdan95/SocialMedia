@@ -8,7 +8,9 @@ const Settings: React.FC = () => {
   const [blockFriendRequests, setBlockFriendRequests] = React.useState(false);
   const [isUsernameDialogOpen, setIsUsernameDialogOpen] = React.useState(false);
 
-  const { userId } = useParams<{ userId?: string }>();
+  const storedUserJSON = localStorage.getItem("user");
+  const storedUser = storedUserJSON ? JSON.parse(storedUserJSON) : null;
+  const userId = storedUser ? storedUser.id : null;
 
   const handleBlockMessagesChange = (
     event: React.ChangeEvent<HTMLInputElement>

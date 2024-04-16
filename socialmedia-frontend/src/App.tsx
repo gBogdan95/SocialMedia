@@ -33,7 +33,7 @@ function App() {
               <Route path="groups" element={<Groups />} />
               <Route path="people" element={<Users />} />
               <Route path="shop" element={<Shop />} />
-              <Route path="settings/:userId" element={<Settings />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
           </Routes>
         </BrowserRouter>
