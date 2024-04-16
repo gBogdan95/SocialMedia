@@ -108,7 +108,13 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+      sx={{ mr: 11 }}
+    >
       <DialogTitle
         sx={{
           fontSize: 24,
