@@ -48,7 +48,7 @@ export default function Register() {
 
       console.error("Registration error:", errorMessage);
 
-      if (errorMessage.toLowerCase().includes("this username already exists")) {
+      if (errorMessage.toLowerCase().includes("error")) {
         setErrors((prevErrors) => ({ ...prevErrors, username: errorMessage }));
       }
     }

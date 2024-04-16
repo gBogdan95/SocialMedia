@@ -29,8 +29,9 @@ const updateUsername = async (
   );
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to update username: ${errorText}`);
+    const errorData = await response.json();
+    const errorMessage = errorData.message || "Username update failed";
+    throw new Error(errorMessage);
   }
 
   return await response.json();
@@ -56,8 +57,9 @@ const updatePassword = async (
   );
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to update password: ${errorText}`);
+    const errorData = await response.json();
+    const errorMessage = errorData.message || "Password update failed";
+    throw new Error(errorMessage);
   }
 
   return await response.json();
@@ -83,8 +85,9 @@ const updateEmail = async (
   );
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to update email: ${errorText}`);
+    const errorData = await response.json();
+    const errorMessage = errorData.message || "Email update failed";
+    throw new Error(errorMessage);
   }
 
   return await response.json();

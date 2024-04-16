@@ -6,6 +6,7 @@ import {
   DialogTitle,
   TextField,
   Button,
+  Typography,
 } from "@mui/material";
 import { settingsService } from "../services/settingsService";
 import { useAuth } from "../contexts/AuthContext";
@@ -26,10 +27,13 @@ const ChangeUsernameDialog: React.FC<ChangeUsernameDialogProps> = ({
   const [formData, setFormData] = useState({ newUsername: "", password: "" });
   const [errors, setErrors] = useState({ newUsername: "", password: "" });
 
+  const [generalError, setGeneralError] = useState("");
+
   useEffect(() => {
     if (open) {
       setFormData({ newUsername: "", password: "" });
       setErrors({ newUsername: "", password: "" });
+      setGeneralError("");
     }
   }, [open]);
 
@@ -63,7 +67,21 @@ const ChangeUsernameDialog: React.FC<ChangeUsernameDialogProps> = ({
       window.location.reload();
       onClose();
     } catch (error) {
-      console.error("Error updating username:", error);
+      const errorMessage =
+        (error as Error).message || "An unknown error occurred";
+
+      console.error("Update username error:", errorMessage);
+
+      if (errorMessage.toLowerCase().includes("error")) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          newUsername: errorMessage,
+        }));
+      } else if (errorMessage.toLowerCase().includes("incorrect password")) {
+        setGeneralError("Incorrect password");
+      } else {
+        setGeneralError(errorMessage);
+      }
     }
   };
 
@@ -76,6 +94,7 @@ const ChangeUsernameDialog: React.FC<ChangeUsernameDialogProps> = ({
           backgroundColor: "#1450A3",
           textShadow: "2px 2px 4px rgba(0, 0, 0, 1)",
           color: "white",
+          mb: 1,
         }}
       >
         Change Username
@@ -108,6 +127,11 @@ const ChangeUsernameDialog: React.FC<ChangeUsernameDialogProps> = ({
           helperText={errors.password}
         />
       </DialogContent>
+      {generalError && (
+        <Typography color="error" sx={{ ml: 3.1, textAlign: "left" }}>
+          {generalError}
+        </Typography>
+      )}
       <DialogActions
         sx={{
           marginBottom: "15px",

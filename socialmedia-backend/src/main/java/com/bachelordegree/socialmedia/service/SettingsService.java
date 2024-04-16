@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+import static com.bachelordegree.socialmedia.exception.UserAlreadyExistsException.ERR_MSG_USER_ALREADY_EXISTS;
+
 @Service
 public class SettingsService {
 
@@ -43,7 +45,7 @@ public class SettingsService {
         );
 
         if (userRepository.findByUsername(newUsername).isPresent()) {
-            throw new UserAlreadyExistsException("Username already in use.");
+            throw new UserAlreadyExistsException(ERR_MSG_USER_ALREADY_EXISTS);
         }
 
         user.setUsername(newUsername);
