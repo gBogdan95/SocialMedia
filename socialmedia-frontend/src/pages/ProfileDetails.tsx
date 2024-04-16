@@ -25,6 +25,7 @@ import { friendshipService } from "../services/friendshipService";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import ConversationDialog from "../components/ConversationDialog";
+import GenericDialog from "../components/GenericDialog";
 
 export interface ProfileDetailsType {
   id: string;
@@ -39,6 +40,15 @@ export interface ProfileDetailsType {
 
 const ProfileDetails: React.FC = () => {
   const [profile, setProfile] = useState<ProfileDetailsType | null>(null);
+  const [dialogInfo, setDialogInfo] = useState<{
+    open: boolean;
+    message: string;
+    color: string;
+  }>({
+    open: false,
+    message: "",
+    color: "black", // Default color
+  });
   const { userId } = useParams<{ userId: string }>();
 
   const storedUser = localStorage.getItem("user");
@@ -49,14 +59,7 @@ const ProfileDetails: React.FC = () => {
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [friendshipStatus, setFriendshipStatus] = useState("NONE");
-  const [isAddFriendDialogOpen, setIsAddFriendDialogOpen] = useState(false);
   const [isMessageDialogOpen, setIsMessageDialogOpen] = useState(false);
-  const [isFriendRequestErrorDialogOpen, setIsFriendRequestErrorDialogOpen] =
-    useState(false);
-  const [
-    isFriendRequestNotAllowedDialogOpen,
-    setIsFriendRequestNotAllowedDialogOpen,
-  ] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -72,24 +75,30 @@ const ProfileDetails: React.FC = () => {
     if (!userId) return;
     try {
       const userDetails = await userService.fetchUserById(userId);
-      const username = userDetails.username;
-      await friendshipService.sendFriendRequest(username);
-      setIsAddFriendDialogOpen(true);
+      await friendshipService.sendFriendRequest(userDetails.username);
+      setDialogInfo({
+        open: true,
+        message: "Your friend request has been sent successfully.",
+        color: "black",
+      });
     } catch (error) {
       console.error("Failed to send friend request:", error);
+      let message = "Failed to send friend request.";
+      let color = "red"; // Default error color
       if (error instanceof Error) {
         if (
           error.message.includes(
             "This user doesn't allow receiving friend requests"
           )
         ) {
-          setIsFriendRequestNotAllowedDialogOpen(true);
+          message = "This user doesn't allow receiving friend requests.";
         } else if (error.message.includes("Friend request already sent")) {
-          setIsFriendRequestErrorDialogOpen(true);
+          message = "You have already a pending friend request to this user.";
         } else {
-          alert("Failed to send friend request: " + error.message);
+          // Keep generic error message and red color
         }
       }
+      setDialogInfo({ open: true, message, color });
     }
   };
 
@@ -104,9 +113,7 @@ const ProfileDetails: React.FC = () => {
     }
   };
 
-  const handleDialogClose = () => {
-    setIsAddFriendDialogOpen(false);
-  };
+  const handleCloseDialog = () => setDialogInfo({ ...dialogInfo, open: false });
 
   useEffect(() => {
     const fetchProfileAndFriendshipStatus = async () => {
@@ -346,106 +353,12 @@ const ProfileDetails: React.FC = () => {
             onConfirm={handleDeleteFriendClick}
             onCancel={handleCloseConfirmation}
           />
-          <Dialog
-            open={isAddFriendDialogOpen}
-            onClose={handleDialogClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogContent>
-              <DialogContentText
-                id="alert-dialog-description"
-                sx={{ fontSize: 20, color: "black", p: 2 }}
-              >
-                Your friend request has been sent successfully.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions
-              sx={{
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                onClick={handleDialogClose}
-                color="primary"
-                variant="contained"
-                size="large"
-                sx={{
-                  width: "60%",
-                  mb: 2,
-                }}
-              >
-                Ok
-              </Button>
-            </DialogActions>
-          </Dialog>
-
-          <Dialog
-            open={isFriendRequestErrorDialogOpen}
-            onClose={() => setIsFriendRequestErrorDialogOpen(false)}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogContent>
-              <DialogContentText
-                id="alert-dialog-description"
-                sx={{ fontSize: 19, color: "red", p: 2, fontWeight: "bold" }}
-              >
-                You have already a pending friend request to this user.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions
-              sx={{
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                onClick={() => setIsFriendRequestErrorDialogOpen(false)}
-                color="primary"
-                variant="contained"
-                size="large"
-                sx={{
-                  width: "60%",
-                  mb: 2,
-                }}
-              >
-                Ok
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog
-            open={isFriendRequestNotAllowedDialogOpen}
-            onClose={() => setIsFriendRequestNotAllowedDialogOpen(false)}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogContent>
-              <DialogContentText
-                id="alert-dialog-description"
-                sx={{ fontSize: 19, color: "red", p: 2, fontWeight: "bold" }}
-              >
-                This user doesn't allow receiving friend requests.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions
-              sx={{
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                onClick={() => setIsFriendRequestNotAllowedDialogOpen(false)}
-                color="primary"
-                variant="contained"
-                size="large"
-                sx={{
-                  width: "60%",
-                  mb: 2,
-                }}
-              >
-                Ok
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <GenericDialog
+            open={dialogInfo.open}
+            message={dialogInfo.message}
+            color={dialogInfo.color}
+            onClose={handleCloseDialog}
+          />
           <Button
             variant="contained"
             color="primary"
