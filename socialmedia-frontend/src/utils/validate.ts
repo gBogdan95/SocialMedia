@@ -35,3 +35,10 @@ export const validateUpdateProfile: ValidationFunctions = {
   name: (value: string) =>
     value.length <= 16 ? "" : "Name must not exceed 16 characters",
 };
+
+export const validateChangeEmail: ValidationFunctions = {
+  email: (value: string) =>
+    /\S+@\S+\.\S+/.test(value) ? "" : "Email must be a valid email address",
+  password: (value: string) =>
+    value.trim().length === 0 ? "Password cannot be empty" : "",
+};

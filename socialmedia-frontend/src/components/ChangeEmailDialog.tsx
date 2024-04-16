@@ -10,72 +10,69 @@ import {
 } from "@mui/material";
 import { settingsService } from "../services/settingsService";
 import { useAuth } from "../contexts/AuthContext";
+import { validateChangeEmail } from "../utils/validate";
 
-interface ChangeUsernameDialogProps {
+interface ChangeEmailDialogProps {
   userId: string;
   open: boolean;
   onClose: () => void;
 }
 
-const ChangeUsernameDialog: React.FC<ChangeUsernameDialogProps> = ({
+const ChangeEmailDialog: React.FC<ChangeEmailDialogProps> = ({
   userId,
   open,
   onClose,
 }) => {
   const { updateUser } = useAuth();
 
-  const [formData, setFormData] = useState({ newUsername: "", password: "" });
-  const [errors, setErrors] = useState({ newUsername: "", password: "" });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({ email: "", password: "" });
   const [generalError, setGeneralError] = useState("");
 
   useEffect(() => {
     if (open) {
-      setFormData({ newUsername: "", password: "" });
-      setErrors({ newUsername: "", password: "" });
+      setFormData({ email: "", password: "" });
+      setErrors({ email: "", password: "" });
       setGeneralError("");
     }
   }, [open]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    const error = validateChangeEmail[name](value);
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({
-      ...prev,
-      [name]: value.trim() ? "" : "This field cannot be empty",
-    }));
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   const handleSave = async () => {
-    const { newUsername, password } = formData;
-    if (!newUsername.trim() || !password.trim()) {
+    const { email, password } = formData;
+    if (!email.trim() || !password.trim()) {
       setErrors({
-        newUsername: newUsername.trim() ? "" : "This field cannot be empty",
-        password: password.trim() ? "" : "This field cannot be empty",
+        email: email.trim() ? "" : "Email is required",
+        password: password.trim() ? "" : "Password is required",
       });
       return;
     }
 
     try {
-      const response = await settingsService.updateUsername(
+      const response = await settingsService.updateEmail(
         userId,
-        newUsername,
+        email,
         password
       );
       const { user, jwt } = response;
       updateUser(user, jwt);
-      window.location.reload();
       onClose();
     } catch (error) {
       const errorMessage =
         (error as Error).message || "An unknown error occurred";
 
-      console.error("Update username error:", errorMessage);
+      console.error("Update email error:", errorMessage);
 
       if (errorMessage.toLowerCase().includes("error")) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          newUsername: errorMessage,
+          email: "This email already exists",
         }));
       } else if (errorMessage.toLowerCase().includes("incorrect password")) {
         setGeneralError("Incorrect password");
@@ -97,21 +94,21 @@ const ChangeUsernameDialog: React.FC<ChangeUsernameDialogProps> = ({
           mb: 1,
         }}
       >
-        Change Username
+        Change Email
       </DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
           margin="dense"
-          id="newUsername"
-          label="New Username"
-          type="text"
+          id="email"
+          label="New Email"
+          type="email"
           fullWidth
-          name="newUsername"
-          value={formData.newUsername}
+          name="email"
+          value={formData.email}
           onChange={handleChange}
-          error={!!errors.newUsername}
-          helperText={errors.newUsername}
+          error={!!errors.email}
+          helperText={errors.email}
           sx={{ mb: 2 }}
         />
         <TextField
@@ -170,7 +167,11 @@ const ChangeUsernameDialog: React.FC<ChangeUsernameDialogProps> = ({
               color: "gray",
             },
           }}
-          disabled={!formData.newUsername.trim() || !formData.password.trim()}
+          disabled={
+            !formData.email.trim() ||
+            !formData.password.trim() ||
+            errors.email !== ""
+          }
         >
           Save
         </Button>
@@ -179,4 +180,4 @@ const ChangeUsernameDialog: React.FC<ChangeUsernameDialogProps> = ({
   );
 };
 
-export default ChangeUsernameDialog;
+export default ChangeEmailDialog;

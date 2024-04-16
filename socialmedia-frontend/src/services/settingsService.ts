@@ -67,10 +67,12 @@ const updatePassword = async (
 
 const updateEmail = async (
   userId: string,
-  password: string,
-  newEmail: string
+  newEmail: string,
+  password: string
 ) => {
   const token = getToken();
+
+  const payload = JSON.stringify({ password, newEmail });
 
   const response = await fetch(
     `${API_BASE_URL}/user/settings/update-email/${userId}`,
@@ -80,7 +82,7 @@ const updateEmail = async (
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ password, newEmail }),
+      body: payload,
     }
   );
 
