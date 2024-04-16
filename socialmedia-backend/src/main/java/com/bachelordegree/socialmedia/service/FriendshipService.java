@@ -1,5 +1,6 @@
 package com.bachelordegree.socialmedia.service;
 
+import com.bachelordegree.socialmedia.exception.FriendRequestException;
 import com.bachelordegree.socialmedia.model.Friendship;
 import com.bachelordegree.socialmedia.model.FriendshipStatus;
 import com.bachelordegree.socialmedia.model.User;
@@ -13,14 +14,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.bachelordegree.socialmedia.exception.FriendRequestException.ERR_MSG_USER_BLOCKED_RECEIVING_FRIEND_REQUESTS;
+
 @Service
 @RequiredArgsConstructor
 public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
 
-    public void sendFriendRequest(User requester, User receiver) {
+    public void sendFriendRequest(User requester, User receiver) throws FriendRequestException {
         if (requester.getId().equals(receiver.getId())) {
             throw new IllegalArgumentException("Cannot send a friend request to oneself.");
+        }
+
+        if (!receiver.isAllowingFriendRequests()) {
+            throw new FriendRequestException(ERR_MSG_USER_BLOCKED_RECEIVING_FRIEND_REQUESTS);
         }
 
         Optional<Friendship> existingFriendship = friendshipRepository.findFriendshipBetweenUsers(requester.getId(), receiver.getId());

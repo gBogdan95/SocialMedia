@@ -66,7 +66,7 @@ public class AuthenticationService {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getAvatarUrl(), user.getBackgroundUrl(), user.getCurrency(), user.getName(), user.getPhoneNumber(), user.getDescription());
+            UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getAvatarUrl(), user.getBackgroundUrl(), user.getCurrency(), user.getName(), user.getPhoneNumber(), user.getDescription(), user.isAllowingFriendRequests());
             return new LoginResponseDTO(userDTO, token);
         } catch (AuthenticationException e) {
             throw new CustomAuthenticationException(ERR_MSG_LOGIN_FAILED);

@@ -7,6 +7,7 @@ import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -92,5 +93,19 @@ public class SettingsService {
         UserDTO userDTO = userConverter.toDTO(updatedUser);
 
         return new LoginResponseDTO(userDTO, newToken);
+    }
+
+    public UserDTO updateFriendRequestSetting(UUID userId, boolean isAllowing, String username) throws Exception {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+
+        if (!user.getUsername().equals(username)) {
+            throw new AccessDeniedException("User not authorized to update this setting");
+        }
+
+        user.setAllowingFriendRequests(isAllowing);
+        User updatedUser = userRepository.save(user);
+
+        return userConverter.toDTO(updatedUser);
     }
 }

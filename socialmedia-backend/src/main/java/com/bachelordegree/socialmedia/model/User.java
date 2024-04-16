@@ -54,6 +54,9 @@ public class User implements UserDetails {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "is_allowing_friend_requests", nullable = false)
+    private boolean isAllowingFriendRequests = true;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",

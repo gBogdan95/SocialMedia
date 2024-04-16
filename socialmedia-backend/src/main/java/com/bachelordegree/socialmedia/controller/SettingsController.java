@@ -1,9 +1,6 @@
 package com.bachelordegree.socialmedia.controller;
 
-import com.bachelordegree.socialmedia.dto.EmailUpdateRequestDTO;
-import com.bachelordegree.socialmedia.dto.LoginResponseDTO;
-import com.bachelordegree.socialmedia.dto.PasswordUpdateRequestDTO;
-import com.bachelordegree.socialmedia.dto.UsernameUpdateRequestDTO;
+import com.bachelordegree.socialmedia.dto.*;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.service.SettingsService;
@@ -11,10 +8,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -67,4 +67,26 @@ public class SettingsController {
             throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the email");
         }
     }
+
+    @PatchMapping("/update-friend-request-setting/{userId}")
+    public UserDTO updateFriendRequestSetting(@PathVariable UUID userId,
+                                              @RequestBody Map<String, Boolean> updates,
+                                              Authentication authentication) {
+        String currentUsername = authentication.getName();
+        try {
+            if (!updates.containsKey("isAllowingFriendRequests")) {
+                throw new IllegalArgumentException("Required key 'isAllowingFriendRequests' is missing");
+            }
+
+            boolean isAllowing = updates.get("isAllowingFriendRequests");
+            return settingsService.updateFriendRequestSetting(userId, isAllowing, currentUsername);
+        } catch (UsernameNotFoundException | AccessDeniedException e) {
+            throw new RestException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the friend request setting");
+        }
+    }
+
 }

@@ -4,6 +4,7 @@ import com.bachelordegree.socialmedia.converter.FriendshipConverter;
 import com.bachelordegree.socialmedia.converter.UserConverter;
 import com.bachelordegree.socialmedia.dto.FriendshipDTO;
 import com.bachelordegree.socialmedia.dto.UserDTO;
+import com.bachelordegree.socialmedia.exception.FriendRequestException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.Friendship;
 import com.bachelordegree.socialmedia.model.FriendshipStatus;
@@ -44,6 +45,8 @@ public class FriendshipController {
             friendshipService.sendFriendRequest(requester, receiver);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+        } catch (FriendRequestException e) {
+            throw new RestException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (IllegalStateException | IllegalArgumentException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

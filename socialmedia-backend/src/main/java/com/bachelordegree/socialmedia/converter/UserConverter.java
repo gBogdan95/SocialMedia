@@ -19,6 +19,7 @@ public class UserConverter {
         userDTO.setName(user.getName());
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setDescription(user.getDescription());
+        userDTO.setAllowingFriendRequests(user.isAllowingFriendRequests());
         return userDTO;
     }
 }
