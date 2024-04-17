@@ -108,4 +108,18 @@ public class SettingsService {
 
         return userConverter.toDTO(updatedUser);
     }
+
+    public UserDTO updateMessagePermissionSetting(UUID userId, boolean isAllowing, String username) throws Exception {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+
+        if (!user.getUsername().equals(username)) {
+            throw new AccessDeniedException("User not authorized to update this setting");
+        }
+
+        user.setAllowingMessagesFromNonFriends(isAllowing);
+        User updatedUser = userRepository.save(user);
+
+        return userConverter.toDTO(updatedUser);
+    }
 }

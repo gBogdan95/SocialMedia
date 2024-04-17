@@ -57,6 +57,9 @@ public class User implements UserDetails {
     @Column(name = "is_allowing_friend_requests", nullable = false)
     private boolean isAllowingFriendRequests = true;
 
+    @Column(name = "is_allowing_messages_from_non_friends", nullable = false)
+    private boolean isAllowingMessagesFromNonFriends = true;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",

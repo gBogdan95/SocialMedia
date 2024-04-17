@@ -24,4 +24,5 @@ public class UserDTO {
     private String phoneNumber;
     private String description;
     private boolean isAllowingFriendRequests;
+    private boolean isAllowingMessagesFromNonFriends;
 }

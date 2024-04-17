@@ -89,4 +89,25 @@ public class SettingsController {
         }
     }
 
+    @PatchMapping("/update-message-permission-setting/{userId}")
+    public UserDTO updateMessagePermissionSetting(@PathVariable UUID userId,
+                                                  @RequestBody Map<String, Boolean> updates,
+                                                  Authentication authentication) {
+        String currentUsername = authentication.getName();
+        try {
+            if (!updates.containsKey("isAllowingMessagesFromNonFriends")) {
+                throw new IllegalArgumentException("Required key 'isAllowingMessagesFromNonFriends' is missing");
+            }
+
+            boolean isAllowing = updates.get("isAllowingMessagesFromNonFriends");
+            return settingsService.updateMessagePermissionSetting(userId, isAllowing, currentUsername);
+        } catch (UsernameNotFoundException | AccessDeniedException e) {
+            throw new RestException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the message permission setting");
+        }
+    }
+
 }

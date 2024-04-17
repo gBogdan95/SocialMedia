@@ -20,6 +20,7 @@ public class UserConverter {
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setDescription(user.getDescription());
         userDTO.setAllowingFriendRequests(user.isAllowingFriendRequests());
+        userDTO.setAllowingMessagesFromNonFriends(user.isAllowingMessagesFromNonFriends());
         return userDTO;
     }
 }
