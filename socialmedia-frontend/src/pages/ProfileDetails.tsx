@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Avatar, Paper, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import { userService } from "../services/userService";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
@@ -40,10 +41,9 @@ const ProfileDetails: React.FC = () => {
     color: "black",
   });
   const { userId } = useParams<{ userId: string }>();
+  const { user } = useAuth();
 
-  const storedUser = localStorage.getItem("user");
-  const currentUser = storedUser ? JSON.parse(storedUser) : null;
-  const isCurrentUser = currentUser && profile && profile.id === currentUser.id;
+  const isCurrentUser = user && profile && profile.id === user.id;
 
   const [userPosts, setUserPosts] = useState<PostType[]>([]);
 

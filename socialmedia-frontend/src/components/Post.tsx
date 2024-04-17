@@ -18,6 +18,7 @@ import UpdatePostDialog from "./UpdatePostDialog";
 import ConfirmationDialog from "./ConfirmationDialog";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import { parseTextToLinkElements } from "../utils/utils";
+import { useAuth } from "../contexts/AuthContext";
 
 export interface PostType {
   id: string;
@@ -47,8 +48,7 @@ const Post: React.FC<PostProps> = ({
   const [liked, setLiked] = useState(post.liked);
   const [likes, setLikes] = useState(post.likes);
 
-  const storedUser = localStorage.getItem("user");
-  const currentUser = storedUser ? JSON.parse(storedUser) : null;
+  const { user: currentUser } = useAuth();
   const isCurrentUser = currentUser && post.user.id === currentUser.id;
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);

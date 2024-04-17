@@ -19,7 +19,7 @@ interface UserDetails {
   currency?: string;
 }
 
-const MyProfile = () => {
+const Home = () => {
   const navigate = useNavigate();
   const [friends, setFriends] = useState<FriendType[]>([]);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
@@ -222,4 +222,4 @@ const MyProfile = () => {
   );
 };
 
-export default MyProfile;
+export default Home;

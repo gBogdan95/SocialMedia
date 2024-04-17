@@ -17,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateCommentDialog from "./UpdateCommentDialog";
 import ConfirmationDialog from "./ConfirmationDialog";
 import { parseTextToLinkElements } from "../utils/utils";
+import { useAuth } from "../contexts/AuthContext";
 
 export interface CommentType {
   id: string;
@@ -36,13 +37,12 @@ interface CommentProps {
 }
 
 const Comment: React.FC<CommentProps> = ({ comment, trimText = false }) => {
+  const { user: currentUser } = useAuth();
+  const isCurrentUser = currentUser && comment.user.id === currentUser.id;
+
   const [liked, setLiked] = useState(comment.liked);
   const [likes, setLikes] = useState(comment.likes);
   const [isTextExpanded, setIsTextExpanded] = useState(false);
-
-  const storedUser = localStorage.getItem("user");
-  const currentUser = storedUser ? JSON.parse(storedUser) : null;
-  const isCurrentUser = currentUser && comment.user.id === currentUser.id;
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
