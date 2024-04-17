@@ -15,7 +15,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const LeftNavbar = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [openDialog, setOpenDialog] = useState(false);
@@ -26,16 +26,10 @@ const LeftNavbar = () => {
   };
 
   const handleProfileNavigation = () => {
-    const userJson = localStorage.getItem("user");
-    if (userJson) {
-      const user = JSON.parse(userJson);
-      if (user && user.id) {
-        navigate(`/profile/${user.id}`);
-      } else {
-        console.error("User ID is missing");
-      }
+    if (user) {
+      navigate(`/profile/${user.id}`);
     } else {
-      console.error("No user data found in local storage");
+      console.error("User data is missing");
     }
   };
 
@@ -64,13 +58,8 @@ const LeftNavbar = () => {
   }
 
   const isActive = (path: string) => {
-    if (path === "/profile") {
-      const storedUser = localStorage.getItem("user");
-      const currentUser = storedUser ? JSON.parse(storedUser) : null;
-      const currentProfilePath = currentUser
-        ? `/profile/${currentUser.id}`
-        : null;
-      return location.pathname === currentProfilePath;
+    if (path === "/profile" && user) {
+      return location.pathname === `/profile/${user.id}`;
     }
     return location.pathname === path;
   };
