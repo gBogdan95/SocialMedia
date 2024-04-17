@@ -83,7 +83,7 @@ const ProfileDetails: React.FC = () => {
         ) {
           message = "This user doesn't allow receiving friend requests.";
         } else if (error.message.includes("Friend request already sent")) {
-          message = "You have already a pending friend request to this user.";
+          message = "This friend request is pending.";
         } else {
         }
       }
