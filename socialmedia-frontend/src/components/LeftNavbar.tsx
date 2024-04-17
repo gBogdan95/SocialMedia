@@ -63,7 +63,17 @@ const LeftNavbar = () => {
     return null;
   }
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path === "/profile") {
+      const storedUser = localStorage.getItem("user");
+      const currentUser = storedUser ? JSON.parse(storedUser) : null;
+      const currentProfilePath = currentUser
+        ? `/profile/${currentUser.id}`
+        : null;
+      return location.pathname === currentProfilePath;
+    }
+    return location.pathname === path;
+  };
 
   const buttons = [
     {

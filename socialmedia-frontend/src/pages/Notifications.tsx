@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import FriendRequestNotification from "../components/FriendRequestNotification";
 import { friendshipService } from "../services/friendshipService";
 
