@@ -6,15 +6,6 @@ import { messageService } from "../services/messageService";
 const Messages: React.FC = () => {
   const [conversations, setConversations] = useState<ConversationType[]>([]);
 
-  const refetchConversations = async () => {
-    try {
-      const conversationsData = await messageService.getAllConversations();
-      setConversations(conversationsData);
-    } catch (error) {
-      console.error("Failed to load conversations:", error);
-    }
-  };
-
   useEffect(() => {
     const fetchConversations = async () => {
       try {

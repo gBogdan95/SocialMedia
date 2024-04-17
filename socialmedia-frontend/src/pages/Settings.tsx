@@ -18,24 +18,36 @@ const Settings: React.FC = () => {
   const userId = storedUser ? storedUser.id : null;
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      if (userId) {
+    if (userId) {
+      const fetchSettings = async () => {
         try {
           const user = await userService.fetchUserById(userId);
+          setBlockMessages(!user.allowingMessagesFromNonFriends);
           setBlockFriendRequests(!user.allowingFriendRequests);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
-      }
-    };
+      };
 
-    fetchCurrentUser();
+      fetchSettings();
+    }
   }, [userId]);
 
-  const handleBlockMessagesChange = (
+  const handleBlockMessagesChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setBlockMessages(event.target.checked);
+    const newSetting = event.target.checked;
+    setBlockMessages(newSetting);
+    try {
+      const updatedUser = await settingsService.updateMessagePermissionSetting(
+        userId,
+        !newSetting
+      );
+      setBlockMessages(!updatedUser.allowingMessagesFromNonFriends);
+    } catch (error) {
+      console.error("Failed to update message permissions", error);
+      setBlockMessages(!newSetting);
+    }
   };
 
   const handleBlockFriendRequestsChange = async (

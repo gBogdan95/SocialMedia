@@ -18,6 +18,7 @@ import defaultAvatarImg from "../assets/defaultAvatar.png";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { messageService } from "../services/messageService";
 import { getCurrentUsername, formatTime } from "../utils/utils";
+import GenericDialog from "../components/GenericDialog";
 
 export interface ParticipantType {
   id: string;
@@ -61,6 +62,11 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [messageText, setMessageText] = useState("");
+  const [dialogInfo, setDialogInfo] = useState({
+    open: false,
+    message: "",
+    color: "black",
+  });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -107,12 +113,24 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
       setMessageText("");
       scrollToBottom();
     } catch (error) {
+      let message = "Failed to send message.";
+      let color = "red";
+
       if (error instanceof Error) {
-        console.error("Failed to send message:", error.message);
-        setError("Failed to send message: " + error.message);
+        if (
+          error.message.includes(
+            "This user doesn't allow receiving messages from non-friends"
+          )
+        ) {
+          message = "User doesn't allow receiving messages from non-friends.";
+        }
       }
+
+      setDialogInfo({ open: true, message, color });
     }
   };
+
+  const handleCloseDialog = () => setDialogInfo({ ...dialogInfo, open: false });
 
   const renderMessages = () => {
     if (loading) {
@@ -157,7 +175,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                 padding: "8px 12px",
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center", // This ensures vertical centering
+                alignItems: "center",
                 marginBottom: "8px",
               }}
             >
@@ -280,6 +298,12 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
               </InputAdornment>
             ),
           }}
+        />
+        <GenericDialog
+          open={dialogInfo.open}
+          message={dialogInfo.message}
+          color={dialogInfo.color}
+          onClose={handleCloseDialog}
         />
       </Box>
     </Dialog>

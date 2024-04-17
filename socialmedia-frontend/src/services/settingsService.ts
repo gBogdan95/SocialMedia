@@ -123,9 +123,38 @@ const updateFriendRequestSetting = async (
   return await response.json();
 };
 
+const updateMessagePermissionSetting = async (
+  userId: string,
+  isAllowingMessagesFromNonFriends: boolean
+) => {
+  const token = getToken();
+
+  const response = await fetch(
+    `${API_BASE_URL}/user/settings/update-message-permission-setting/${userId}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isAllowingMessagesFromNonFriends }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    const errorMessage =
+      errorData.message || "Message permission setting update failed";
+    throw new Error(errorMessage);
+  }
+
+  return await response.json();
+};
+
 export const settingsService = {
   updateUsername,
   updatePassword,
   updateEmail,
   updateFriendRequestSetting,
+  updateMessagePermissionSetting,
 };
