@@ -41,6 +41,7 @@ const NotificationsPage = () => {
       setFriendRequests(
         friendRequests.filter((request) => request.id !== friendRequestId)
       );
+      window.location.reload();
     } catch (error) {
       console.error("Failed to accept friend request:", error);
     }
