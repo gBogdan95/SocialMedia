@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-public class StoreItemDTO {
+public class ShopItemDTO {
     private UUID id;
     private String imageUrl;
     private int price;

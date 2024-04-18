@@ -10,7 +10,7 @@ import java.util.UUID;
 @Table(name = "store_items")
 @Data
 @NoArgsConstructor
-public class StoreItem {
+public class ShopItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

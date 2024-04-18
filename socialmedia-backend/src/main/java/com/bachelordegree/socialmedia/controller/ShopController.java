@@ -1,14 +1,14 @@
 package com.bachelordegree.socialmedia.controller;
 
 import com.bachelordegree.socialmedia.converter.InventoryConverter;
-import com.bachelordegree.socialmedia.converter.StoreItemConverter;
+import com.bachelordegree.socialmedia.converter.ShopItemConverter;
 import com.bachelordegree.socialmedia.dto.InventoryDTO;
-import com.bachelordegree.socialmedia.dto.StoreItemDTO;
+import com.bachelordegree.socialmedia.dto.ShopItemDTO;
 import com.bachelordegree.socialmedia.exception.InsufficientFundsException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.Inventory;
-import com.bachelordegree.socialmedia.model.StoreItem;
-import com.bachelordegree.socialmedia.service.StoreService;
+import com.bachelordegree.socialmedia.model.ShopItem;
+import com.bachelordegree.socialmedia.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,32 +23,32 @@ import java.util.UUID;
 @RequestMapping("/user/store")
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
-public class StoreController {
+public class ShopController {
 
     @Autowired
-    private StoreService storeService;
+    private ShopService shopService;
 
     @Autowired
-    private StoreItemConverter storeItemConverter;
+    private ShopItemConverter shopItemConverter;
 
     @Autowired
     private InventoryConverter inventoryConverter;
 
     @GetMapping("/items")
-    public List<StoreItemDTO> getAllStoreItems(Authentication authentication) {
+    public List<ShopItemDTO> getAllShopItems(Authentication authentication) {
         if (authentication == null) {
             throw new RestException(HttpStatus.UNAUTHORIZED, "You must be logged in to view items.");
         }
 
-        List<StoreItem> items = storeService.listAllItems();
-        return items.stream().map(storeItemConverter::toDTO).toList();
+        List<ShopItem> items = shopService.listAllItems();
+        return items.stream().map(shopItemConverter::toDTO).toList();
     }
 
 
     @PostMapping("/purchase/{itemId}")
     public InventoryDTO purchaseItem(@PathVariable UUID itemId, Authentication authentication) {
         try {
-            Inventory updatedInventory = storeService.purchaseImage(itemId, authentication);
+            Inventory updatedInventory = shopService.purchaseImage(itemId, authentication);
             return inventoryConverter.toDTO(updatedInventory);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
