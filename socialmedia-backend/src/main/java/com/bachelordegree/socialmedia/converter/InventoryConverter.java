@@ -19,15 +19,4 @@ public class InventoryConverter {
         inventoryDTO.setBackgroundPictureUrls(new HashSet<>(inventory.getBackgroundPictureUrls()));
         return inventoryDTO;
     }
-
-    public Inventory fromDTO(InventoryDTO inventoryDTO) {
-        if (inventoryDTO == null) {
-            return null;
-        }
-        Inventory inventory = new Inventory();
-        inventory.setId(inventoryDTO.getId());
-        inventory.setProfilePictureUrls(new HashSet<>(inventoryDTO.getProfilePictureUrls()));
-        inventory.setBackgroundPictureUrls(new HashSet<>(inventoryDTO.getBackgroundPictureUrls()));
-        return inventory;
-    }
 }
