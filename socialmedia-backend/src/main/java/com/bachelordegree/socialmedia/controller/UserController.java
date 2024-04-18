@@ -2,16 +2,13 @@ package com.bachelordegree.socialmedia.controller;
 
 import com.bachelordegree.socialmedia.converter.InventoryConverter;
 import com.bachelordegree.socialmedia.converter.UserConverter;
-import com.bachelordegree.socialmedia.dto.InventoryDTO;
-import com.bachelordegree.socialmedia.dto.UserDTO;
-import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
+import com.bachelordegree.socialmedia.dto.*;
+import com.bachelordegree.socialmedia.exception.InvalidImageException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.User;
-import com.bachelordegree.socialmedia.service.StoreService;
 import com.bachelordegree.socialmedia.service.UserService;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -77,5 +74,33 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update-avatar")
+    public UserDTO updateAvatar(@RequestBody AvatarUpdateDTO avatarUpdateDTO, Authentication authentication) {
+        if (avatarUpdateDTO.getNewAvatarUrl() == null || avatarUpdateDTO.getNewAvatarUrl().isEmpty()) {
+            throw new RestException(HttpStatus.BAD_REQUEST, "Avatar URL must not be empty.");
+        }
 
+        String username = authentication.getName();
+        try {
+            User updatedUser = userService.updateAvatar(username, avatarUpdateDTO.getNewAvatarUrl());
+            return userConverter.toDTO(updatedUser);
+        } catch (InvalidImageException e) {
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PutMapping("/update-background")
+    public UserDTO updateBackground(@RequestBody BackgroundUpdateDTO backgroundUpdateDTO, Authentication authentication) {
+        if (backgroundUpdateDTO.getNewBackgroundUrl() == null || backgroundUpdateDTO.getNewBackgroundUrl().isEmpty()) {
+            throw new RestException(HttpStatus.BAD_REQUEST, "Background URL must not be empty.");
+        }
+
+        String username = authentication.getName();
+        try {
+            User updatedUser = userService.updateBackground(username, backgroundUpdateDTO.getNewBackgroundUrl());
+            return userConverter.toDTO(updatedUser);
+        } catch (InvalidImageException e) {
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }

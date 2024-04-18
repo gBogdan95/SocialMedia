@@ -1,15 +1,13 @@
 package com.bachelordegree.socialmedia.service;
 
 import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
-import com.bachelordegree.socialmedia.exception.ReplyNotFoundException;
+import com.bachelordegree.socialmedia.exception.InvalidImageException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.Inventory;
-import com.bachelordegree.socialmedia.model.Reply;
 import com.bachelordegree.socialmedia.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-import static com.bachelordegree.socialmedia.exception.ReplyNotFoundException.ERR_MSG_REPLY_NOT_FOUND;
-import static com.bachelordegree.socialmedia.exception.UserAlreadyExistsException.ERR_MSG_USER_ALREADY_EXISTS;
+import static com.bachelordegree.socialmedia.exception.InvalidImageException.ERR_MSG_INVALID_IMAGE;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -68,5 +65,33 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         return user.getInventory();
+    }
+
+    @Transactional
+    public User updateAvatar(String username, String newAvatarUrl) throws InvalidImageException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        if (!user.getInventory().getProfilePictureUrls().contains(newAvatarUrl)) {
+            throw new InvalidImageException(ERR_MSG_INVALID_IMAGE);
+        }
+
+        user.setAvatarUrl(newAvatarUrl);
+        userRepository.save(user);
+        return user;
+    }
+
+    @Transactional
+    public User updateBackground(String username, String newBackgroundUrl) throws InvalidImageException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        if (!user.getInventory().getBackgroundPictureUrls().contains(newBackgroundUrl)) {
+            throw new InvalidImageException(ERR_MSG_INVALID_IMAGE);
+        }
+
+        user.setBackgroundUrl(newBackgroundUrl);
+        userRepository.save(user);
+        return user;
     }
 }
