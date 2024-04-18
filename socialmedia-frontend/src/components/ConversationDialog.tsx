@@ -86,7 +86,16 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
           setLoading(false);
         })
         .catch((error: Error) => {
-          setError(error.message);
+          if (
+            error.message.includes(
+              "No conversation found between the specified users."
+            )
+          ) {
+            setMessages([]);
+            setError("");
+          } else {
+            setError(error.message);
+          }
           setLoading(false);
         });
     }
