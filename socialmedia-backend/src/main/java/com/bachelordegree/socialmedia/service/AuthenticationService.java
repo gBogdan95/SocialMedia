@@ -1,9 +1,11 @@
 package com.bachelordegree.socialmedia.service;
 
+import com.bachelordegree.socialmedia.converter.UserConverter;
 import com.bachelordegree.socialmedia.dto.LoginResponseDTO;
 import com.bachelordegree.socialmedia.dto.UserDTO;
 import com.bachelordegree.socialmedia.exception.CustomAuthenticationException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
+import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.Role;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.repository.RoleRepository;
@@ -31,6 +33,9 @@ public class AuthenticationService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserConverter userConverter;
+
+    @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
@@ -42,6 +47,7 @@ public class AuthenticationService {
     @Autowired
     private TokenService tokenService;
 
+    @Transactional
     public User registerUser(String username, String password, String email) throws UserAlreadyExistsException {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new UserAlreadyExistsException(ERR_MSG_USER_ALREADY_EXISTS);
@@ -53,7 +59,16 @@ public class AuthenticationService {
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
 
-        return userRepository.save(new User(username, encodedPassword, email, authorities));
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setPassword(encodedPassword);
+        newUser.setEmail(email);
+        newUser.setAuthorities(authorities);
+
+        Inventory newInventory = new Inventory();
+        newUser.setInventory(newInventory);
+
+        return userRepository.save(newUser);
     }
 
     public LoginResponseDTO loginUser(String username, String password) throws CustomAuthenticationException {
@@ -66,7 +81,7 @@ public class AuthenticationService {
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getAvatarUrl(), user.getBackgroundUrl(), user.getCurrency(), user.getName(), user.getPhoneNumber(), user.getDescription(), user.isAllowingFriendRequests(), user.isAllowingMessagesFromNonFriends());
+            UserDTO userDTO = userConverter.toDTO(user);
             return new LoginResponseDTO(userDTO, token);
         } catch (AuthenticationException e) {
             throw new CustomAuthenticationException(ERR_MSG_LOGIN_FAILED);

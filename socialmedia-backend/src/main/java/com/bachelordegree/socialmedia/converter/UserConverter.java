@@ -1,12 +1,20 @@
 package com.bachelordegree.socialmedia.converter;
 
+import com.bachelordegree.socialmedia.dto.InventoryDTO;
 import com.bachelordegree.socialmedia.dto.UserDTO;
 import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
+import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
 
 @Component
 public class UserConverter {
+
+    @Autowired
+    private InventoryConverter inventoryConverter;
 
     public UserDTO toDTO(User user) {
         UserDTO userDTO = new UserDTO();
@@ -21,6 +29,7 @@ public class UserConverter {
         userDTO.setDescription(user.getDescription());
         userDTO.setAllowingFriendRequests(user.isAllowingFriendRequests());
         userDTO.setAllowingMessagesFromNonFriends(user.isAllowingMessagesFromNonFriends());
+        userDTO.setInventory(inventoryConverter.toDTO(user.getInventory()));
         return userDTO;
     }
 }

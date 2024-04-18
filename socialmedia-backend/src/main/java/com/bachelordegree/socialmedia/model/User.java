@@ -36,6 +36,10 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "inventory_id")
+    private Inventory inventory;
+
     @Column(name = "avatar_url")
     private String avatarUrl;
 
