@@ -29,7 +29,6 @@ public class UserConverter {
         userDTO.setDescription(user.getDescription());
         userDTO.setAllowingFriendRequests(user.isAllowingFriendRequests());
         userDTO.setAllowingMessagesFromNonFriends(user.isAllowingMessagesFromNonFriends());
-        userDTO.setInventory(inventoryConverter.toDTO(user.getInventory()));
         return userDTO;
     }
 }

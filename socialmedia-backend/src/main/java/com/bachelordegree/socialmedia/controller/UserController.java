@@ -1,16 +1,21 @@
 package com.bachelordegree.socialmedia.controller;
 
+import com.bachelordegree.socialmedia.converter.InventoryConverter;
 import com.bachelordegree.socialmedia.converter.UserConverter;
+import com.bachelordegree.socialmedia.dto.InventoryDTO;
 import com.bachelordegree.socialmedia.dto.UserDTO;
 import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
+import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.User;
+import com.bachelordegree.socialmedia.service.StoreService;
 import com.bachelordegree.socialmedia.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +31,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserConverter userConverter;
+    private final InventoryConverter inventoryConverter;
 
     @GetMapping
     public List<UserDTO> getAll() {
@@ -57,4 +63,19 @@ public class UserController {
             throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating user profile: " + e.getMessage());
         }
     }
+
+    @GetMapping("/inventory")
+    public InventoryDTO getUserInventory(Authentication authentication) {
+        if (authentication == null) {
+            throw new RestException(HttpStatus.UNAUTHORIZED, "Authentication is required");
+        }
+        try {
+            Inventory inventory = userService.getUserInventory(authentication);
+            return inventoryConverter.toDTO(inventory);
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+        }
+    }
+
+
 }

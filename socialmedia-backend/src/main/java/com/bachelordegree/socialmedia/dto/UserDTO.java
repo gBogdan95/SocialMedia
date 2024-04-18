@@ -25,5 +25,4 @@ public class UserDTO {
     private String description;
     private boolean isAllowingFriendRequests;
     private boolean isAllowingMessagesFromNonFriends;
-    private InventoryDTO inventory;
 }

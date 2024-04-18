@@ -3,16 +3,19 @@ package com.bachelordegree.socialmedia.service;
 import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
 import com.bachelordegree.socialmedia.exception.ReplyNotFoundException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
+import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.Reply;
 import com.bachelordegree.socialmedia.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.bachelordegree.socialmedia.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -57,5 +60,13 @@ public class UserService implements UserDetailsService {
         user.setDescription(updateDTO.getDescription());
 
         return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Inventory getUserInventory(Authentication authentication) {
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+        return user.getInventory();
     }
 }

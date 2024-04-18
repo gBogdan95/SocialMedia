@@ -54,5 +54,4 @@ public class StoreService {
         userRepository.save(user);
         return user.getInventory();
     }
-
 }

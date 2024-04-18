@@ -12,7 +12,5 @@ public class StoreItemDTO {
     private UUID id;
     private String imageUrl;
     private int price;
-    private String description;
     private ImageType imageType;
-
 }
