@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
-import { postService } from "../services/postService";
-import { commentService } from "../services/commentService";
 import Post, { PostType } from "../components/Post";
 import Comment, { CommentType } from "../components/Comment";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import CreateCommentDialog from "../components/CreateCommentDialog";
+import { postService } from "../services/postService";
+import { commentService } from "../services/commentService";
 import { userService } from "../services/userService";
 import { useUser } from "../contexts/UserContext";
 
@@ -15,8 +15,9 @@ const PostDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<PostType | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);
-  const commentsRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [commentAdded, setCommentAdded] = useState(false);
 
   const handleAddCommentClick = () => {
     setCreateDialogOpen(true);
@@ -31,6 +32,7 @@ const PostDetails: React.FC = () => {
     try {
       const newComment = await commentService.createComment(id, content);
       setComments((prevComments) => [...prevComments, newComment]);
+      setCommentAdded(true);
 
       const updatedUserData = await userService.fetchUserById(userDetails.id);
       setUserDetails(updatedUserData);
@@ -59,23 +61,19 @@ const PostDetails: React.FC = () => {
     fetchPostAndComments();
   }, [id]);
 
-  const scrollToComments = () =>
-    commentsRef.current?.scrollIntoView({ behavior: "smooth" });
+  useEffect(() => {
+    if (commentAdded) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      setCommentAdded(false);
+    }
+  }, [commentAdded]);
 
   if (!post) return <Typography>Loading post...</Typography>;
 
   return (
     <Box sx={{ pt: 3, pr: 3, pb: 3, pl: 0 }}>
-      <Post
-        post={post}
-        trimText={false}
-        isDetailPage={true}
-        onCommentButtonClick={scrollToComments}
-      />
-      <Box
-        ref={commentsRef}
-        sx={{ display: "flex", justifyContent: "center", mt: 2 }}
-      >
+      <Post post={post} trimText={false} isDetailPage={true} />
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
         <Button
           variant="contained"
           color="primary"
@@ -102,6 +100,7 @@ const PostDetails: React.FC = () => {
           </Typography>
         )}
       </Box>
+      <div ref={bottomRef} />
     </Box>
   );
 };
