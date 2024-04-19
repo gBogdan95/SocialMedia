@@ -116,6 +116,7 @@ public class PostService {
 
         post.getLikedByUsers().remove(user);
         post.setLikes(Math.max(0, post.getLikes() - 1));
+        user.setCurrency(user.getCurrency() - 1);
         postRepository.save(post);
     }
 }

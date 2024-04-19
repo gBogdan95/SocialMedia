@@ -95,6 +95,7 @@ public class CommentService {
         } else {
             comment.getLikedByUsers().add(user);
             comment.setLikes(comment.getLikes() + 1);
+            user.setCurrency(user.getCurrency() + 1);
             commentRepository.save(comment);
         }
     }
@@ -114,6 +115,7 @@ public class CommentService {
 
         comment.getLikedByUsers().remove(user);
         comment.setLikes(Math.max(0, comment.getLikes() - 1));
+        user.setCurrency(user.getCurrency() - 1);
         commentRepository.save(comment);
     }
 }

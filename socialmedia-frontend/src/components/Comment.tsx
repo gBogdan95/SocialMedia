@@ -18,6 +18,8 @@ import UpdateCommentDialog from "./UpdateCommentDialog";
 import ConfirmationDialog from "./ConfirmationDialog";
 import { parseTextToLinkElements } from "../utils/utils";
 import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
+import { userService } from "../services/userService";
 
 export interface CommentType {
   id: string;
@@ -40,6 +42,7 @@ const Comment: React.FC<CommentProps> = ({ comment, trimText = false }) => {
   const { user: currentUser } = useAuth();
   const isCurrentUser = currentUser && comment.user.id === currentUser.id;
 
+  const { userDetails, setUserDetails } = useUser();
   const [liked, setLiked] = useState(comment.liked);
   const [likes, setLikes] = useState(comment.likes);
   const [isTextExpanded, setIsTextExpanded] = useState(false);
@@ -76,22 +79,29 @@ const Comment: React.FC<CommentProps> = ({ comment, trimText = false }) => {
   };
 
   const toggleLike = async () => {
-    if (liked) {
-      try {
+    try {
+      if (liked) {
         await commentService.unlikeComment(comment.id);
         setLikes(Math.max(0, likes - 1));
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      try {
+        // Fetch updated user details to reflect the decrease in currency
+        const updatedUserData = await userService.fetchUserById(
+          userDetails!.id
+        );
+        setUserDetails(updatedUserData);
+      } else {
         await commentService.likeComment(comment.id);
         setLikes(likes + 1);
-      } catch (error) {
-        console.error(error);
+        // Fetch updated user details to reflect the increase in currency
+        const updatedUserData = await userService.fetchUserById(
+          userDetails!.id
+        );
+        setUserDetails(updatedUserData);
       }
+      setLiked(!liked);
+    } catch (error) {
+      console.error("Error toggling the like status for the comment:", error);
+      // Optionally handle errors, e.g., by showing a message to the user
     }
-    setLiked(!liked);
   };
 
   const displayText =

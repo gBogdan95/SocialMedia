@@ -103,16 +103,26 @@ const Post: React.FC<PostProps> = ({
   };
 
   const toggleLike = async () => {
-    if (liked) {
-      await postService.unlikePost(post.id);
-      setLikes(Math.max(0, likes - 1));
-    } else {
-      await postService.likePost(post.id);
-      setLikes(likes + 1);
-      const updatedUserData = await userService.fetchUserById(userDetails!.id);
-      setUserDetails(updatedUserData);
+    try {
+      if (liked) {
+        await postService.unlikePost(post.id);
+        setLikes(Math.max(0, likes - 1));
+        const updatedUserData = await userService.fetchUserById(
+          userDetails!.id
+        );
+        setUserDetails(updatedUserData);
+      } else {
+        await postService.likePost(post.id);
+        setLikes(likes + 1);
+        const updatedUserData = await userService.fetchUserById(
+          userDetails!.id
+        );
+        setUserDetails(updatedUserData);
+      }
+      setLiked(!liked);
+    } catch (error) {
+      console.error("Error toggling the like status:", error);
     }
-    setLiked(!liked);
   };
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
