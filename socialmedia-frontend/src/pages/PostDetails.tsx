@@ -7,8 +7,11 @@ import Post, { PostType } from "../components/Post";
 import Comment, { CommentType } from "../components/Comment";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import CreateCommentDialog from "../components/CreateCommentDialog";
+import { userService } from "../services/userService";
+import { useUser } from "../contexts/UserContext";
 
 const PostDetails: React.FC = () => {
+  const { userDetails, setUserDetails } = useUser();
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<PostType | null>(null);
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -24,10 +27,14 @@ const PostDetails: React.FC = () => {
   };
 
   const handleCreateComment = async (content: string) => {
-    if (!id) return;
+    if (!id || !userDetails) return;
     try {
-      await commentService.createComment(id, content);
-      window.location.reload();
+      const newComment = await commentService.createComment(id, content);
+      setComments((prevComments) => [...prevComments, newComment]);
+
+      const updatedUserData = await userService.fetchUserById(userDetails.id);
+      setUserDetails(updatedUserData);
+
       handleCloseCreateDialog();
     } catch (error) {
       console.error("Failed to create comment", error);

@@ -83,7 +83,6 @@ const Comment: React.FC<CommentProps> = ({ comment, trimText = false }) => {
       if (liked) {
         await commentService.unlikeComment(comment.id);
         setLikes(Math.max(0, likes - 1));
-        // Fetch updated user details to reflect the decrease in currency
         const updatedUserData = await userService.fetchUserById(
           userDetails!.id
         );
@@ -91,7 +90,6 @@ const Comment: React.FC<CommentProps> = ({ comment, trimText = false }) => {
       } else {
         await commentService.likeComment(comment.id);
         setLikes(likes + 1);
-        // Fetch updated user details to reflect the increase in currency
         const updatedUserData = await userService.fetchUserById(
           userDetails!.id
         );
@@ -100,7 +98,6 @@ const Comment: React.FC<CommentProps> = ({ comment, trimText = false }) => {
       setLiked(!liked);
     } catch (error) {
       console.error("Error toggling the like status for the comment:", error);
-      // Optionally handle errors, e.g., by showing a message to the user
     }
   };
 
