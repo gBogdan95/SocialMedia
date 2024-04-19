@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { useAuth } from "../contexts/AuthContext";
+import { Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import currencyImg from "../assets/currency.png";
 import GroupIcon from "@mui/icons-material/Group";
@@ -206,15 +205,42 @@ const Home = () => {
             mb: 8,
           }}
         >
-          {friends.map((user) => (
-            <Friend
-              key={user.id}
-              id={user.id}
-              username={user.username}
-              avatarUrl={user.avatarUrl}
-              backgroundUrl={user.backgroundUrl}
-            />
-          ))}
+          {friends.length === 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                mt: 22,
+              }}
+            >
+              <Typography sx={{ color: "black", fontSize: 35 }}>
+                You have no friends yet.
+              </Typography>
+              <Button
+                variant="contained"
+                sx={{
+                  mt: 3,
+                  backgroundColor: "#1976d2",
+                  fontSize: 20,
+                  "&:hover": { backgroundColor: "#1565c0" },
+                }}
+                onClick={() => navigate("/users")}
+              >
+                Find Friends
+              </Button>
+            </Box>
+          ) : (
+            friends.map((user) => (
+              <Friend
+                key={user.id}
+                id={user.id}
+                username={user.username}
+                avatarUrl={user.avatarUrl}
+                backgroundUrl={user.backgroundUrl}
+              />
+            ))
+          )}
         </Box>
       </Box>
     </Box>

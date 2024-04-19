@@ -78,7 +78,7 @@ const LeftNavbar = () => {
     },
     {
       label: "USERS",
-      path: "/people",
+      path: "/users",
       icon: <PeopleIcon />,
     },
     {

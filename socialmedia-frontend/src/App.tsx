@@ -31,7 +31,7 @@ function App() {
               <Route path="post/:id" element={<PostDetails />} />
               <Route path="profile/:userId" element={<ProfileDetails />} />
               <Route path="groups" element={<Groups />} />
-              <Route path="people" element={<Users />} />
+              <Route path="users" element={<Users />} />
               <Route path="shop" element={<Shop />} />
               <Route path="settings" element={<Settings />} />
             </Route>

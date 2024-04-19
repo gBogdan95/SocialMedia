@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Conversation, { ConversationType } from "../components/Conversation";
 import { messageService } from "../services/messageService";
 
@@ -36,14 +36,20 @@ const Messages: React.FC = () => {
           mb: 5.7,
         }}
       >
-        {conversations.map((conversation) => (
-          <Conversation
-            key={conversation.conversationId}
-            conversationId={conversation.conversationId}
-            otherParticipant={conversation.otherParticipant}
-            lastMessage={conversation.lastMessage}
-          />
-        ))}
+        {conversations.length === 0 ? (
+          <Typography sx={{ fontSize: 30, mt: 50 }}>
+            You don't have any messages.
+          </Typography>
+        ) : (
+          conversations.map((conversation) => (
+            <Conversation
+              key={conversation.conversationId}
+              conversationId={conversation.conversationId}
+              otherParticipant={conversation.otherParticipant}
+              lastMessage={conversation.lastMessage}
+            />
+          ))
+        )}
       </Box>
     </Box>
   );

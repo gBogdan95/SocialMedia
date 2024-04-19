@@ -77,7 +77,7 @@ const NotificationsPage = () => {
         ))
       ) : (
         <Typography sx={{ fontSize: 30, textAlign: "center", mt: 50 }}>
-          You don't have notifications
+          You don't have notifications.
         </Typography>
       )}
     </Box>
