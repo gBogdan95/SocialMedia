@@ -381,14 +381,16 @@ const ProfileDetails: React.FC = () => {
             p: 3,
           }}
         >
-          {userPosts.length > 0 ? (
+          {userPosts.length === 0 ? (
+            <Typography sx={{ fontSize: 30 }}>
+              {isCurrentUser
+                ? "You have no posts yet."
+                : "This user has no posts yet."}
+            </Typography>
+          ) : (
             userPosts.map((post) => (
               <Post key={post.id} post={post} trimText={true} />
             ))
-          ) : (
-            <Typography sx={{ fontSize: 30 }}>
-              This user has no posts yet
-            </Typography>
           )}
         </Box>
       </Box>

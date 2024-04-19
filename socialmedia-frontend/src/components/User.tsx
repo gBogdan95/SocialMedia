@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Avatar } from "@mui/material";
+import { Box, Typography, Avatar, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
@@ -24,7 +24,7 @@ const User: React.FC<UserType> = ({
   };
 
   return (
-    <Box
+    <Container
       sx={{
         width: "98%",
         height: 150,
@@ -49,11 +49,15 @@ const User: React.FC<UserType> = ({
             right: 0,
             bottom: 0,
             backgroundColor: "rgba(0, 0, 0, 0.6)",
+            backdropFilter: "blur(2px)",
             zIndex: 1,
           },
           "& .viewProfileText": {
             display: "flex",
             zIndex: 2,
+          },
+          "& .usernameText": {
+            display: "none",
           },
         },
       }}
@@ -93,6 +97,7 @@ const User: React.FC<UserType> = ({
         }}
       >
         <Typography
+          className="usernameText"
           sx={{
             fontWeight: "bold",
             fontSize: "50px",
@@ -114,7 +119,7 @@ const User: React.FC<UserType> = ({
           left: "50%",
           transform: "translate(-50%, -50%)",
           zIndex: 2,
-          backgroundColor: "rgba(0, 0, 0, 1)",
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
           borderRadius: "20px",
           padding: "10px 20px",
           textShadow: "1px 1px 2px black",
@@ -123,7 +128,7 @@ const User: React.FC<UserType> = ({
       >
         View Profile
       </Typography>
-    </Box>
+    </Container>
   );
 };
 
