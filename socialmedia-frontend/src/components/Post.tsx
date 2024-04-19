@@ -19,6 +19,8 @@ import ConfirmationDialog from "./ConfirmationDialog";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import { parseTextToLinkElements } from "../utils/utils";
 import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
+import { userService } from "../services/userService";
 
 export interface PostType {
   id: string;
@@ -45,6 +47,7 @@ const Post: React.FC<PostProps> = ({
   onCommentButtonClick,
 }) => {
   const navigate = useNavigate();
+  const { userDetails, setUserDetails } = useUser();
   const [liked, setLiked] = useState(post.liked);
   const [likes, setLikes] = useState(post.likes);
 
@@ -101,19 +104,13 @@ const Post: React.FC<PostProps> = ({
 
   const toggleLike = async () => {
     if (liked) {
-      try {
-        await postService.unlikePost(post.id);
-        setLikes(Math.max(0, likes - 1));
-      } catch (error) {
-        console.error(error);
-      }
+      await postService.unlikePost(post.id);
+      setLikes(Math.max(0, likes - 1));
     } else {
-      try {
-        await postService.likePost(post.id);
-        setLikes(likes + 1);
-      } catch (error) {
-        console.error(error);
-      }
+      await postService.likePost(post.id);
+      setLikes(likes + 1);
+      const updatedUserData = await userService.fetchUserById(userDetails!.id);
+      setUserDetails(updatedUserData);
     }
     setLiked(!liked);
   };

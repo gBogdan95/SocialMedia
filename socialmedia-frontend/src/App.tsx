@@ -14,30 +14,33 @@ import { RightContentProvider } from "./contexts/RightContentContext";
 import AuthListener from "./components/AuthListner";
 import PostDetails from "./pages/PostDetails";
 import ProfileDetails from "./pages/ProfileDetails";
+import { UserProvider } from "./contexts/UserContext";
 
 function App() {
   return (
     <AuthProvider>
-      <RightContentProvider>
-        <BrowserRouter>
-          <AuthListener />
-          <TopNavbar />
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+      <UserProvider>
+        <RightContentProvider>
+          <BrowserRouter>
+            <AuthListener />
+            <TopNavbar />
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-            <Route path="/" element={<MainLayout />}>
-              <Route path="explore" element={<Posts />} />
-              <Route path="post/:id" element={<PostDetails />} />
-              <Route path="profile/:userId" element={<ProfileDetails />} />
-              <Route path="groups" element={<Groups />} />
-              <Route path="users" element={<Users />} />
-              <Route path="shop" element={<Shop />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </RightContentProvider>
+              <Route path="/" element={<MainLayout />}>
+                <Route path="explore" element={<Posts />} />
+                <Route path="post/:id" element={<PostDetails />} />
+                <Route path="profile/:userId" element={<ProfileDetails />} />
+                <Route path="groups" element={<Groups />} />
+                <Route path="users" element={<Users />} />
+                <Route path="shop" element={<Shop />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </RightContentProvider>
+      </UserProvider>
     </AuthProvider>
   );
 }

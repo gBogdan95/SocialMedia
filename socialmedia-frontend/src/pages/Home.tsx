@@ -9,6 +9,7 @@ import defaultBackgroundImg from "../assets/defaultBackground.jpg";
 import { friendshipService } from "../services/friendshipService";
 import Friend, { FriendType } from "../components/Friend";
 import { userService } from "../services/userService";
+import { useUser } from "../contexts/UserContext";
 
 interface UserDetails {
   id: string;
@@ -21,7 +22,7 @@ interface UserDetails {
 const Home = () => {
   const navigate = useNavigate();
   const [friends, setFriends] = useState<FriendType[]>([]);
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const { userDetails, setUserDetails } = useUser();
 
   const fetchAndSetFriends = async () => {
     try {

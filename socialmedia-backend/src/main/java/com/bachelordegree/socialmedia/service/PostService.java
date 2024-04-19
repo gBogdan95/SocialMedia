@@ -96,6 +96,7 @@ public class PostService {
         } else {
             post.getLikedByUsers().add(user);
             post.setLikes(post.getLikes() + 1);
+            user.setCurrency(user.getCurrency() + 1);
             postRepository.save(post);
         }
     }
