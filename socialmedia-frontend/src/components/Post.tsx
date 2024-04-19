@@ -37,14 +37,12 @@ interface PostProps {
   refreshPosts?: () => void;
   trimText?: boolean;
   isDetailPage?: boolean;
-  onCommentButtonClick?: () => void;
 }
 
 const Post: React.FC<PostProps> = ({
   post,
   trimText = false,
   isDetailPage = false,
-  onCommentButtonClick,
 }) => {
   const navigate = useNavigate();
   const { userDetails, setUserDetails } = useUser();
@@ -70,11 +68,7 @@ const Post: React.FC<PostProps> = ({
   }, [post.liked]);
 
   const handleClick = () => {
-    if (isDetailPage && onCommentButtonClick) {
-      onCommentButtonClick();
-    } else {
-      navigate(`/post/${post.id}`);
-    }
+    navigate(`/post/${post.id}`);
   };
 
   const handleEditClick = () => {
