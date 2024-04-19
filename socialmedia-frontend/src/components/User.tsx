@@ -72,7 +72,6 @@ const User: React.FC<UserType> = ({
           left: 50,
           top: "50%",
           transform: "translateY(-50%)",
-          boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
           borderRadius: "50%",
         }}
       />
@@ -85,7 +84,7 @@ const User: React.FC<UserType> = ({
           transform: "translate(-50%, -50%)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
           borderRadius: "20px",
-          p: 0,
+          p: 0.5,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
