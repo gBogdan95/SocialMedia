@@ -7,13 +7,16 @@ import {
   DialogActions,
   Button,
   Typography,
+  IconButton,
 } from "@mui/material";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { validatePost } from "../utils/validate";
+import { postService } from "../services/postService";
 
 interface CreatePostDialogProps {
   open: boolean;
   onClose: () => void;
-  onSave: (title: string, postContent: string) => void;
+  onSave: (title: string, postContent: string, imageUrl?: string) => void;
 }
 
 const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
@@ -23,6 +26,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
 }) => {
   const [formData, setFormData] = useState({ title: "", content: "" });
   const [errors, setErrors] = useState({ title: "", content: "" });
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
 
   const handleClose = () => {
     setFormData({ title: "", content: "" });
@@ -38,13 +42,38 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
     setErrors({ ...errors, [name]: error });
   };
 
-  const handleSave = () => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setImageFile(files[0]);
+    }
+  };
+
+  const handleImageUploadClick = () => {
+    const fileInput = document.getElementById(
+      "image-upload-input"
+    ) as HTMLInputElement;
+    fileInput.click();
+  };
+
+  const handleSave = async () => {
     const titleError = validatePost.title(formData.title);
     const contentError = validatePost.content(formData.content);
 
     if (!titleError && !contentError) {
-      onSave(formData.title, formData.content);
-      handleClose();
+      let imageUrl: string | undefined = undefined;
+
+      if (imageFile) {
+        try {
+          imageUrl = await postService.uploadImage(imageFile);
+        } catch (error) {
+          console.error("Failed to upload image:", error);
+          alert("Failed to upload image. Please try again.");
+          return;
+        }
+      }
+
+      onSave(formData.title, formData.content, imageUrl);
     } else {
       setErrors({ title: titleError, content: contentError });
     }
@@ -80,7 +109,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           sx={{ mb: 2 }}
         />
         <Typography sx={{ fontSize: 25, mt: 2 }}>
-          Share something intersing:
+          Share something interesting:
         </Typography>
         <TextField
           margin="dense"
@@ -94,10 +123,25 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           error={!!errors.content}
           helperText={errors.content}
           multiline
-          rows={15}
+          rows={4}
         />
+        <input
+          type="file"
+          id="image-upload-input"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+          accept="image/*"
+        />
+        <IconButton
+          color="primary"
+          aria-label="upload picture"
+          component="span"
+          onClick={handleImageUploadClick}
+          sx={{ position: "absolute", left: 8, bottom: 8 }}
+        >
+          <AddPhotoAlternateIcon />
+        </IconButton>
       </DialogContent>
-
       <DialogActions
         sx={{
           marginBottom: "15px",

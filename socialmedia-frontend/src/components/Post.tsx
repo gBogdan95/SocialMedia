@@ -30,6 +30,7 @@ export interface PostType {
   likes: number;
   liked: boolean;
   totalComments: number;
+  imageUrl?: string;
 }
 
 interface PostProps {
@@ -286,6 +287,22 @@ const Post: React.FC<PostProps> = ({
           <React.Fragment key={index}>{element}</React.Fragment>
         ))}
       </Typography>
+      {post.imageUrl && (
+        <Box
+          onClick={handleClick}
+          component="img"
+          src={post.imageUrl}
+          alt="Post Image"
+          sx={{
+            width: "100%",
+            maxHeight: "500px",
+            objectFit: "cover",
+            borderRadius: "4px",
+            marginTop: 2,
+            cursor: "pointer",
+          }}
+        />
+      )}
       <Box
         sx={{
           display: "flex",

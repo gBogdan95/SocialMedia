@@ -75,15 +75,25 @@ const fetchPostsByUserId = async (userId: string) => {
   return data;
 };
 
-const createPost = async (title: string, postContent: string) => {
+const createPost = async (
+  title: string,
+  postContent: string,
+  imageUrl?: string
+) => {
   const token = getToken();
+  const body = JSON.stringify({
+    title,
+    text: postContent,
+    imageUrl,
+  });
+
   const response = await fetch(`${API_BASE_URL}/user/posts`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ title, text: postContent }),
+    body: body,
   });
 
   if (!response.ok) {
@@ -181,6 +191,29 @@ const deletePost = async (postId: string) => {
   return true;
 };
 
+const uploadImage = async (file: File): Promise<string> => {
+  const token = getToken();
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const response = await fetch(`${API_BASE_URL}/user/images/upload`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Failed to upload image:", errorText);
+    throw new Error("Failed to upload image.");
+  }
+
+  const data = await response.json();
+  return data.imageUrl;
+};
+
 export const postService = {
   fetchPosts,
   fetchPostById,
@@ -190,4 +223,5 @@ export const postService = {
   likePost,
   unlikePost,
   deletePost,
+  uploadImage,
 };
