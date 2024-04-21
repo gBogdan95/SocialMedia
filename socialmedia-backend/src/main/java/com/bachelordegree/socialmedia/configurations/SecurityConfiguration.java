@@ -1,4 +1,4 @@
-package com.bachelordegree.socialmedia.business;
+package com.bachelordegree.socialmedia.configurations;
 
 import com.bachelordegree.socialmedia.utils.RSAKeyProperties;
 import com.nimbusds.jose.jwk.JWK;
