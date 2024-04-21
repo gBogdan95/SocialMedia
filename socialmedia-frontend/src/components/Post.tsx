@@ -231,6 +231,7 @@ const Post: React.FC<PostProps> = ({
                   open={editDialogOpen}
                   title={post.title}
                   content={post.text}
+                  imageUrl={post.imageUrl}
                   onClose={() => setEditDialogOpen(false)}
                   onSave={handleSaveEdit}
                 />

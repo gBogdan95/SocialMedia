@@ -13,6 +13,7 @@ import {
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { validatePost } from "../utils/validate";
 import { postService } from "../services/postService";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface CreatePostDialogProps {
   open: boolean;
@@ -102,7 +103,6 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
         Create a new post
       </DialogTitle>
       <DialogContent>
-        {/* <Typography sx={{ fontSize: 25, mt: 2 }}>Choose a title:</Typography> */}
         <TextField
           autoFocus
           margin="dense"
@@ -117,9 +117,6 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           helperText={errors.title}
           sx={{ mb: 2, mt: 2 }}
         />
-        {/* <Typography sx={{ fontSize: 25, mt: 2 }}>
-          Share something interesting:
-        </Typography> */}
         <TextField
           margin="dense"
           id="post-content"
@@ -145,6 +142,29 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
               alt="Preview"
               sx={{ width: "100%", maxHeight: 300, objectFit: "contain" }}
             />
+            <IconButton
+              aria-label="remove image"
+              onClick={() => setImagePreviewUrl(null)}
+              sx={{
+                position: "absolute",
+                right: 195,
+                top: 375,
+                color: "lightgrey",
+                backgroundColor: "rgba(0, 0, 0, 0.65)",
+                borderRadius: "50px",
+                "&:hover": {
+                  backgroundColor: "black",
+                },
+              }}
+            >
+              <CloseIcon
+                sx={{
+                  "&:hover": {
+                    color: "white",
+                  },
+                }}
+              />
+            </IconButton>
           </>
         )}
         <input

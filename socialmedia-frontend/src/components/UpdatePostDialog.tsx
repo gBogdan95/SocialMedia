@@ -8,10 +8,12 @@ import {
   TextField,
   Button,
   IconButton,
+  Typography,
 } from "@mui/material";
 import { validatePost } from "../utils/validate";
 import { postService } from "../services/postService";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface UpdatePostDialogProps {
   open: boolean;
@@ -131,20 +133,61 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
           fullWidth
           name="content"
           multiline
-          rows={12}
+          rows={8}
           value={formData.content}
           onChange={handleChange}
           error={!!errors.content}
           helperText={errors.content}
-          sx={{ mb: 2 }}
         />
         {imagePreviewUrl && (
-          <Box
-            component="img"
-            src={imagePreviewUrl}
-            alt="Preview"
-            sx={{ width: "100%", maxHeight: 300, objectFit: "contain" }}
-          />
+          <>
+            <Typography sx={{ fontSize: 25, mt: 2, mb: 2 }}>
+              Image preview:
+            </Typography>
+            <Box
+              position="relative"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                maxHeight: 300,
+                overflow: "hidden",
+              }}
+            >
+              <IconButton
+                aria-label="remove image"
+                onClick={() => setImagePreviewUrl(null)}
+                sx={{
+                  position: "absolute",
+                  right: 180,
+                  top: 10,
+                  color: "lightgrey",
+                  backgroundColor: "rgba(0, 0, 0, 0.65)",
+                  borderRadius: "50px",
+                  "&:hover": {
+                    backgroundColor: "black",
+                  },
+                }}
+              >
+                <CloseIcon
+                  sx={{
+                    "&:hover": {
+                      color: "white",
+                    },
+                  }}
+                />
+              </IconButton>
+              <img
+                src={imagePreviewUrl}
+                alt="Preview"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: 300,
+                  objectFit: "contain",
+                }}
+              />
+            </Box>
+          </>
         )}
         <input
           type="file"
