@@ -108,7 +108,7 @@ const updatePost = async (
   postId: string,
   title: string,
   postContent: string,
-  imageUrl?: string
+  imageUrl?: string | null | undefined
 ) => {
   const token = getToken();
   const body = JSON.stringify({

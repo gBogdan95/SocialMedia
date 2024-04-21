@@ -79,7 +79,7 @@ const Post: React.FC<PostProps> = ({
   const handleSaveEdit = async (
     title: string,
     text: string,
-    imageUrl?: string
+    imageUrl?: string | null
   ) => {
     try {
       await postService.updatePost(post.id, title, text, imageUrl);
