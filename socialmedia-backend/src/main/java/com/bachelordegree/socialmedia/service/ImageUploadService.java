@@ -2,6 +2,7 @@ package com.bachelordegree.socialmedia.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,11 @@ public class ImageUploadService {
 
     public String uploadImage(MultipartFile file) throws IOException {
         String fileKey = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
-        amazonS3.putObject(new PutObjectRequest(bucketName, fileKey, file.getInputStream(), null)
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize());
+
+        amazonS3.putObject(new PutObjectRequest(bucketName, fileKey, file.getInputStream(), metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
 
         return amazonS3.getUrl(bucketName, fileKey).toString();
