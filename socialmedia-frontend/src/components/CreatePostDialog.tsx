@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Box,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -27,10 +28,12 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
   const [formData, setFormData] = useState({ title: "", content: "" });
   const [errors, setErrors] = useState({ title: "", content: "" });
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
   const handleClose = () => {
     setFormData({ title: "", content: "" });
     setErrors({ title: "", content: "" });
+    setImagePreviewUrl(null);
     onClose();
   };
 
@@ -45,7 +48,13 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      setImageFile(files[0]);
+      const file = files[0];
+      setImageFile(file);
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreviewUrl(imageUrl);
+    } else {
+      setImageFile(undefined);
+      setImagePreviewUrl(null);
     }
   };
 
@@ -93,7 +102,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
         Create a new post
       </DialogTitle>
       <DialogContent>
-        <Typography sx={{ fontSize: 25, mt: 2 }}>Choose a title:</Typography>
+        {/* <Typography sx={{ fontSize: 25, mt: 2 }}>Choose a title:</Typography> */}
         <TextField
           autoFocus
           margin="dense"
@@ -106,15 +115,15 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           onChange={handleChange}
           error={!!errors.title}
           helperText={errors.title}
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, mt: 2 }}
         />
-        <Typography sx={{ fontSize: 25, mt: 2 }}>
+        {/* <Typography sx={{ fontSize: 25, mt: 2 }}>
           Share something interesting:
-        </Typography>
+        </Typography> */}
         <TextField
           margin="dense"
           id="post-content"
-          label="Content"
+          label="Description"
           type="text"
           fullWidth
           name="content"
@@ -125,6 +134,19 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           multiline
           rows={4}
         />
+        {imagePreviewUrl && (
+          <>
+            <Typography sx={{ fontSize: 25, mt: 2, mb: 2 }}>
+              Image preview:
+            </Typography>
+            <Box
+              component="img"
+              src={imagePreviewUrl}
+              alt="Preview"
+              sx={{ width: "100%", maxHeight: 300, objectFit: "contain" }}
+            />
+          </>
+        )}
         <input
           type="file"
           id="image-upload-input"
@@ -137,9 +159,13 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           aria-label="upload picture"
           component="span"
           onClick={handleImageUploadClick}
-          sx={{ position: "absolute", left: 8, bottom: 8 }}
+          sx={{
+            position: "absolute",
+            left: 8,
+            bottom: 8,
+          }}
         >
-          <AddPhotoAlternateIcon />
+          <AddPhotoAlternateIcon sx={{ width: 60, height: 60 }} />
         </IconButton>
       </DialogContent>
       <DialogActions

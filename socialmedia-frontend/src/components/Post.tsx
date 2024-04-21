@@ -76,9 +76,13 @@ const Post: React.FC<PostProps> = ({
     setEditDialogOpen(true);
   };
 
-  const handleSaveEdit = async (title: string, text: string) => {
+  const handleSaveEdit = async (
+    title: string,
+    text: string,
+    imageUrl?: string
+  ) => {
     try {
-      await postService.updatePost(post.id, title, text);
+      await postService.updatePost(post.id, title, text, imageUrl);
       setEditDialogOpen(false);
       window.location.reload();
     } catch (error) {
@@ -298,7 +302,7 @@ const Post: React.FC<PostProps> = ({
             maxHeight: "500px",
             objectFit: "cover",
             borderRadius: "4px",
-            marginTop: 2,
+            mb: 2,
             cursor: "pointer",
           }}
         />

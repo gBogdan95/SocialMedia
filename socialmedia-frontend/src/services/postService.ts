@@ -107,16 +107,23 @@ const createPost = async (
 const updatePost = async (
   postId: string,
   title: string,
-  postContent: string
+  postContent: string,
+  imageUrl?: string
 ) => {
   const token = getToken();
+  const body = JSON.stringify({
+    title,
+    text: postContent,
+    imageUrl,
+  });
+
   const response = await fetch(`${API_BASE_URL}/user/posts/${postId}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ title, text: postContent }),
+    body: body,
   });
 
   if (!response.ok) {

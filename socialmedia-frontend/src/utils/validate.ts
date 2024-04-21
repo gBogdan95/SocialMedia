@@ -21,7 +21,7 @@ export const validatePost: ValidationFunctions = {
   title: (value: string) =>
     value.trim().length === 0 ? "Title is required!" : "",
   content: (value: string) =>
-    value.trim().length === 0 ? "Content is required!" : "",
+    value.trim().length === 0 ? "Description is required!" : "",
 };
 
 export const validateComment: ValidationFunctions = {
