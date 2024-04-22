@@ -10,7 +10,6 @@ import {
   ListItem,
   TextField,
   IconButton,
-  InputAdornment,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
@@ -109,10 +108,11 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async (imageUrlToSend: string | null = null) => {
-    const finalImageUrl = imageUrlToSend || imageUrl;
-
-    if (!finalImageUrl && messageText.trim() === "") {
+  const handleSendMessage = async (
+    textToSend: string = "",
+    imageUrlToSend: string | null = null
+  ) => {
+    if (!imageUrlToSend && !textToSend.trim()) {
       console.log("No message to send");
       return;
     }
@@ -120,18 +120,22 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
     try {
       const sentMessage = await messageService.sendMessage(
         participant.username,
-        messageText,
-        finalImageUrl
+        textToSend.trim(),
+        imageUrlToSend
       );
       console.log("Message sent successfully:", sentMessage);
 
       setMessages((prevMessages) => [
         ...prevMessages,
-        { ...sentMessage, imageUrl: finalImageUrl },
+        { ...sentMessage, text: textToSend.trim(), imageUrl: imageUrlToSend },
       ]);
 
-      setMessageText("");
-      setImageUrl(null);
+      if (textToSend.trim()) {
+        setMessageText("");
+      }
+      if (imageUrlToSend) {
+        setImageUrl(null);
+      }
       scrollToBottom();
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -150,8 +154,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
     if (files && files.length > 0) {
       try {
         const uploadedImageUrl = await postService.uploadImage(files[0]);
-        console.log("Uploaded image URL:", uploadedImageUrl);
-        handleSendMessage(uploadedImageUrl);
+        await handleSendMessage("", uploadedImageUrl);
       } catch (error) {
         console.error("Error uploading image:", error);
         setDialogInfo({
@@ -314,7 +317,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
-              handleSendMessage();
+              handleSendMessage(messageText);
             }
           }}
           sx={{
@@ -347,7 +350,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
           <AddPhotoAlternateIcon sx={{ width: 30, height: 30 }} />
         </IconButton>
         <IconButton
-          onClick={() => handleSendMessage()}
+          onClick={() => handleSendMessage(messageText)}
           sx={{
             position: "absolute",
             right: 20,
