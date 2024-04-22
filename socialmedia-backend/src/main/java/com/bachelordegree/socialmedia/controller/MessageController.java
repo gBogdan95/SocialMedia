@@ -33,7 +33,7 @@ public class MessageController {
 
             return messageService.sendMessage(sender, receiver, messageContentDTO);
         } catch (UsernameNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (SendMessageException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -48,7 +48,7 @@ public class MessageController {
 
             return messageService.getMessagesBetweenUsers(caller, otherUser);
         } catch (UsernameNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

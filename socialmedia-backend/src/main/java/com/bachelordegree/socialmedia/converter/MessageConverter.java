@@ -21,6 +21,7 @@ public class MessageConverter {
                 message.getConversation().getId(),
                 userConverter.toDTO(message.getSender()),
                 message.getText(),
+                message.getImageUrl(),
                 message.getSentAt(),
                 message.isRead()
         );

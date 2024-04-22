@@ -15,6 +15,7 @@ public class MessageDTO {
     private UUID conversationId;
     private UserDTO sender;
     private String text;
+    private String imageUrl;
     private LocalDateTime sentAt;
     private boolean read;
 }

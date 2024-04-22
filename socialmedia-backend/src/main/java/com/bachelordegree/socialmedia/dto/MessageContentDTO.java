@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MessageContentDTO {
     private String text;
+    private String imageUrl;
 }

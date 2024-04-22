@@ -27,7 +27,6 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
     private final ConversationRepository conversationRepository;
-    private final UserConverter userConverter;
     private final MessageConverter messageConverter;
     private final FriendshipRepository friendshipRepository;
 
@@ -59,6 +58,7 @@ public class MessageService {
         message.setSender(sender);
         message.setConversation(conversation);
         message.setText(messageContentDTO.getText());
+        message.setImageUrl(messageContentDTO.getImageUrl());
         message.setSentAt(LocalDateTime.now());
         message.setRead(false);
         message = messageRepository.save(message);

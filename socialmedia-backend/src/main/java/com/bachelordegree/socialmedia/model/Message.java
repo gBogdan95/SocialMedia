@@ -28,6 +28,9 @@ public class Message {
     @Column(nullable = false)
     private String text;
 
+    @Column(nullable = true)
+    private String imageUrl;
+
     @Column(nullable = false)
     private LocalDateTime sentAt = LocalDateTime.now();
 
