@@ -110,7 +110,6 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
   }, [messages]);
 
   const handleSendMessage = async (imageUrlToSend: string | null = null) => {
-    // Use imageUrlToSend if provided, otherwise fall back to state imageUrl
     const finalImageUrl = imageUrlToSend || imageUrl;
 
     if (!finalImageUrl && messageText.trim() === "") {
@@ -132,13 +131,13 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
       ]);
 
       setMessageText("");
-      setImageUrl(null); // Clear the imageUrl state only if not provided directly
+      setImageUrl(null);
       scrollToBottom();
     } catch (error) {
       console.error("Failed to send message:", error);
       setDialogInfo({
         open: true,
-        message: "Failed to send message.",
+        message: "This user doesn't allow receiving messages from non-friends.",
         color: "red",
       });
     }
@@ -152,7 +151,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
       try {
         const uploadedImageUrl = await postService.uploadImage(files[0]);
         console.log("Uploaded image URL:", uploadedImageUrl);
-        handleSendMessage(uploadedImageUrl); // Directly pass the URL to handleSendMessage
+        handleSendMessage(uploadedImageUrl);
       } catch (error) {
         console.error("Error uploading image:", error);
         setDialogInfo({
@@ -217,6 +216,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                 <Box
                   component="img"
                   src={message.imageUrl}
+                  onLoad={scrollToBottom}
                   sx={{
                     maxWidth: "100%",
                     maxHeight: 200,
@@ -319,48 +319,44 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
           }}
           sx={{
             "& .MuiOutlinedInput-root": {
+              paddingLeft: "50px",
               paddingRight: "50px",
             },
             "& .MuiOutlinedInput-input": {
               paddingRight: "0 !important",
+              paddingLeft: "0 !important",
             },
             "& .MuiOutlinedInput-multiline": {
-              paddingRight: "48px !important",
+              paddingRight: "0 !important",
+              paddingLeft: "0 !important",
             },
           }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <IconButton
-                  color="primary"
-                  aria-label="upload picture"
-                  component="span"
-                  onClick={() =>
-                    document.getElementById("image-upload-input")?.click()
-                  }
-                  sx={{ marginRight: 1 }}
-                >
-                  <AddPhotoAlternateIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => handleSendMessage()}
-                  sx={{
-                    position: "absolute",
-                    right: 2,
-                    bottom: 8,
-                    color: "primary.main",
-                  }}
-                >
-                  <SendIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
         />
+        <IconButton
+          color="primary"
+          aria-label="upload picture"
+          component="span"
+          onClick={() => document.getElementById("image-upload-input")?.click()}
+          sx={{
+            position: "absolute",
+            left: 20,
+            bottom: 22,
+            color: "primary.main",
+          }}
+        >
+          <AddPhotoAlternateIcon sx={{ width: 30, height: 30 }} />
+        </IconButton>
+        <IconButton
+          onClick={() => handleSendMessage()}
+          sx={{
+            position: "absolute",
+            right: 20,
+            bottom: 22,
+            color: "primary.main",
+          }}
+        >
+          <SendIcon sx={{ width: 30, height: 30 }} />
+        </IconButton>
         <input
           type="file"
           id="image-upload-input"
