@@ -5,6 +5,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import { getCurrentUsername, formatTime } from "../utils/utils";
+import ImageIcon from "@mui/icons-material/Image";
 
 export interface ParticipantType {
   id: string;
@@ -53,10 +54,17 @@ const Conversation: React.FC<ConversationType> = ({
 
   const avatarUrl = otherParticipant.avatarUrl || defaultAvatarImg;
 
-  const trimmedMessage =
-    lastMessage.text.length > 22
+  const isCurrentUserSender =
+    lastMessage.sender.username === currentUserUsername;
+  const messageText = isCurrentUserSender
+    ? "You sent an image."
+    : "Sent you an image.";
+
+  const trimmedMessage = lastMessage.text
+    ? lastMessage.text.length > 22
       ? `${lastMessage.text.substring(0, 22)}...`
-      : lastMessage.text;
+      : lastMessage.text
+    : messageText;
 
   return (
     <>
@@ -68,7 +76,7 @@ const Conversation: React.FC<ConversationType> = ({
           width: "100%",
           padding: 4,
           borderRadius: 1,
-          border: 1,
+          border: "1px solid",
           boxShadow: 1,
           overflow: "hidden",
           cursor: "pointer",
@@ -117,8 +125,13 @@ const Conversation: React.FC<ConversationType> = ({
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   flexGrow: 1,
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
+                {!lastMessage.text && (
+                  <ImageIcon sx={{ fontSize: 20, mr: 0.5 }} />
+                )}
                 {trimmedMessage}
               </Typography>
             </Box>

@@ -263,15 +263,17 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                       >
                         {formatTime(message.sentAt)}
                       </Typography>
-                      <DoneAllIcon
-                        sx={{
-                          fontSize: "1.2rem",
-                          color: message.read
-                            ? "primary.main"
-                            : "text.secondary",
-                          ml: 0.5,
-                        }}
-                      />
+                      {message.sender.username === currentUserUsername && (
+                        <DoneAllIcon
+                          sx={{
+                            fontSize: "1.2rem",
+                            color: message.read
+                              ? "primary.main"
+                              : "text.secondary",
+                            ml: 0.5,
+                          }}
+                        />
+                      )}
                     </Box>
                   )}
                 </Box>
@@ -282,7 +284,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "flex-end",
-                    mt: 1,
+                    width: "100%",
                   }}
                 >
                   <Typography
@@ -290,17 +292,19 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                     sx={{
                       fontSize: "0.775rem",
                       whiteSpace: "nowrap",
-                      mr: 1,
                     }}
                   >
                     {formatTime(message.sentAt)}
                   </Typography>
-                  <DoneAllIcon
-                    sx={{
-                      fontSize: "1.2rem",
-                      color: message.read ? "primary.main" : "text.secondary",
-                    }}
-                  />
+                  {message.sender.username === currentUserUsername && (
+                    <DoneAllIcon
+                      sx={{
+                        fontSize: "1.2rem",
+                        color: message.read ? "primary.main" : "text.secondary",
+                        ml: 0.5,
+                      }}
+                    />
+                  )}
                 </Box>
               )}
               {!message.text && (
@@ -324,13 +328,15 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                   >
                     {formatTime(message.sentAt)}
                   </Typography>
-                  <DoneAllIcon
-                    sx={{
-                      fontSize: "1.2rem",
-                      ml: 1,
-                      color: message.read ? "primary.main" : "white",
-                    }}
-                  />
+                  {message.sender.username === currentUserUsername && (
+                    <DoneAllIcon
+                      sx={{
+                        fontSize: "1.2rem",
+                        ml: 1,
+                        color: message.read ? "primary.main" : "white",
+                      }}
+                    />
+                  )}
                 </Box>
               )}
             </Box>
