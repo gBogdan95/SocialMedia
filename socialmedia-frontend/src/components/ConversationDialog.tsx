@@ -234,12 +234,74 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                 />
               )}
               {message.text && (
-                <Typography
-                  variant="body1"
-                  sx={{ wordBreak: "break-word", flexGrow: 1, marginRight: 1 }}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexDirection: "row",
+                    flexGrow: 1,
+                  }}
                 >
-                  {message.text}
-                </Typography>
+                  <Typography variant="body1" sx={{ wordBreak: "break-word" }}>
+                    {message.text}
+                  </Typography>
+                  {message.text.length <= 60 && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        ml: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          fontSize: "0.775rem",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {formatTime(message.sentAt)}
+                      </Typography>
+                      <DoneAllIcon
+                        sx={{
+                          fontSize: "1.2rem",
+                          color: message.read
+                            ? "primary.main"
+                            : "text.secondary",
+                          ml: 0.5,
+                        }}
+                      />
+                    </Box>
+                  )}
+                </Box>
+              )}
+              {message.text.length > 60 && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                    mt: 1,
+                  }}
+                >
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontSize: "0.775rem",
+                      whiteSpace: "nowrap",
+                      mr: 1,
+                    }}
+                  >
+                    {formatTime(message.sentAt)}
+                  </Typography>
+                  <DoneAllIcon
+                    sx={{
+                      fontSize: "1.2rem",
+                      color: message.read ? "primary.main" : "text.secondary",
+                    }}
+                  />
+                </Box>
               )}
               {!message.text && (
                 <Box
@@ -266,36 +328,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                     sx={{
                       fontSize: "1.2rem",
                       ml: 1,
-                      mb: 0.5,
                       color: message.read ? "primary.main" : "white",
-                    }}
-                  />
-                </Box>
-              )}
-              {message.text && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    mt: 1,
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontSize: "0.775rem",
-                      whiteSpace: "nowrap",
-                      mr: 1,
-                    }}
-                  >
-                    {formatTime(message.sentAt)}
-                  </Typography>
-                  <DoneAllIcon
-                    sx={{
-                      fontSize: "1.2rem",
-                      color: message.read ? "primary.main" : "text.secondary",
-                      mb: 0.5,
                     }}
                   />
                 </Box>
@@ -303,7 +336,6 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
             </Box>
           </ListItem>
         ))}
-
         <div ref={messagesEndRef} />
       </List>
     );
