@@ -19,6 +19,8 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { messageService } from "../services/messageService";
 import { getCurrentUsername, formatTime } from "../utils/utils";
 import GenericDialog from "../components/GenericDialog";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import { postService } from "../services/postService";
 
 export interface ParticipantType {
   id: string;
@@ -49,6 +51,7 @@ interface MessageType {
   conversationId: string;
   sender: SenderType;
   text: string;
+  imageUrl?: string | null;
   sentAt: string;
   read: boolean;
 }
@@ -59,6 +62,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
   participant,
 }) => {
   const [messages, setMessages] = useState<MessageType[]>([]);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [messageText, setMessageText] = useState("");
@@ -105,37 +109,58 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (messageText.trim() === "") {
+  const handleSendMessage = async (imageUrlToSend: string | null = null) => {
+    // Use imageUrlToSend if provided, otherwise fall back to state imageUrl
+    const finalImageUrl = imageUrlToSend || imageUrl;
+
+    if (!finalImageUrl && messageText.trim() === "") {
       console.log("No message to send");
       return;
     }
+
     try {
       const sentMessage = await messageService.sendMessage(
         participant.username,
-        messageText
+        messageText,
+        finalImageUrl
       );
       console.log("Message sent successfully:", sentMessage);
 
-      setMessages((prevMessages) => [...prevMessages, sentMessage]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { ...sentMessage, imageUrl: finalImageUrl },
+      ]);
 
       setMessageText("");
+      setImageUrl(null); // Clear the imageUrl state only if not provided directly
       scrollToBottom();
     } catch (error) {
-      let message = "Failed to send message.";
-      let color = "red";
+      console.error("Failed to send message:", error);
+      setDialogInfo({
+        open: true,
+        message: "Failed to send message.",
+        color: "red",
+      });
+    }
+  };
 
-      if (error instanceof Error) {
-        if (
-          error.message.includes(
-            "This user doesn't allow receiving messages from non-friends"
-          )
-        ) {
-          message = "User doesn't allow receiving messages from non-friends.";
-        }
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      try {
+        const uploadedImageUrl = await postService.uploadImage(files[0]);
+        console.log("Uploaded image URL:", uploadedImageUrl);
+        handleSendMessage(uploadedImageUrl); // Directly pass the URL to handleSendMessage
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        setDialogInfo({
+          open: true,
+          message: "Failed to upload image.",
+          color: "red",
+        });
       }
-
-      setDialogInfo({ open: true, message, color });
     }
   };
 
@@ -188,6 +213,19 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                 marginBottom: "8px",
               }}
             >
+              {message.imageUrl && (
+                <Box
+                  component="img"
+                  src={message.imageUrl}
+                  sx={{
+                    maxWidth: "100%",
+                    maxHeight: 200,
+                    objectFit: "contain",
+                    marginRight: 2,
+                  }}
+                  alt="Attached Image"
+                />
+              )}
               <Typography
                 variant="body1"
                 sx={{ wordBreak: "break-word", flexGrow: 1, marginRight: 1 }}
@@ -291,10 +329,25 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
             },
           }}
           InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <IconButton
+                  color="primary"
+                  aria-label="upload picture"
+                  component="span"
+                  onClick={() =>
+                    document.getElementById("image-upload-input")?.click()
+                  }
+                  sx={{ marginRight: 1 }}
+                >
+                  <AddPhotoAlternateIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  onClick={handleSendMessage}
+                  onClick={() => handleSendMessage()}
                   sx={{
                     position: "absolute",
                     right: 2,
@@ -307,6 +360,13 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
               </InputAdornment>
             ),
           }}
+        />
+        <input
+          type="file"
+          id="image-upload-input"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+          accept="image/*"
         />
         <GenericDialog
           open={dialogInfo.open}

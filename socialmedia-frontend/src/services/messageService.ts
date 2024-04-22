@@ -9,7 +9,11 @@ const getToken = () => {
   return token;
 };
 
-const sendMessage = async (receiverUsername: string, content: string) => {
+const sendMessage = async (
+  receiverUsername: string,
+  content: string,
+  imageUrl: string | null = null
+) => {
   const token = getToken();
 
   const response = await fetch(
@@ -20,7 +24,7 @@ const sendMessage = async (receiverUsername: string, content: string) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text: content }),
+      body: JSON.stringify({ text: content, imageUrl }),
     }
   );
 
