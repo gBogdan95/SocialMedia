@@ -5,6 +5,7 @@ import com.bachelordegree.socialmedia.converter.ShopItemConverter;
 import com.bachelordegree.socialmedia.dto.InventoryDTO;
 import com.bachelordegree.socialmedia.dto.ShopItemDTO;
 import com.bachelordegree.socialmedia.exception.InsufficientFundsException;
+import com.bachelordegree.socialmedia.exception.ItemAlreadyOwnedException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.ShopItem;
@@ -52,9 +53,8 @@ public class ShopController {
             return inventoryConverter.toDTO(updatedInventory);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
-        } catch (InsufficientFundsException e) {
-            throw new RestException(HttpStatus.BAD_REQUEST, "Insufficient funds: " + e.getMessage());
+        } catch (InsufficientFundsException | ItemAlreadyOwnedException e) {
+            throw new RestException(HttpStatus.BAD_REQUEST,e.getMessage());
         }
     }
 }
-
