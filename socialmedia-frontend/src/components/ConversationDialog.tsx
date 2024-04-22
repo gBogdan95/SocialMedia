@@ -208,10 +208,14 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                     ? "#bbdefb"
                     : "#e0f2f1",
                 borderRadius: 1,
-                padding: "8px 12px",
+                padding: 1,
+                position: "relative",
                 display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: "column",
+                alignItems:
+                  message.sender.username === currentUserUsername
+                    ? "flex-end"
+                    : "flex-start",
                 marginBottom: "8px",
               }}
             >
@@ -224,40 +228,82 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                     maxWidth: "100%",
                     maxHeight: 200,
                     objectFit: "contain",
-                    marginRight: 2,
+                    borderRadius: 1,
                   }}
                   alt="Attached Image"
                 />
               )}
-              <Typography
-                variant="body1"
-                sx={{ wordBreak: "break-word", flexGrow: 1, marginRight: 1 }}
-              >
-                {message.text}
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              {message.text && (
                 <Typography
-                  variant="caption"
+                  variant="body1"
+                  sx={{ wordBreak: "break-word", flexGrow: 1, marginRight: 1 }}
+                >
+                  {message.text}
+                </Typography>
+              )}
+              {!message.text && (
+                <Box
                   sx={{
-                    whiteSpace: "nowrap",
-                    fontSize: "0.775rem",
+                    position: "absolute",
+                    bottom: 10,
+                    right: 10,
+                    display: "flex",
+                    alignItems: "center",
+                    borderRadius: "10px",
+                    padding: "2px 6px",
+                    color: "white",
                   }}
                 >
-                  {formatTime(message.sentAt)}
-                </Typography>
-                {message.sender.username === currentUserUsername && (
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontSize: "0.775rem",
+                    }}
+                  >
+                    {formatTime(message.sentAt)}
+                  </Typography>
+                  <DoneAllIcon
+                    sx={{
+                      fontSize: "1.2rem",
+                      ml: 1,
+                      mb: 0.5,
+                      color: message.read ? "primary.main" : "white",
+                    }}
+                  />
+                </Box>
+              )}
+              {message.text && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    mt: 1,
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      fontSize: "0.775rem",
+                      whiteSpace: "nowrap",
+                      mr: 1,
+                    }}
+                  >
+                    {formatTime(message.sentAt)}
+                  </Typography>
                   <DoneAllIcon
                     sx={{
                       fontSize: "1.2rem",
                       color: message.read ? "primary.main" : "text.secondary",
-                      marginLeft: 1,
+                      mb: 0.5,
                     }}
                   />
-                )}
-              </Box>
+                </Box>
+              )}
             </Box>
           </ListItem>
         ))}
+
         <div ref={messagesEndRef} />
       </List>
     );
