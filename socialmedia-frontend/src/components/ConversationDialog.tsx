@@ -21,6 +21,7 @@ import { getCurrentUsername, formatTime } from "../utils/utils";
 import GenericDialog from "../components/GenericDialog";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { postService } from "../services/postService";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 export interface ParticipantType {
   id: string;
@@ -72,6 +73,9 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
     message: "",
     color: "black",
   });
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -147,6 +151,36 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
         color: "red",
       });
     }
+  };
+
+  const handleOpenDeleteDialog = (messageId: string) => {
+    setMessageToDelete(messageId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteMessage = async () => {
+    if (messageToDelete) {
+      try {
+        await messageService.deleteMessage(messageToDelete);
+        setMessages((prevMessages) =>
+          prevMessages.filter((m) => m.id !== messageToDelete)
+        );
+        setDeleteDialogOpen(false);
+        setMessageToDelete(null);
+      } catch (error) {
+        console.error("Error deleting message:", error);
+        setDialogInfo({
+          open: true,
+          message: "Failed to delete message.",
+          color: "red",
+        });
+      }
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setMessageToDelete(null);
   };
 
   const handleFileChange = async (
@@ -352,7 +386,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                       right: 0,
                       color: "red",
                     }}
-                    onClick={() => console.log("Delete message:", message.id)}
+                    onClick={() => handleOpenDeleteDialog(message.id)}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -476,6 +510,13 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
           onClose={handleCloseDialog}
         />
       </Box>
+      <ConfirmationDialog
+        open={deleteDialogOpen}
+        title="Delete message"
+        message="Are you sure you want to delete this message?"
+        onConfirm={handleDeleteMessage}
+        onCancel={handleCancelDelete}
+      />
     </Dialog>
   );
 };
