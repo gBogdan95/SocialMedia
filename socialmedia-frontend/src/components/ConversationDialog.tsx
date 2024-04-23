@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { messageService } from "../services/messageService";
 import { getCurrentUsername, formatTime } from "../utils/utils";
 import GenericDialog from "../components/GenericDialog";
@@ -65,6 +66,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [messageText, setMessageText] = useState("");
+  const [hoveredMessage, setHoveredMessage] = useState<string | null>(null);
   const [dialogInfo, setDialogInfo] = useState({
     open: false,
     message: "",
@@ -199,6 +201,8 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                   ? "flex-end"
                   : "flex-start",
             }}
+            onMouseEnter={() => setHoveredMessage(message.id)}
+            onMouseLeave={() => setHoveredMessage(null)}
           >
             <Box
               sx={{
@@ -339,6 +343,20 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                   )}
                 </Box>
               )}
+              {hoveredMessage === message.id &&
+                message.sender.username === currentUserUsername && (
+                  <IconButton
+                    sx={{
+                      position: "absolute",
+                      top: 0,
+                      right: -2,
+                      color: "red",
+                    }}
+                    onClick={() => console.log("Delete message:", message.id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                )}
             </Box>
           </ListItem>
         ))}
