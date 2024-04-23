@@ -4,6 +4,8 @@ import com.bachelordegree.socialmedia.converter.MessageConverter;
 import com.bachelordegree.socialmedia.converter.UserConverter;
 import com.bachelordegree.socialmedia.dto.MessageContentDTO;
 import com.bachelordegree.socialmedia.dto.MessageDTO;
+import com.bachelordegree.socialmedia.exception.DeleteMessageException;
+import com.bachelordegree.socialmedia.exception.MessageNotFoundException;
 import com.bachelordegree.socialmedia.exception.SendMessageException;
 import com.bachelordegree.socialmedia.model.Conversation;
 import com.bachelordegree.socialmedia.model.FriendshipStatus;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static com.bachelordegree.socialmedia.exception.DeleteMessageException.ERR_MSG_UNAUTHORIZED_TO_DELETE;
+import static com.bachelordegree.socialmedia.exception.MessageNotFoundException.ERR_MSG_MESSAGE_NOT_FOUND;
 import static com.bachelordegree.socialmedia.exception.SendMessageException.ERR_MSG_USER_BLOCKED_RECEIVING_MESSAGES;
 
 @Service
@@ -92,5 +96,32 @@ public class MessageService {
                 });
 
         return messages.stream().map(messageConverter::toDTO).toList();
+    }
+
+    @Transactional
+    public void deleteMessage(UUID messageId, User currentUser) throws MessageNotFoundException, DeleteMessageException {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new MessageNotFoundException(ERR_MSG_MESSAGE_NOT_FOUND));
+
+        if (!message.getSender().equals(currentUser)) {
+            throw new DeleteMessageException(ERR_MSG_UNAUTHORIZED_TO_DELETE);
+        }
+
+        Conversation conversation = message.getConversation();
+        List<Message> remainingMessages = messageRepository.findByConversationOrderBySentAtDesc(conversation);
+        if (!remainingMessages.isEmpty() && remainingMessages.get(0).getId().equals(messageId)) {
+            remainingMessages.remove(0);
+        }
+
+        if (!remainingMessages.isEmpty()) {
+            conversation.setLastMessage(remainingMessages.get(0));
+        } else {
+            conversation.setLastMessage(null);
+        }
+
+        conversationRepository.save(conversation);
+        conversationRepository.flush();
+
+        messageRepository.delete(message);
     }
 }

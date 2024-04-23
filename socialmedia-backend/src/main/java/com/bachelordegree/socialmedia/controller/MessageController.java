@@ -2,6 +2,8 @@ package com.bachelordegree.socialmedia.controller;
 
 import com.bachelordegree.socialmedia.dto.MessageContentDTO;
 import com.bachelordegree.socialmedia.dto.MessageDTO;
+import com.bachelordegree.socialmedia.exception.DeleteMessageException;
+import com.bachelordegree.socialmedia.exception.MessageNotFoundException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.exception.SendMessageException;
 import com.bachelordegree.socialmedia.model.User;
@@ -14,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user/messages")
@@ -50,6 +53,19 @@ public class MessageController {
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException e) {
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{messageId}")
+    public void deleteMessage(@PathVariable UUID messageId, Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            User currentUser = userService.loadUserByUsername(username);
+            messageService.deleteMessage(messageId, currentUser);
+        } catch (UsernameNotFoundException | MessageNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DeleteMessageException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

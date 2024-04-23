@@ -349,7 +349,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
                     sx={{
                       position: "absolute",
                       top: 0,
-                      right: -2,
+                      right: 0,
                       color: "red",
                     }}
                     onClick={() => console.log("Delete message:", message.id)}
