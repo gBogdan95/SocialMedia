@@ -1,17 +1,22 @@
--- Inserting records into the 'Posts' table
-INSERT INTO posts (post_id, text, likes) VALUES
-('123e4567-e89b-12d3-a456-426614174000', 'This is the first post', 0),
-('123e4567-e89b-12d3-a456-426614174001', 'This is the second post', 0),
-('123e4567-e89b-12d3-a456-426614174002', 'This is the third post', 0);
+INSERT INTO shop_items (id, image_type, image_url, price) VALUES
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar1.png', 15),
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar2.png', 50),
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar3.png', 100),
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar4.png', 250),
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar5.png', 500),
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar6.png', 750),
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar7.png', 1000),
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar8.png', 1500),
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar9.png', 2000),
+(gen_random_uuid(), 'PROFILE', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/avatar10.png', 5000),
 
--- Inserting records into the 'Comments' table
-INSERT INTO comments (comment_id, text, likes, post_id) VALUES
-('123e4567-e89b-12d3-a456-426614174003', 'First comment on first post', 0, '123e4567-e89b-12d3-a456-426614174000'),
-('123e4567-e89b-12d3-a456-426614174004', 'Second comment on first post', 0, '123e4567-e89b-12d3-a456-426614174000'),
-('123e4567-e89b-12d3-a456-426614174005', 'First comment on second post', 0, '123e4567-e89b-12d3-a456-426614174001');
-
--- Inserting records into the 'Replies' table
-INSERT INTO replies (reply_id, text, likes, comment_id) VALUES
-('123e4567-e89b-12d3-a456-426614174006', 'First reply to first comment', 0, '123e4567-e89b-12d3-a456-426614174003'),
-('123e4567-e89b-12d3-a456-426614174007', 'Second reply to first comment', 0, '123e4567-e89b-12d3-a456-426614174003'),
-('123e4567-e89b-12d3-a456-426614174008', 'First reply to second comment', 0, '123e4567-e89b-12d3-a456-426614174004');
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background1.jpg', 15),
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background2.jpg', 50),
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background3.jpg', 100),
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background4.jpg', 250),
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background5.jpg', 500),
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background6.jpg', 750),
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background7.png', 1000),
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background8.jpg', 1500),
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background9.jpg', 2000),
+(gen_random_uuid(), 'BACKGROUND', 'https://gbogdan95bucket.s3.eu-north-1.amazonaws.com/ShopItems/background10.jpg', 5000);

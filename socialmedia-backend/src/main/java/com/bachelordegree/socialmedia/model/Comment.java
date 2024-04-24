@@ -18,7 +18,7 @@ public class Comment {
     private UUID id;
 
     @NonNull
-    @Column(name = "text", nullable = false, length = 5000)
+    @Column(name = "text", nullable = false, length = 2200)
     private String text;
 
     @Column(name = "likes", nullable = false)

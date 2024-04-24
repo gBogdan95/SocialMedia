@@ -25,7 +25,7 @@ public class Message {
     @JoinColumn(name = "conversation_id", nullable = false)
     private Conversation conversation;
 
-    @Column(nullable = false, length = 5000)
+    @Column(nullable = false, length = 2200)
     private String text;
 
     @Column(nullable = true)
