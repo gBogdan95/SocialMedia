@@ -129,7 +129,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           error={!!errors.content}
           helperText={errors.content}
           multiline
-          rows={4}
+          rows={8}
         />
         {imagePreviewUrl && (
           <>
@@ -147,8 +147,8 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
               onClick={() => setImagePreviewUrl(null)}
               sx={{
                 position: "absolute",
-                right: 195,
-                top: 375,
+                right: 190,
+                top: 460,
                 color: "lightgrey",
                 backgroundColor: "rgba(0, 0, 0, 0.65)",
                 borderRadius: "50px",
