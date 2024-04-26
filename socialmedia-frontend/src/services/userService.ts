@@ -30,6 +30,28 @@ const fetchUsers = async () => {
   return data;
 };
 
+const searchUsers = async (searchTerm: string) => {
+  const token = getToken();
+
+  const response = await fetch(`${API_BASE_URL}/user/users/search`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ search: searchTerm }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Failed to search users:", errorText);
+    throw new Error("Failed to search users.");
+  }
+
+  const users = await response.json();
+  return users;
+};
+
 const fetchUserById = async (userId: string) => {
   const token = getToken();
 
@@ -82,6 +104,7 @@ const updateUserProfile = async (
 
 export const userService = {
   fetchUsers,
+  searchUsers,
   fetchUserById,
   updateUserProfile,
 };

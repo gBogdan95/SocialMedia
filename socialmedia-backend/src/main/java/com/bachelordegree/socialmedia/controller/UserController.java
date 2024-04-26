@@ -56,7 +56,6 @@ public class UserController {
                 .toList();
     }
 
-
     @PutMapping("update-profile/{id}")
     public UserDTO updateProfile(@PathVariable UUID id, @Validated @RequestBody UserProfileUpdateDTO updateDTO) {
         try {
