@@ -11,14 +11,6 @@ import Friend, { FriendType } from "../components/Friend";
 import { userService } from "../services/userService";
 import { useUser } from "../contexts/UserContext";
 
-interface UserDetails {
-  id: string;
-  username: string;
-  avatarUrl?: string;
-  backgroundUrl?: string;
-  currency?: string;
-}
-
 const Home = () => {
   const navigate = useNavigate();
   const [friends, setFriends] = useState<FriendType[]>([]);
