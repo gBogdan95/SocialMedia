@@ -9,6 +9,7 @@ import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.UserService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,15 @@ public class UserController {
         }
     }
 
+    @PostMapping("/search")
+    public List<UserDTO> searchUsers(@RequestBody SearchDTO searchDTO) {
+        List<User> users = userService.findUsersByUsername(searchDTO.getSearch());
+        return users.stream()
+                .map(userConverter::toDTO)
+                .toList();
+    }
+
+
     @PutMapping("update-profile/{id}")
     public UserDTO updateProfile(@PathVariable UUID id, @Validated @RequestBody UserProfileUpdateDTO updateDTO) {
         try {
@@ -63,9 +73,6 @@ public class UserController {
 
     @GetMapping("/inventory")
     public InventoryDTO getUserInventory(Authentication authentication) {
-        if (authentication == null) {
-            throw new RestException(HttpStatus.UNAUTHORIZED, "Authentication is required");
-        }
         try {
             Inventory inventory = userService.getUserInventory(authentication);
             return inventoryConverter.toDTO(inventory);
@@ -75,11 +82,7 @@ public class UserController {
     }
 
     @PutMapping("/update-avatar")
-    public UserDTO updateAvatar(@RequestBody AvatarUpdateDTO avatarUpdateDTO, Authentication authentication) {
-        if (avatarUpdateDTO.getNewAvatarUrl() == null || avatarUpdateDTO.getNewAvatarUrl().isEmpty()) {
-            throw new RestException(HttpStatus.BAD_REQUEST, "Avatar URL must not be empty.");
-        }
-
+    public UserDTO updateAvatar(@RequestBody @Valid AvatarUpdateDTO avatarUpdateDTO, Authentication authentication) {
         String username = authentication.getName();
         try {
             User updatedUser = userService.updateAvatar(username, avatarUpdateDTO.getNewAvatarUrl());
@@ -90,11 +93,7 @@ public class UserController {
     }
 
     @PutMapping("/update-background")
-    public UserDTO updateBackground(@RequestBody BackgroundUpdateDTO backgroundUpdateDTO, Authentication authentication) {
-        if (backgroundUpdateDTO.getNewBackgroundUrl() == null || backgroundUpdateDTO.getNewBackgroundUrl().isEmpty()) {
-            throw new RestException(HttpStatus.BAD_REQUEST, "Background URL must not be empty.");
-        }
-
+    public UserDTO updateBackground(@RequestBody @Valid BackgroundUpdateDTO backgroundUpdateDTO, Authentication authentication) {
         String username = authentication.getName();
         try {
             User updatedUser = userService.updateBackground(username, backgroundUpdateDTO.getNewBackgroundUrl());

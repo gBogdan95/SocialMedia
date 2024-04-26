@@ -48,6 +48,10 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
     }
 
+    public List<User> findUsersByUsername(String username) {
+        return userRepository.findByUsernameContainingIgnoreCase(username);
+    }
+
     public User updateUserProfile(UUID userId, UserProfileUpdateDTO updateDTO) throws UsernameNotFoundException, UserAlreadyExistsException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
