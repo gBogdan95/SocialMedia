@@ -123,10 +123,32 @@ const updateUserProfile = async (
   return response.json();
 };
 
+const updateAvatar = async (newAvatarUrl: string) => {
+  const token = getToken();
+
+  const response = await fetch(`${API_BASE_URL}/user/users/update-avatar`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ newAvatarUrl }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Failed to update avatar:", errorText);
+    throw new Error("Failed to update avatar.");
+  }
+
+  return response.json();
+};
+
 export const userService = {
   fetchUsers,
   searchUsers,
   fetchUserById,
   fetchUserInventory,
   updateUserProfile,
+  updateAvatar,
 };

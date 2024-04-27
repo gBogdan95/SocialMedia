@@ -9,6 +9,7 @@ import {
   Typography,
   IconButton,
   Box,
+  Snackbar,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { userService } from "../services/userService";
@@ -45,6 +46,16 @@ const AvatarDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
     loadInventory();
   }, [open]);
 
+  const handleSelectAvatar = async (avatarUrl: string) => {
+    try {
+      await userService.updateAvatar(avatarUrl);
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to update avatar:", error);
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md">
       <DialogTitle
@@ -60,7 +71,7 @@ const AvatarDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
           mb: 2,
         }}
       >
-        Avatars Inventory
+        Avatar Images Inventory
         <IconButton onClick={onClose} aria-label="close">
           <CloseIcon sx={{ color: "white", width: 30, height: 30 }} />
         </IconButton>
@@ -105,6 +116,7 @@ const AvatarDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
                         borderRadius: "50%",
                         cursor: "pointer",
                       }}
+                      onClick={() => handleSelectAvatar(url)}
                     >
                       <Typography variant="h6">Select</Typography>
                     </Box>
