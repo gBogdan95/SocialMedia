@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/user/store")
+@RequestMapping("/user/shop")
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class ShopController {
