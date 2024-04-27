@@ -25,6 +25,7 @@ const AvatarDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
   onClose,
 }) => {
   const [profilePics, setProfilePics] = useState<string[]>([]);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,13 +69,47 @@ const AvatarDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
         {profilePics.length > 0 ? (
           <Grid container spacing={2}>
             {profilePics.map((url, index) => (
-              <Grid item xs={12} sm={2} key={index}>
-                {" "}
-                <img
-                  src={url}
-                  alt={`Profile ${index + 1}`}
-                  style={{ width: "100%", height: "auto" }}
-                />
+              <Grid
+                item
+                xs={12}
+                sm={2}
+                key={index}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <Box position="relative" width="100%" height="100%">
+                  <img
+                    src={url}
+                    alt={`Profile ${index + 1}`}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      transition: "filter 0.3s",
+                    }}
+                  />
+                  {hoveredIndex === index && (
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
+                        backgroundColor: "rgba(0, 0, 0, 0.7)",
+                        color: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backdropFilter: "blur(2px)",
+                        transition: "opacity 0.3s",
+                        borderRadius: "50%",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <Typography variant="h6">Select</Typography>
+                    </Box>
+                  )}
+                </Box>
               </Grid>
             ))}
           </Grid>
