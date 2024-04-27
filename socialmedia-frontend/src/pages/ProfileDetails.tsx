@@ -17,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import ConversationDialog from "../components/ConversationDialog";
 import GenericDialog from "../components/GenericDialog";
+import AvatarDialog from "../components/AvatarDialog";
 
 export interface ProfileDetailsType {
   id: string;
@@ -50,6 +51,7 @@ const ProfileDetails: React.FC = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [friendshipStatus, setFriendshipStatus] = useState("NONE");
   const [isMessageDialogOpen, setIsMessageDialogOpen] = useState(false);
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -59,6 +61,10 @@ const ProfileDetails: React.FC = () => {
 
   const handleEditDialogClose = () => {
     setIsEditDialogOpen(false);
+  };
+
+  const handleAvatarDialogClose = () => {
+    setIsAvatarDialogOpen(false);
   };
 
   const handleAddFriendClick = async () => {
@@ -186,7 +192,7 @@ const ProfileDetails: React.FC = () => {
           }}
         >
           <Box
-            onClick={() => {}}
+            onClick={() => setIsAvatarDialogOpen(true)}
             sx={{
               cursor: "pointer",
               width: 175,
@@ -231,6 +237,10 @@ const ProfileDetails: React.FC = () => {
               </Box>
             )}
           </Box>
+          <AvatarDialog
+            open={isAvatarDialogOpen}
+            onClose={handleAvatarDialogClose}
+          ></AvatarDialog>
         </Box>
         <Box sx={{ pt: 12, pb: 2, px: 5, position: "relative" }}>
           <Typography

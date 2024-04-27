@@ -76,7 +76,7 @@ public class UserController {
             Inventory inventory = userService.getUserInventory(authentication);
             return inventoryConverter.toDTO(inventory);
         } catch (UsernameNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 

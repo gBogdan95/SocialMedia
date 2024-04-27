@@ -73,6 +73,27 @@ const fetchUserById = async (userId: string) => {
   return data;
 };
 
+const fetchUserInventory = async () => {
+  const token = getToken();
+
+  const response = await fetch(`${API_BASE_URL}/user/users/inventory`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Failed to fetch user inventory:", errorText);
+    throw new Error("Failed to fetch user inventory.");
+  }
+
+  const inventory = await response.json();
+  return inventory;
+};
+
 const updateUserProfile = async (
   userId: string,
   name: string,
@@ -106,5 +127,6 @@ export const userService = {
   fetchUsers,
   searchUsers,
   fetchUserById,
+  fetchUserInventory,
   updateUserProfile,
 };

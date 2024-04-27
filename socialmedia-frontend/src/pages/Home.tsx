@@ -214,9 +214,7 @@ const Home = () => {
                 variant="contained"
                 sx={{
                   mt: 3,
-                  backgroundColor: "#1976d2",
                   fontSize: 20,
-                  "&:hover": { backgroundColor: "#1565c0" },
                 }}
                 onClick={() => navigate("/users")}
               >
