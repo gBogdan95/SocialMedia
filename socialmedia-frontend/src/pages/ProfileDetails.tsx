@@ -18,6 +18,7 @@ import ConfirmationDialog from "../components/ConfirmationDialog";
 import ConversationDialog from "../components/ConversationDialog";
 import GenericDialog from "../components/GenericDialog";
 import AvatarDialog from "../components/AvatarDialog";
+import BackgroundDialog from "../components/BackgroundDialog";
 
 export interface ProfileDetailsType {
   id: string;
@@ -52,6 +53,7 @@ const ProfileDetails: React.FC = () => {
   const [friendshipStatus, setFriendshipStatus] = useState("NONE");
   const [isMessageDialogOpen, setIsMessageDialogOpen] = useState(false);
   const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
+  const [isBackgroundDialogOpen, setIsBackgroundDialogOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -65,6 +67,10 @@ const ProfileDetails: React.FC = () => {
 
   const handleAvatarDialogClose = () => {
     setIsAvatarDialogOpen(false);
+  };
+
+  const handleBackgroundDialogClose = () => {
+    setIsBackgroundDialogOpen(false);
   };
 
   const handleAddFriendClick = async () => {
@@ -164,7 +170,7 @@ const ProfileDetails: React.FC = () => {
               backgroundColor: "black",
             },
           }}
-          onClick={() => {}}
+          onClick={() => setIsBackgroundDialogOpen(true)}
           aria-label="edit background"
         >
           <EditIcon
@@ -177,6 +183,10 @@ const ProfileDetails: React.FC = () => {
           />
         </IconButton>
       )}
+      <BackgroundDialog
+        open={isBackgroundDialogOpen}
+        onClose={handleBackgroundDialogClose}
+      ></BackgroundDialog>
       <Paper elevation={5} sx={{ mt: 2, borderRadius: 2, overflow: "hidden" }}>
         <Box
           sx={{

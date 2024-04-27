@@ -144,6 +144,27 @@ const updateAvatar = async (newAvatarUrl: string) => {
   return response.json();
 };
 
+const updateBackground = async (newBackgroundUrl: string) => {
+  const token = getToken();
+
+  const response = await fetch(`${API_BASE_URL}/user/users/update-background`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ newBackgroundUrl }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Failed to update background:", errorText);
+    throw new Error("Failed to update background.");
+  }
+
+  return response.json();
+};
+
 export const userService = {
   fetchUsers,
   searchUsers,
@@ -151,4 +172,5 @@ export const userService = {
   fetchUserInventory,
   updateUserProfile,
   updateAvatar,
+  updateBackground,
 };
