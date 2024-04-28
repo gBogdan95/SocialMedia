@@ -8,7 +8,7 @@ import {
   Container,
   Box,
 } from "@mui/material";
-import { shopService } from "../services/shopService";
+import { imageService } from "../services/imageService";
 import currencyImg from "../assets/currency.png";
 
 enum ImageType {
@@ -26,11 +26,20 @@ interface Image {
 const DisplayImages = () => {
   const [images, setImages] = useState<Image[]>([]);
   const [error, setError] = useState<string>("");
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  const handleMouseEnter = (id: string) => {
+    setHoveredId(id);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredId(null);
+  };
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const fetchedImages = await shopService.getAllImages();
+        const fetchedImages = await imageService.getAllImages();
         setImages(fetchedImages);
       } catch (error: any) {
         setError(error.message);
@@ -50,6 +59,15 @@ const DisplayImages = () => {
     (image) => image.imageType === "BACKGROUND"
   );
 
+  const handleCardClick = async (itemId: string) => {
+    try {
+      const imageDetails = await imageService.getImage(itemId);
+      console.log(imageDetails);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const renderImageCard = (image: Image) => (
     <Grid
       item
@@ -59,13 +77,68 @@ const DisplayImages = () => {
       key={image.id}
       sx={{ width: "20%", flexGrow: 1 }}
     >
-      <Card sx={{ maxWidth: 345, margin: "auto" }}>
+      <Card
+        sx={{
+          maxWidth: 345,
+          margin: "auto",
+          position: "relative",
+          overflow: "hidden",
+          "&:hover .overlay": {
+            opacity: 1,
+            visibility: "visible",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          },
+          "&:hover .image": {
+            filter: "blur(3px)",
+          },
+        }}
+        onClick={() => handleCardClick(image.id)}
+        onMouseEnter={() => handleMouseEnter(image.id)}
+        onMouseLeave={handleMouseLeave}
+      >
         <CardMedia
           component="img"
           height="120"
           image={image.imageUrl}
           alt={image.imageType}
+          className="image"
+          sx={{
+            ...(image.imageType === ImageType.PROFILE && {
+              borderRadius: "50%",
+              width: "110px",
+              height: "110px",
+              objectFit: "cover",
+              mx: "auto",
+              my: 1,
+            }),
+          }}
         />
+        <Box
+          className="overlay"
+          sx={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white",
+            fontSize: "24px",
+            fontWeight: "bold",
+            opacity: 0,
+            visibility: "hidden",
+            cursor: "pointer",
+            ...(hoveredId === image.id && {
+              opacity: 1,
+              visibility: "visible",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            }),
+          }}
+        >
+          Purchase
+        </Box>
         <CardContent
           sx={{
             padding: "16px",
@@ -81,7 +154,7 @@ const DisplayImages = () => {
             <Typography
               variant="body2"
               color="text.secondary"
-              sx={{ fontSize: "1rem" }}
+              sx={{ fontSize: "1rem", fontWeight: "bold" }}
             >
               Price: {image.price.toFixed(2)}
             </Typography>

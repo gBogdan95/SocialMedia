@@ -30,7 +30,7 @@ const getAllImages = async () => {
   return items;
 };
 
-const purchaseShopItem = async (itemId: string) => {
+const getImage = async (itemId: string) => {
   const token = getToken();
 
   const response = await fetch(`${API_BASE_URL}/user/shop/purchase/${itemId}`, {
@@ -43,15 +43,15 @@ const purchaseShopItem = async (itemId: string) => {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Failed to purchase shop item:", errorText);
-    throw new Error("Failed to purchase shop item.");
+    console.error("Failed to get image:", errorText);
+    throw new Error("Failed to get image.");
   }
 
   const inventoryUpdate = await response.json();
   return inventoryUpdate;
 };
 
-export const shopService = {
+export const imageService = {
   getAllImages,
-  purchaseShopItem,
+  getImage,
 };

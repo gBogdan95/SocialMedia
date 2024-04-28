@@ -38,7 +38,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
         sx={{ justifyContent: "space-between", padding: "15px 24px" }}
       >
         <Button
-          onClick={onConfirm}
+          onClick={onCancel}
           fullWidth
           sx={{
             color: "white",
@@ -49,10 +49,10 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             marginRight: "8px",
           }}
         >
-          Yes
+          No
         </Button>
         <Button
-          onClick={onCancel}
+          onClick={onConfirm}
           fullWidth
           sx={{
             color: "white",
@@ -63,7 +63,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             marginLeft: "8px",
           }}
         >
-          No
+          Yes
         </Button>
       </DialogActions>
     </Dialog>
