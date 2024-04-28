@@ -1,14 +1,15 @@
 const API_BASE_URL = "http://localhost:8080";
+
 const getToken = () => {
   const token = localStorage.getItem("token");
   if (!token) {
-    console.error("No token found");
+    console.log("No token found");
     throw new Error("Authentication token not found.");
   }
   return token;
 };
 
-const getAllShopItems = async () => {
+const getAllImages = async () => {
   const token = getToken();
 
   const response = await fetch(`${API_BASE_URL}/user/shop/items`, {
@@ -21,14 +22,15 @@ const getAllShopItems = async () => {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Failed to fetch shop items:", errorText);
-    throw new Error("Failed to fetch shop items.");
+    console.error("Failed to fetch images:", errorText);
+    throw new Error("Failed to fetch images.");
   }
 
-  return await response.json();
+  const items = await response.json();
+  return items;
 };
 
-const purchaseItem = async (itemId: string) => {
+const purchaseShopItem = async (itemId: string) => {
   const token = getToken();
 
   const response = await fetch(`${API_BASE_URL}/user/shop/purchase/${itemId}`, {
@@ -40,18 +42,16 @@ const purchaseItem = async (itemId: string) => {
   });
 
   if (!response.ok) {
-    const errorText = await response.json();
-    console.error(
-      "Failed to purchase item:",
-      errorText.message || "Unknown error"
-    );
-    throw new Error(errorText.message || "Failed to purchase item");
+    const errorText = await response.text();
+    console.error("Failed to purchase shop item:", errorText);
+    throw new Error("Failed to purchase shop item.");
   }
 
-  return await response.json();
+  const inventoryUpdate = await response.json();
+  return inventoryUpdate;
 };
 
 export const shopService = {
-  getAllShopItems,
-  purchaseItem,
+  getAllImages,
+  purchaseShopItem,
 };
