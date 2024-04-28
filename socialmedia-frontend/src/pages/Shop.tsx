@@ -8,8 +8,9 @@ import {
   Container,
   Box,
 } from "@mui/material";
-import { imageService } from "../services/imageService";
 import currencyImg from "../assets/currency.png";
+import GenericDialog from "../components/GenericDialog";
+import { shopService } from "../services/shopService";
 
 enum ImageType {
   PROFILE = "PROFILE",
@@ -23,8 +24,13 @@ interface Image {
   imageType: ImageType;
 }
 
-const DisplayImages = () => {
+const Shop = () => {
   const [images, setImages] = useState<Image[]>([]);
+  const [dialogInfo, setDialogInfo] = useState({
+    open: false,
+    message: "",
+    color: "black",
+  });
   const [error, setError] = useState<string>("");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
@@ -39,7 +45,7 @@ const DisplayImages = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const fetchedImages = await imageService.getAllImages();
+        const fetchedImages = await shopService.getAllImages();
         setImages(fetchedImages);
       } catch (error: any) {
         setError(error.message);
@@ -61,12 +67,30 @@ const DisplayImages = () => {
 
   const handleCardClick = async (itemId: string) => {
     try {
-      const imageDetails = await imageService.getImage(itemId);
-      console.log(imageDetails);
-    } catch (error) {
+      const response = await shopService.purchaseImage(itemId);
+      setDialogInfo({
+        open: true,
+        message: "The image has been added to your inventory.",
+        color: "black",
+      });
+    } catch (error: any) {
       console.error(error);
+      let message = "An error occurred during the purchase.";
+      let color = "red";
+      if (
+        error.message.includes(
+          "You have insufficient funds to purchase this image"
+        )
+      ) {
+        message = "You have insufficient funds.";
+      } else if (error.message.includes("already own")) {
+        message = "You already own this image.";
+      }
+      setDialogInfo({ open: true, message, color });
     }
   };
+
+  const handleCloseDialog = () => setDialogInfo({ ...dialogInfo, open: false });
 
   const renderImageCard = (image: Image) => (
     <Grid
@@ -201,8 +225,14 @@ const DisplayImages = () => {
       <Grid container spacing={2} justifyContent="center">
         {backgroundImages.map(renderImageCard)}
       </Grid>
+      <GenericDialog
+        open={dialogInfo.open}
+        onClose={handleCloseDialog}
+        message={dialogInfo.message}
+        color={dialogInfo.color}
+      />
     </Container>
   );
 };
 
-export default DisplayImages;
+export default Shop;

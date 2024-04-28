@@ -147,7 +147,7 @@ const ConversationDialog: React.FC<ConversationDialogProps> = ({
       console.error("Failed to send message:", error);
       setDialogInfo({
         open: true,
-        message: "This user doesn't allow receiving messages from non-friends.",
+        message: "User doesn't allow receiving messages from non-friends.",
         color: "red",
       });
     }

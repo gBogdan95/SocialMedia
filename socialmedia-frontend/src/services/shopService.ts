@@ -22,15 +22,14 @@ const getAllImages = async () => {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Failed to fetch images:", errorText);
-    throw new Error("Failed to fetch images.");
+    throw new Error(`Failed to display images: ${errorText}`);
   }
 
   const items = await response.json();
   return items;
 };
 
-const getImage = async (itemId: string) => {
+const purchaseImage = async (itemId: string) => {
   const token = getToken();
 
   const response = await fetch(`${API_BASE_URL}/user/shop/purchase/${itemId}`, {
@@ -43,15 +42,14 @@ const getImage = async (itemId: string) => {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Failed to get image:", errorText);
-    throw new Error("Failed to get image.");
+    throw new Error(`Failed to purchase image: ${errorText}`);
   }
 
   const inventoryUpdate = await response.json();
   return inventoryUpdate;
 };
 
-export const imageService = {
+export const shopService = {
   getAllImages,
-  getImage,
+  purchaseImage,
 };
