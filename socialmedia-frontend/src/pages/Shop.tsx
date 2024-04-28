@@ -90,7 +90,10 @@ const Shop = () => {
     }
   };
 
-  const handleCloseDialog = () => setDialogInfo({ ...dialogInfo, open: false });
+  const handleCloseDialog = () => {
+    setDialogInfo({ ...dialogInfo, open: false });
+    window.location.reload();
+  };
 
   const renderImageCard = (image: Image) => (
     <Grid
