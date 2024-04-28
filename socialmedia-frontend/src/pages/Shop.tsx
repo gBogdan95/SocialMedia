@@ -11,6 +11,8 @@ import {
 import currencyImg from "../assets/currency.png";
 import GenericDialog from "../components/GenericDialog";
 import { shopService } from "../services/shopService";
+import { userService } from "../services/userService";
+import { useUser } from "../contexts/UserContext";
 
 enum ImageType {
   PROFILE = "PROFILE",
@@ -31,8 +33,9 @@ const Shop = () => {
     message: "",
     color: "black",
   });
-  const [error, setError] = useState<string>("");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  const { userDetails, setUserDetails } = useUser();
 
   const handleMouseEnter = (id: string) => {
     setHoveredId(id);
@@ -48,7 +51,6 @@ const Shop = () => {
         const fetchedImages = await shopService.getAllImages();
         setImages(fetchedImages);
       } catch (error: any) {
-        setError(error.message);
         console.error(error);
       }
     };
@@ -56,18 +58,18 @@ const Shop = () => {
     fetchImages();
   }, []);
 
-  if (error) {
-    return <Typography color="error">Error: {error}</Typography>;
-  }
-
   const profileImages = images.filter((image) => image.imageType === "PROFILE");
   const backgroundImages = images.filter(
     (image) => image.imageType === "BACKGROUND"
   );
 
   const handleCardClick = async (itemId: string) => {
+    if (!userDetails) return;
     try {
       const response = await shopService.purchaseImage(itemId);
+      const updatedUserData = await userService.fetchUserById(userDetails.id);
+      setUserDetails(updatedUserData);
+
       setDialogInfo({
         open: true,
         message: "The image has been added to your inventory.",
@@ -92,7 +94,6 @@ const Shop = () => {
 
   const handleCloseDialog = () => {
     setDialogInfo({ ...dialogInfo, open: false });
-    window.location.reload();
   };
 
   const renderImageCard = (image: Image) => (
