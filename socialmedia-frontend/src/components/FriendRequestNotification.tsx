@@ -30,7 +30,7 @@ const FriendRequestNotification: React.FC<FriendRequestNotificationProps> = ({
         sx={{
           display: "flex",
           alignItems: "center",
-          mb: 2,
+          mb: 1,
         }}
       >
         <Avatar
