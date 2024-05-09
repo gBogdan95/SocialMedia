@@ -63,7 +63,7 @@ const NotificationsPage = () => {
   }
 
   return (
-    <Box>
+    <Box height="100vh" overflow="auto">
       {friendRequests.length > 0 ? (
         friendRequests.map((request) => (
           <FriendRequestNotification

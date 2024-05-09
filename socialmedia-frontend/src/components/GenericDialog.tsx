@@ -11,7 +11,7 @@ interface GenericDialogProps {
   open: boolean;
   onClose: () => void;
   message: string;
-  color: string; // Add a color prop
+  color: string;
 }
 
 const GenericDialog: React.FC<GenericDialogProps> = ({
