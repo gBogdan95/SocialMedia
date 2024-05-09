@@ -53,7 +53,7 @@ export default function TopNavbar() {
           alt="Logo"
           style={{
             height: "3.5em",
-            marginLeft: "10px",
+            marginLeft: "40px",
             verticalAlign: "middle",
           }}
         />
@@ -70,7 +70,7 @@ export default function TopNavbar() {
             marginLeft: "30px",
           }}
         >
-          Social Media
+          ActiSocial
         </Typography>
         <Box sx={{ flexGrow: 1 }} />{" "}
         <Box sx={{ display: "flex", alignItems: "center" }}>

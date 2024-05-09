@@ -88,27 +88,6 @@ export default function Login() {
             {generalError}
           </Typography>
         )}
-        <Grid container>
-          <Typography variant="body2" sx={{ mt: 2 }}>
-            Forgot your{" "}
-            <MuiLink
-              component={RouterLink}
-              to="/reset-username"
-              underline="none"
-            >
-              username
-            </MuiLink>{" "}
-            or{" "}
-            <MuiLink
-              component={RouterLink}
-              to="/reset-password"
-              underline="none"
-            >
-              password
-            </MuiLink>
-            ?
-          </Typography>
-        </Grid>
         <Button
           type="submit"
           fullWidth
@@ -121,6 +100,15 @@ export default function Login() {
           You don't have an account?{" "}
           <MuiLink component={RouterLink} to="/register" underline="none">
             Register
+          </MuiLink>
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{ mt: 5, textAlign: "center", color: "grey" }}
+        >
+          Having trouble logging in? <br /> Contact us at:
+          <MuiLink href="mailto:actiocial@gmail.com" underline="always">
+            actiocial@gmail.com
           </MuiLink>
         </Typography>
       </Box>
