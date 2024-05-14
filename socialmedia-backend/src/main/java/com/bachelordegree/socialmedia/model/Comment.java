@@ -32,13 +32,6 @@ public class Comment {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reply> replies = new ArrayList<>();
-
-    public int getTotalReplies() {
-        return this.replies.size();
-    }
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "comment_likes",

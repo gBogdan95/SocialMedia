@@ -60,7 +60,7 @@ const Post: React.FC<PostProps> = ({
   const handleCloseConfirmation = () => setIsConfirmationOpen(false);
 
   const displayText =
-    trimText && post.text.length > 100
+    trimText && post.text.length > 400
       ? `${post.text.substring(0, 400)}...`
       : post.text;
 

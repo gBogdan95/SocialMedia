@@ -23,7 +23,6 @@ public class CommentConverter {
         commentDTO.setId(comment.getId());
         commentDTO.setText(comment.getText());
         commentDTO.setLikes(comment.getLikes());
-        commentDTO.setTotalReplies(comment.getTotalReplies());
 
         if (comment.getUser() != null) {
             commentDTO.setUser(userConverter.toDTO(comment.getUser()));
@@ -37,7 +36,6 @@ public class CommentConverter {
         commentDTO.setId(comment.getId());
         commentDTO.setText(comment.getText());
         commentDTO.setLikes(comment.getLikes());
-        commentDTO.setTotalReplies(comment.getTotalReplies());
 
         if (comment.getUser() != null) {
             commentDTO.setUser(userConverter.toDTO(comment.getUser()));
