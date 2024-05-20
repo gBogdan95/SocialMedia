@@ -108,7 +108,7 @@ export default function Login() {
         >
           Having trouble logging in? <br /> Contact us at:
           <MuiLink href="mailto:actiocial@gmail.com" underline="always">
-            actiocial@gmail.com
+            actisocial@gmail.com
           </MuiLink>
         </Typography>
       </Box>
