@@ -9,6 +9,26 @@ const getToken = () => {
   return token;
 };
 
+const fetchPostById = async (postId: string) => {
+  const token = getToken();
+
+  const response = await fetch(`${API_BASE_URL}/user/posts/${postId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to fetch post with ID ${postId}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  return data;
+};
+
 const fetchPosts = async () => {
   const token = getToken();
 
@@ -24,27 +44,6 @@ const fetchPosts = async () => {
     const errorText = await response.text();
     console.error("Failed to fetch posts:", errorText);
     throw new Error("Failed to fetch posts.");
-  }
-
-  const data = await response.json();
-  return data;
-};
-
-const fetchPostById = async (postId: string) => {
-  const token = getToken();
-
-  const response = await fetch(`${API_BASE_URL}/user/posts/${postId}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error(`Failed to fetch post with ID ${postId}:`, errorText);
-    throw new Error(`Failed to fetch post with ID ${postId}.`);
   }
 
   const data = await response.json();

@@ -25,7 +25,7 @@ const Users = () => {
 
   const handleSearch = async () => {
     if (!searchTerm) {
-      fetchAndSetUsers(); // fetch all users if the search term is empty
+      fetchAndSetUsers();
       return;
     }
     try {
