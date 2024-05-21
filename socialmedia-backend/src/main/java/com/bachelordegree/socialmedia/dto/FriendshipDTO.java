@@ -14,4 +14,3 @@ public class FriendshipDTO {
     private UserDTO requester;
     private String status;
 }
-

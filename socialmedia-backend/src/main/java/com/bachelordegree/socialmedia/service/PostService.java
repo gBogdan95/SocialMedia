@@ -89,7 +89,7 @@ public class PostService {
                 .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         boolean alreadyLiked = postRepository.existsByPostIdAndUserId(postId, user.getId());
         if (alreadyLiked) {
