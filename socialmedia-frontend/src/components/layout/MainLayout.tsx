@@ -1,9 +1,9 @@
 import React from "react";
 import { Box } from "@mui/material";
 import LeftNavbar from "./LeftNavbar";
-import { Outlet, Navigate, useLocation } from "react-router-dom";
-import { useRightContent } from "../contexts/RightContentContext";
-import { useAuth } from "../contexts/AuthContext";
+import { Outlet, useLocation } from "react-router-dom";
+import { useRightContent } from "../../contexts/RightContentContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const MainLayout = () => {
   const { content: RightSideContent } = useRightContent();
@@ -11,7 +11,7 @@ const MainLayout = () => {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return null;
   }
 
   const noOverflowRoutes = ["/settings", "/shop"];

@@ -5,7 +5,6 @@ import {
   TextField,
   Button,
   Box,
-  Grid,
   Link as MuiLink,
 } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
@@ -15,7 +14,7 @@ import { authService } from "../services/authService";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
-  const { login } = useAuth();
+  //const { login } = useAuth();
   const navigate = useNavigate();
 
   const { values, errors, handleChange, handleSubmit, reset } = useForm({
@@ -28,7 +27,8 @@ export default function Login() {
     },
   });
 
-  const [generalError, setGeneralError] = useState("");
+  const { login } = useAuth();
+  const [credentialsError, setCredentialsError] = useState("");
 
   const handleLogin = async () => {
     try {
@@ -39,7 +39,7 @@ export default function Login() {
       const errorMessage =
         (error as Error).message || "An unknown error occurred";
       console.error("Login error:", errorMessage);
-      setGeneralError("Incorrect username or password");
+      setCredentialsError("Incorrect username or password");
       reset();
     }
   };
@@ -83,9 +83,9 @@ export default function Login() {
           error={!!errors.password}
           helperText={errors.password}
         />
-        {generalError && (
+        {credentialsError && (
           <Typography color="error" sx={{ mt: 2, textAlign: "left" }}>
-            {generalError}
+            {credentialsError}
           </Typography>
         )}
         <Button

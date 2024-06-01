@@ -187,9 +187,6 @@ const Post: React.FC<PostProps> = ({
               aria-label="settings"
               onClick={handleSettingsClick}
               sx={{
-                "&:hover": {
-                  backgroundColor: "lightblue",
-                },
                 color: open ? "#1450A3" : "#40A2D8",
               }}
             >
@@ -220,9 +217,6 @@ const Post: React.FC<PostProps> = ({
                     width: "200px",
                     color: "white",
                     backgroundColor: "#40A2D8",
-                    ":hover": {
-                      backgroundColor: "#1450A3",
-                    },
                   }}
                 >
                   Edit
@@ -245,9 +239,6 @@ const Post: React.FC<PostProps> = ({
                     width: "200px",
                     color: "white",
                     backgroundColor: "#D24545",
-                    ":hover": {
-                      backgroundColor: "red",
-                    },
                   }}
                 >
                   Delete

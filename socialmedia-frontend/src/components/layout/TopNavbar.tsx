@@ -1,16 +1,16 @@
 import React, { ReactElement, useState } from "react";
 import { AppBar, Toolbar, Button, Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import NotificationsIcon from "@mui/icons-material/NotificationsActive";
 import EmailIcon from "@mui/icons-material/Email";
 import LogoutIcon from "@mui/icons-material/Logout";
-import logo from "../assets/logo.png";
-import { useRightContent } from "../contexts/RightContentContext";
-import Home from "../pages/Home";
+import logo from "../../assets/logo.png";
+import { useRightContent } from "../../contexts/RightContentContext";
+import Home from "../../pages/Home";
 import HomeIcon from "@mui/icons-material/Home";
-import Notifications from "../pages/Notifications";
-import Messages from "../pages/Messages";
+import Notifications from "../../pages/Notifications";
+import Messages from "../../pages/Messages";
 
 export default function TopNavbar() {
   const navigate = useNavigate();

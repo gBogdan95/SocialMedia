@@ -2,12 +2,12 @@ import React, { useState } from "react";
 
 import { Box, Drawer } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import CreateButton from "./CreateButton";
-import NavbarButton from "./NavbarButton";
-import CreatePostDialog from "./CreatePostDialog";
-import { postService } from "../services/postService";
-import backgroundImage from "../assets/leftNavbarBg.jpg";
+import { useAuth } from "../../contexts/AuthContext";
+import CreateButton from "././CreateButton";
+import NavbarButton from "../NavbarButton";
+import CreatePostDialog from "../CreatePostDialog";
+import { postService } from "../../services/postService";
+import backgroundImage from "../../assets/leftNavbarBg.jpg";
 import SearchIcon from "@mui/icons-material/Search";
 import PeopleIcon from "@mui/icons-material/People";
 import ShopIcon from "@mui/icons-material/Shop";
