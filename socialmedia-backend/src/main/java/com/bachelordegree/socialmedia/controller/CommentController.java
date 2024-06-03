@@ -3,17 +3,15 @@ package com.bachelordegree.socialmedia.controller;
 import com.bachelordegree.socialmedia.converter.CommentConverter;
 import com.bachelordegree.socialmedia.converter.PostConverter;
 import com.bachelordegree.socialmedia.dto.CommentDTO;
-import com.bachelordegree.socialmedia.dto.PostDTO;
+import com.bachelordegree.socialmedia.dto.CreateOrUpdateCommentDTO;
 import com.bachelordegree.socialmedia.exception.*;
 import com.bachelordegree.socialmedia.model.Comment;
-import com.bachelordegree.socialmedia.model.Post;
 import com.bachelordegree.socialmedia.service.CommentService;
 import com.bachelordegree.socialmedia.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -54,7 +52,7 @@ public class CommentController {
     }
 
     @PostMapping("/{postId}")
-    public CommentDTO create(@PathVariable UUID postId, @Valid @RequestBody CommentDTO commentDTO, Authentication authentication) {
+    public CommentDTO create(@PathVariable UUID postId, @Valid @RequestBody CreateOrUpdateCommentDTO commentDTO, Authentication authentication) {
         try {
             String username = authentication.getName();
             Comment comment = commentConverter.toEntity(commentDTO);
@@ -68,7 +66,7 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public CommentDTO update(@PathVariable UUID commentId, @Valid @RequestBody CommentDTO commentDTO, Authentication authentication) {
+    public CommentDTO update(@PathVariable UUID commentId, @Valid @RequestBody CreateOrUpdateCommentDTO commentDTO, Authentication authentication) {
         try {
             String username = authentication.getName();
             Comment commentToUpdate = commentConverter.toEntity(commentDTO);

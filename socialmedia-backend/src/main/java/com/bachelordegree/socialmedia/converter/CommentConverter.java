@@ -2,6 +2,7 @@ package com.bachelordegree.socialmedia.converter;
 
 import com.bachelordegree.socialmedia.dto.CommentDTO;
 
+import com.bachelordegree.socialmedia.dto.CreateOrUpdateCommentDTO;
 import com.bachelordegree.socialmedia.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,10 +12,9 @@ public class CommentConverter {
     @Autowired
     private UserConverter userConverter;
 
-    public Comment toEntity(CommentDTO commentDTO) {
+    public Comment toEntity(CreateOrUpdateCommentDTO commentDTO) {
         Comment comment = new Comment();
         comment.setText(commentDTO.getText());
-        comment.setLikes(commentDTO.getLikes());
         return comment;
     }
 

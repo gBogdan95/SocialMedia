@@ -1,5 +1,6 @@
 package com.bachelordegree.socialmedia.converter;
 
+import com.bachelordegree.socialmedia.dto.CreateOrUpdatePostDTO;
 import com.bachelordegree.socialmedia.dto.PostDTO;
 import com.bachelordegree.socialmedia.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,9 @@ public class PostConverter {
     @Autowired
     private UserConverter userConverter;
 
-    public Post toEntity(PostDTO postDTO) {
+    public Post toEntity(CreateOrUpdatePostDTO postDTO) {
         Post post = new Post();
         post.setText(postDTO.getText());
-        post.setLikes(postDTO.getLikes());
         post.setTitle(postDTO.getTitle());
         post.setImageUrl(postDTO.getImageUrl());
         return post;

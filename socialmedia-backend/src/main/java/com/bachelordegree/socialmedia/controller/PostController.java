@@ -1,6 +1,7 @@
 package com.bachelordegree.socialmedia.controller;
 
 import com.bachelordegree.socialmedia.converter.PostConverter;
+import com.bachelordegree.socialmedia.dto.CreateOrUpdatePostDTO;
 import com.bachelordegree.socialmedia.dto.PostDTO;
 import com.bachelordegree.socialmedia.exception.AlreadyLikedException;
 import com.bachelordegree.socialmedia.exception.NotLikedException;
@@ -64,7 +65,7 @@ public class PostController {
     }
 
     @PostMapping
-    public PostDTO create(@Valid @RequestBody PostDTO postDTO, Authentication authentication) {
+    public PostDTO create(@Valid @RequestBody CreateOrUpdatePostDTO postDTO, Authentication authentication) {
         try {
             String username = authentication.getName();
             Post post = postConverter.toEntity(postDTO);
@@ -76,7 +77,7 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public PostDTO update(@PathVariable @NotNull UUID id, @RequestBody PostDTO postDTO, Authentication authentication) {
+    public PostDTO update(@PathVariable @NotNull UUID id, @RequestBody CreateOrUpdatePostDTO postDTO, Authentication authentication) {
         try {
             String username = authentication.getName();
             Post postToUpdate = postConverter.toEntity(postDTO);

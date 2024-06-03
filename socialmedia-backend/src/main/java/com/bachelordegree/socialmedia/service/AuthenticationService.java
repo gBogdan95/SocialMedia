@@ -54,8 +54,8 @@ public class AuthenticationService {
         }
 
         String encodedPassword = passwordEncoder.encode(password);
-        Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new RuntimeException("Role not found"));
 
+        Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new RuntimeException("Role not found"));
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
 
@@ -64,9 +64,7 @@ public class AuthenticationService {
         newUser.setPassword(encodedPassword);
         newUser.setEmail(email);
         newUser.setAuthorities(authorities);
-
-        Inventory newInventory = new Inventory();
-        newUser.setInventory(newInventory);
+        newUser.setInventory(new Inventory());
 
         return userRepository.save(newUser);
     }

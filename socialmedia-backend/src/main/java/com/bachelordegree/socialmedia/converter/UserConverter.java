@@ -13,9 +13,6 @@ import java.util.HashSet;
 @Component
 public class UserConverter {
 
-    @Autowired
-    private InventoryConverter inventoryConverter;
-
     public UserDTO toDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());

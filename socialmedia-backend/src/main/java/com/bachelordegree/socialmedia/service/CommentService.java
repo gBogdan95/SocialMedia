@@ -20,10 +20,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.bachelordegree.socialmedia.exception.AlreadyLikedException.ERR_MSG_COMMENT_ALREADY_LIKED;
-import static com.bachelordegree.socialmedia.exception.AlreadyLikedException.ERR_MSG_POST_ALREADY_LIKED;
 import static com.bachelordegree.socialmedia.exception.CommentNotFoundException.ERR_MSG_COMMENT_NOT_FOUND;
 import static com.bachelordegree.socialmedia.exception.NotLikedException.ERR_MSG_COMMENT_NOT_LIKED;
-import static com.bachelordegree.socialmedia.exception.NotLikedException.ERR_MSG_POST_NOT_LIKED;
 import static com.bachelordegree.socialmedia.exception.PostNotFoundException.ERR_MSG_POST_NOT_FOUND;
 
 @Service
@@ -89,7 +87,7 @@ public class CommentService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
-        boolean alreadyLiked = commentRepository.existsByCommentIdAndUserId(commentId, user.getId());
+        boolean alreadyLiked = commentRepository.likedByUser(commentId, user.getId());
         if (alreadyLiked) {
             throw new AlreadyLikedException(ERR_MSG_COMMENT_ALREADY_LIKED);
         } else {

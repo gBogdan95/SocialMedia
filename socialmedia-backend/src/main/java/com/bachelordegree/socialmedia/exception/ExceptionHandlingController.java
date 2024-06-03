@@ -34,10 +34,8 @@ public class ExceptionHandlingController {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-
     @ExceptionHandler(Exception.class)
     ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        ex.printStackTrace();
         ErrorResponse errorResponse = new ErrorResponse(SERVER_PROBLEM, ERR_MSG_UNEXPECTED);
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
