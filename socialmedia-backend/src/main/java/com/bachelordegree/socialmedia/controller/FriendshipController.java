@@ -5,6 +5,7 @@ import com.bachelordegree.socialmedia.converter.UserConverter;
 import com.bachelordegree.socialmedia.dto.FriendshipDTO;
 import com.bachelordegree.socialmedia.dto.UserDTO;
 import com.bachelordegree.socialmedia.exception.FriendRequestException;
+import com.bachelordegree.socialmedia.exception.FriendshipNotFoundException;
 import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.Friendship;
 import com.bachelordegree.socialmedia.model.FriendshipStatus;
@@ -19,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,14 +43,9 @@ public class FriendshipController {
         try {
             User requester = userService.loadUserByUsername(requesterUsername);
             User receiver = userService.loadUserByUsername(receiverUsername);
-
             friendshipService.sendFriendRequest(requester, receiver);
-        } catch (UsernameNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
-        } catch (FriendRequestException e) {
-            throw new RestException(HttpStatus.FORBIDDEN, e.getMessage());
-        } catch (IllegalStateException | IllegalArgumentException e) {
-            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (UsernameNotFoundException | FriendRequestException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -57,14 +54,9 @@ public class FriendshipController {
         String receiverUsername = authentication.getName();
         try {
             User receiver = userService.loadUserByUsername(receiverUsername);
-
             friendshipService.acceptFriendRequest(friendshipId, receiver);
-        } catch (UsernameNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
-        } catch (EntityNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "Friend request not found.");
-        } catch (IllegalStateException e) {
-            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (UsernameNotFoundException | FriendshipNotFoundException | AccessDeniedException e) {
+            throw new RestException(HttpStatus.NOT_FOUND,  e.getMessage());
         }
     }
 
@@ -73,14 +65,9 @@ public class FriendshipController {
         String receiverUsername = authentication.getName();
         try {
             User receiver = userService.loadUserByUsername(receiverUsername);
-
             friendshipService.declineFriendRequest(friendshipId, receiver);
-        } catch (UsernameNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
-        } catch (EntityNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "Friend request not found.");
-        } catch (IllegalStateException e) {
-            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (UsernameNotFoundException | FriendshipNotFoundException | AccessDeniedException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -94,7 +81,7 @@ public class FriendshipController {
                     .map(friendshipConverter::toDTO)
                     .toList();
         } catch (UsernameNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -108,7 +95,7 @@ public class FriendshipController {
                     .map(userConverter::toDTO)
                     .toList();
         } catch (UsernameNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+            throw new RestException(HttpStatus.NOT_FOUND,  e.getMessage());
         }
     }
 
@@ -118,8 +105,8 @@ public class FriendshipController {
         try {
             User user = userService.loadUserByUsername(username);
             friendshipService.removeFriend(user, friendId);
-        } catch (EntityNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "Friendship not found.");
+        } catch (FriendshipNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -130,7 +117,7 @@ public class FriendshipController {
             User user =  userService.loadUserByUsername(username);
             return friendshipService.checkFriendshipStatus(user.getId(), friendId);
         } catch (UsernameNotFoundException e) {
-            throw new RestException(HttpStatus.NOT_FOUND, "User not found: " + e.getMessage());
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 }

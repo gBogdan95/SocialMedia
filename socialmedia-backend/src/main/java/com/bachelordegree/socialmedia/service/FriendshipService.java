@@ -1,20 +1,22 @@
 package com.bachelordegree.socialmedia.service;
 
 import com.bachelordegree.socialmedia.exception.FriendRequestException;
+import com.bachelordegree.socialmedia.exception.FriendshipNotFoundException;
 import com.bachelordegree.socialmedia.model.Friendship;
 import com.bachelordegree.socialmedia.model.FriendshipStatus;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.repository.FriendshipRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.bachelordegree.socialmedia.exception.FriendRequestException.ERR_MSG_USER_BLOCKED_RECEIVING_FRIEND_REQUESTS;
+import static com.bachelordegree.socialmedia.exception.FriendRequestException.*;
+import static com.bachelordegree.socialmedia.exception.FriendshipNotFoundException.ERR_MSG_FRIENDSHIP_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class FriendshipService {
 
     public void sendFriendRequest(User requester, User receiver) throws FriendRequestException {
         if (requester.getId().equals(receiver.getId())) {
-            throw new IllegalArgumentException("Cannot send a friend request to oneself.");
+            throw new FriendRequestException(ERR_MSG_CANNOT_SNE_FRIEND_REQUEST_TO_ONESELF);
         }
 
         if (!receiver.isAllowingFriendRequests()) {
@@ -35,9 +37,9 @@ public class FriendshipService {
         if (existingFriendship.isPresent()) {
             FriendshipStatus status = existingFriendship.get().getStatus();
             if (status == FriendshipStatus.PENDING) {
-                throw new IllegalStateException("Friend request already sent.");
+                throw new FriendRequestException(ERR_MSG_FRIEND_REQUEST_ALREADY_SENT);
             } else if (status == FriendshipStatus.ACCEPTED) {
-                throw new IllegalStateException("Users are already friends.");
+                throw new FriendRequestException(ERR_MSG_FRIEND_ALREADY_FRIENDS);
             }
         } else {
             Friendship friendRequest = new Friendship();
@@ -48,32 +50,32 @@ public class FriendshipService {
         }
     }
 
-    public void acceptFriendRequest(UUID friendshipId, User receiver) {
+    public void acceptFriendRequest(UUID friendshipId, User receiver) throws FriendshipNotFoundException, AccessDeniedException {
         Friendship friendship = friendshipRepository.findById(friendshipId)
-                .orElseThrow(() -> new EntityNotFoundException("Friend request not found."));
+                .orElseThrow(() -> new FriendshipNotFoundException(ERR_MSG_FRIENDSHIP_NOT_FOUND));
 
         if (!friendship.getReceiver().equals(receiver)) {
-            throw new IllegalStateException("Only the receiver can accept the friend request.");
+            throw new AccessDeniedException("Only the receiver can accept the friend request.");
         }
 
         if (!friendship.getStatus().equals(FriendshipStatus.PENDING)) {
-            throw new IllegalStateException("The friend request is not in a pending state.");
+            throw new AccessDeniedException("The friend request is not in a pending state.");
         }
 
         friendship.setStatus(FriendshipStatus.ACCEPTED);
         friendshipRepository.save(friendship);
     }
 
-    public void declineFriendRequest(UUID friendshipId, User receiver) {
+    public void declineFriendRequest(UUID friendshipId, User receiver) throws FriendshipNotFoundException, AccessDeniedException {
         Friendship friendship = friendshipRepository.findById(friendshipId)
-                .orElseThrow(() -> new EntityNotFoundException("Friend request not found."));
+                .orElseThrow(() -> new FriendshipNotFoundException(ERR_MSG_FRIENDSHIP_NOT_FOUND));
 
         if (!friendship.getReceiver().equals(receiver)) {
-            throw new IllegalStateException("Only the receiver can decline the friend request.");
+            throw new AccessDeniedException("Only the receiver can decline the friend request.");
         }
 
         if (!friendship.getStatus().equals(FriendshipStatus.PENDING)) {
-            throw new IllegalStateException("The friend request is not in a pending state.");
+            throw new AccessDeniedException("The friend request is not in a pending state.");
         }
 
         friendshipRepository.delete(friendship);
@@ -93,9 +95,9 @@ public class FriendshipService {
                 .toList();
     }
 
-    public void removeFriend(User user, UUID friendId) {
+    public void removeFriend(User user, UUID friendId) throws FriendshipNotFoundException {
         Friendship friendship = friendshipRepository.findByUsersAndStatus(user.getId(), friendId, FriendshipStatus.ACCEPTED)
-                .orElseThrow(() -> new EntityNotFoundException("Friendship not found."));
+                .orElseThrow(() -> new FriendshipNotFoundException(ERR_MSG_FRIENDSHIP_NOT_FOUND));
 
         friendshipRepository.delete(friendship);
     }
