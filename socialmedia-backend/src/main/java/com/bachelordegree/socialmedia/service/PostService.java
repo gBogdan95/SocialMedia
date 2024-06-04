@@ -57,7 +57,6 @@ public class PostService {
         return postRepository.save(post);
     }
 
-
     public Post update(UUID id, Post postUpdate, String username) throws PostNotFoundException, AccessDeniedException {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFoundException(ERR_MSG_POST_NOT_FOUND));
@@ -116,8 +115,8 @@ public class PostService {
         }
 
         post.getLikedByUsers().remove(user);
-        post.setLikes(Math.max(0, post.getLikes() - 1));
-        user.setCurrency(user.getCurrency() - 1);
+        post.setLikes(post.getLikes() - 1);
+        user.setCurrency(Math.max(0, user.getCurrency() - 1));
         postRepository.save(post);
     }
 }

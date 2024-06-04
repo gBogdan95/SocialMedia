@@ -112,8 +112,8 @@ public class CommentService {
         }
 
         comment.getLikedByUsers().remove(user);
-        comment.setLikes(Math.max(0, comment.getLikes() - 1));
-        user.setCurrency(user.getCurrency() - 1);
+        comment.setLikes(comment.getLikes() - 1);
+        user.setCurrency(Math.max(0, user.getCurrency() - 1));
         commentRepository.save(comment);
     }
 }
