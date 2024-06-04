@@ -95,24 +95,20 @@ const fetchUserInventory = async () => {
 };
 
 const updateUserProfile = async (
-  userId: string,
   name: string,
   phoneNumber: string,
   description: string
 ) => {
   const token = getToken();
 
-  const response = await fetch(
-    `${API_BASE_URL}/user/users/update-profile/${userId}`,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, phoneNumber, description }),
-    }
-  );
+  const response = await fetch(`${API_BASE_URL}/user/users/update-profile`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, phoneNumber, description }),
+  });
 
   if (!response.ok) {
     const errorData = await response.json();

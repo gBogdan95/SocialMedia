@@ -56,17 +56,14 @@ public class UserController {
                 .toList();
     }
 
-    @PutMapping("update-profile/{id}")
-    public UserDTO updateProfile(@PathVariable UUID id, @Validated @RequestBody UserProfileUpdateDTO updateDTO) {
+    @PutMapping("update-profile")
+    public UserDTO updateProfile(@Valid @RequestBody UserProfileUpdateDTO updateDTO, Authentication authentication) {
+        String username = authentication.getName();
         try {
-            User updatedUser = userService.updateUserProfile(id, updateDTO);
+            User updatedUser = userService.updateUserProfile(username, updateDTO);
             return userConverter.toDTO(updatedUser);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UserAlreadyExistsException e) {
-            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (Exception e) {
-            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating user profile: " + e.getMessage());
         }
     }
 

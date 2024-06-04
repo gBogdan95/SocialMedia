@@ -52,9 +52,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsernameContainingIgnoreCase(username);
     }
 
-    public User updateUserProfile(UUID userId, UserProfileUpdateDTO updateDTO) throws UsernameNotFoundException, UserAlreadyExistsException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+    public User updateUserProfile(String username, UserProfileUpdateDTO updateDTO) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         user.setName(updateDTO.getName());
         user.setPhoneNumber(updateDTO.getPhoneNumber());

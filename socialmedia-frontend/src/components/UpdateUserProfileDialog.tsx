@@ -54,7 +54,6 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
   const handleFormSubmit = async () => {
     try {
       await userService.updateUserProfile(
-        profileId,
         formData.name,
         formData.phoneNumber,
         formData.description
