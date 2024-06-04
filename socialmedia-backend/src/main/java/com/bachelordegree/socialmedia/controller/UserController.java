@@ -3,9 +3,7 @@ package com.bachelordegree.socialmedia.controller;
 import com.bachelordegree.socialmedia.converter.InventoryConverter;
 import com.bachelordegree.socialmedia.converter.UserConverter;
 import com.bachelordegree.socialmedia.dto.*;
-import com.bachelordegree.socialmedia.exception.InvalidImageException;
 import com.bachelordegree.socialmedia.exception.RestException;
-import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.UserService;
@@ -15,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -69,8 +66,9 @@ public class UserController {
 
     @GetMapping("/inventory")
     public InventoryDTO getUserInventory(Authentication authentication) {
+        String username = authentication.getName();
         try {
-            Inventory inventory = userService.getUserInventory(authentication);
+            Inventory inventory = userService.getUserInventory(username);
             return inventoryConverter.toDTO(inventory);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -81,9 +79,9 @@ public class UserController {
     public UserDTO updateAvatar(@RequestBody @Valid AvatarUpdateDTO avatarUpdateDTO, Authentication authentication) {
         String username = authentication.getName();
         try {
-            User updatedUser = userService.updateAvatar(username, avatarUpdateDTO.getNewAvatarUrl());
+            User updatedUser = userService.updateAvatar(username, avatarUpdateDTO);
             return userConverter.toDTO(updatedUser);
-        } catch (InvalidImageException e) {
+        } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -92,9 +90,9 @@ public class UserController {
     public UserDTO updateBackground(@RequestBody @Valid BackgroundUpdateDTO backgroundUpdateDTO, Authentication authentication) {
         String username = authentication.getName();
         try {
-            User updatedUser = userService.updateBackground(username, backgroundUpdateDTO.getNewBackgroundUrl());
+            User updatedUser = userService.updateBackground(username, backgroundUpdateDTO);
             return userConverter.toDTO(updatedUser);
-        } catch (InvalidImageException e) {
+        } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

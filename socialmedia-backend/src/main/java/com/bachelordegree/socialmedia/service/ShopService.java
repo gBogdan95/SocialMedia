@@ -2,6 +2,7 @@ package com.bachelordegree.socialmedia.service;
 
 import com.bachelordegree.socialmedia.exception.InsufficientFundsException;
 import com.bachelordegree.socialmedia.exception.ItemAlreadyOwnedException;
+import com.bachelordegree.socialmedia.exception.ShopItemNotFoundException;
 import com.bachelordegree.socialmedia.model.ImageType;
 import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.ShopItem;
@@ -9,7 +10,6 @@ import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.repository.ShopItemRepository;
 import com.bachelordegree.socialmedia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import static com.bachelordegree.socialmedia.exception.InsufficientFundsException.ERR_MSG_INSUFFICIENT_FUNDS;
 import static com.bachelordegree.socialmedia.exception.ItemAlreadyOwnedException.ERR_MSG_ITEM_ALREADY_OWNED;
+import static com.bachelordegree.socialmedia.exception.ShopItemNotFoundException.ERR_MSG_SHOP_ITEM_NOT_FOUND;
 
 @Service
 public class ShopService {
@@ -35,13 +36,12 @@ public class ShopService {
     }
 
     @Transactional
-    public Inventory purchaseImage(UUID itemId, Authentication authentication) throws InsufficientFundsException, ItemAlreadyOwnedException {
-        String username = authentication.getName();
+    public Inventory purchaseImage(UUID itemId, String username) throws InsufficientFundsException, ItemAlreadyOwnedException, ShopItemNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         ShopItem item = shopItemRepository.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+                .orElseThrow(() -> new ShopItemNotFoundException(ERR_MSG_SHOP_ITEM_NOT_FOUND));
 
         if (user.getCurrency() < item.getPrice()) {
             throw new InsufficientFundsException(ERR_MSG_INSUFFICIENT_FUNDS);

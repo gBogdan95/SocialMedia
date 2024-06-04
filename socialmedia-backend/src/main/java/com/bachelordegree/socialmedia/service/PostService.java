@@ -1,6 +1,5 @@
 package com.bachelordegree.socialmedia.service;
 
-import com.bachelordegree.socialmedia.dto.PostDTO;
 import com.bachelordegree.socialmedia.exception.AlreadyLikedException;
 import com.bachelordegree.socialmedia.exception.NotLikedException;
 import com.bachelordegree.socialmedia.exception.PostNotFoundException;
@@ -8,8 +7,6 @@ import com.bachelordegree.socialmedia.model.Post;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.repository.PostRepository;
 import com.bachelordegree.socialmedia.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

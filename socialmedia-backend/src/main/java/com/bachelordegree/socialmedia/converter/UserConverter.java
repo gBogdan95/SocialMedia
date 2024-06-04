@@ -1,14 +1,8 @@
 package com.bachelordegree.socialmedia.converter;
 
-import com.bachelordegree.socialmedia.dto.InventoryDTO;
 import com.bachelordegree.socialmedia.dto.UserDTO;
-import com.bachelordegree.socialmedia.dto.UserProfileUpdateDTO;
-import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
 
 @Component
 public class UserConverter {

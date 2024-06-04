@@ -1,6 +1,5 @@
 package com.bachelordegree.socialmedia.dto;
 
-
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 

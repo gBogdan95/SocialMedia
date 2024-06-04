@@ -1,7 +1,6 @@
 package com.bachelordegree.socialmedia.service;
 
 import com.bachelordegree.socialmedia.converter.MessageConverter;
-import com.bachelordegree.socialmedia.converter.UserConverter;
 import com.bachelordegree.socialmedia.dto.MessageContentDTO;
 import com.bachelordegree.socialmedia.dto.MessageDTO;
 import com.bachelordegree.socialmedia.exception.DeleteMessageException;
