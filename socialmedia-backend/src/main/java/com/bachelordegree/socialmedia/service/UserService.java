@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> getAll() {
-        return userRepository.findAll(Sort.by("username"));
+        return userRepository.findAllByOrderByUsernameAsc();
     }
 
     public User getById(UUID id) throws UsernameNotFoundException{
