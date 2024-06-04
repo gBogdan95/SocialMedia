@@ -89,7 +89,7 @@ public class FriendshipService {
 
         return friendships.stream()
                 .map(friendship -> friendship.getRequester().equals(user) ? friendship.getReceiver() : friendship.getRequester())
-                .sorted(Comparator.comparing(User::getUsername))
+                .sorted(Comparator.comparing(userFriend -> userFriend.getUsername().toLowerCase()))
                 .toList();
     }
 
