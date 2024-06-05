@@ -12,7 +12,6 @@ import com.bachelordegree.socialmedia.model.FriendshipStatus;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.FriendshipService;
 import com.bachelordegree.socialmedia.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

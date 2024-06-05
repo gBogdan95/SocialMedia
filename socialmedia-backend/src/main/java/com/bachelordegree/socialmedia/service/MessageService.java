@@ -3,6 +3,7 @@ package com.bachelordegree.socialmedia.service;
 import com.bachelordegree.socialmedia.converter.MessageConverter;
 import com.bachelordegree.socialmedia.dto.MessageContentDTO;
 import com.bachelordegree.socialmedia.dto.MessageDTO;
+import com.bachelordegree.socialmedia.exception.ConversationNotFoundException;
 import com.bachelordegree.socialmedia.exception.DeleteMessageException;
 import com.bachelordegree.socialmedia.exception.MessageNotFoundException;
 import com.bachelordegree.socialmedia.exception.SendMessageException;
@@ -17,9 +18,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static com.bachelordegree.socialmedia.exception.ConversationNotFoundException.ERR_MSG_CONVERSATION_NOT_FOUND;
 import static com.bachelordegree.socialmedia.exception.DeleteMessageException.ERR_MSG_UNAUTHORIZED_TO_DELETE;
 import static com.bachelordegree.socialmedia.exception.MessageNotFoundException.ERR_MSG_MESSAGE_NOT_FOUND;
 import static com.bachelordegree.socialmedia.exception.SendMessageException.ERR_MSG_USER_BLOCKED_RECEIVING_MESSAGES;
@@ -35,9 +38,9 @@ public class MessageService {
 
 
     @Transactional
-    public MessageDTO sendMessage(User sender, User receiver, MessageContentDTO messageContentDTO) throws SendMessageException {
+    public MessageDTO sendMessage(User sender, User receiver, MessageContentDTO messageContentDTO) throws SendMessageException, AccessDeniedException {
         if (sender.getId().equals(receiver.getId())) {
-            throw new IllegalArgumentException("Cannot send a message to oneself.");
+            throw new AccessDeniedException("Cannot send a message to oneself!");
         }
 
         if (!receiver.isAllowingMessagesFromNonFriends()) {
@@ -73,16 +76,16 @@ public class MessageService {
     }
 
     @Transactional
-    public List<MessageDTO> getMessagesBetweenUsers(User caller, User otherUser) {
+    public List<MessageDTO> getMessagesBetweenUsers(User caller, User otherUser) throws ConversationNotFoundException {
         if (caller.getId().equals(otherUser.getId())) {
-            throw new IllegalArgumentException("Retrieving messages with oneself is not allowed.");
+            throw new IllegalArgumentException("Action now allowed!");
         }
 
         Optional<Conversation> conversation = conversationRepository
                 .findFirstByParticipantOneAndParticipantTwoOrParticipantOneAndParticipantTwo(caller, otherUser, otherUser, caller);
 
         if (conversation.isEmpty()) {
-            throw new IllegalArgumentException("No conversation found between the specified users.");
+            throw new ConversationNotFoundException(ERR_MSG_CONVERSATION_NOT_FOUND);
         }
 
         List<Message> messages = messageRepository.findByConversationOrderBySentAtAsc(conversation.get());
@@ -107,20 +110,22 @@ public class MessageService {
         }
 
         Conversation conversation = message.getConversation();
-        List<Message> remainingMessages = messageRepository.findByConversationOrderBySentAtDesc(conversation);
-        if (!remainingMessages.isEmpty() && remainingMessages.get(0).getId().equals(messageId)) {
-            remainingMessages.remove(0);
-        }
+        boolean isLastMessage = conversation.getLastMessage().equals(message);
 
-        if (!remainingMessages.isEmpty()) {
-            conversation.setLastMessage(remainingMessages.get(0));
-        } else {
+        if (isLastMessage) {
             conversation.setLastMessage(null);
+            conversationRepository.save(conversation);
         }
-
-        conversationRepository.save(conversation);
-        conversationRepository.flush();
 
         messageRepository.delete(message);
+
+        List<Message> remainingMessages = messageRepository.findByConversationOrderBySentAtDesc(conversation);
+
+        if (remainingMessages.isEmpty()) {
+            conversationRepository.delete(conversation);
+        } else if (isLastMessage) {
+            conversation.setLastMessage(remainingMessages.get(0));
+            conversationRepository.save(conversation);
+        }
     }
 }

@@ -2,10 +2,7 @@ package com.bachelordegree.socialmedia.controller;
 
 import com.bachelordegree.socialmedia.dto.MessageContentDTO;
 import com.bachelordegree.socialmedia.dto.MessageDTO;
-import com.bachelordegree.socialmedia.exception.DeleteMessageException;
-import com.bachelordegree.socialmedia.exception.MessageNotFoundException;
-import com.bachelordegree.socialmedia.exception.RestException;
-import com.bachelordegree.socialmedia.exception.SendMessageException;
+import com.bachelordegree.socialmedia.exception.*;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.MessageService;
 import com.bachelordegree.socialmedia.service.UserService;
@@ -15,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +35,7 @@ public class MessageController {
             return messageService.sendMessage(sender, receiver, messageContentDTO);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (SendMessageException e) {
+        } catch (SendMessageException | AccessDeniedException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -50,7 +48,7 @@ public class MessageController {
             User otherUser = userService.loadUserByUsername(otherUsername);
 
             return messageService.getMessagesBetweenUsers(caller, otherUser);
-        } catch (UsernameNotFoundException e) {
+        } catch (UsernameNotFoundException | ConversationNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IllegalArgumentException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
