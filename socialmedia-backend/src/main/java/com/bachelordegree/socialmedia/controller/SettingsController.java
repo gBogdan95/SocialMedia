@@ -58,11 +58,11 @@ public class SettingsController {
         }
     }
 
-    @PatchMapping("/update-friend-request-setting/{userId}")
-    public UserDTO updateFriendRequestSetting(@PathVariable UUID userId, @RequestBody Boolean isAllowingFriendRequests, Authentication authentication) {
+    @PatchMapping("/update-friend-request-setting")
+    public UserDTO updateFriendRequestSetting(@RequestBody Boolean isAllowingFriendRequests, Authentication authentication) {
         String currentUsername = authentication.getName();
         try {
-            return settingsService.updateFriendRequestSetting(userId, isAllowingFriendRequests, currentUsername);
+            return settingsService.updateFriendRequestSetting(isAllowingFriendRequests, currentUsername);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AccessDeniedException e) {
@@ -70,11 +70,11 @@ public class SettingsController {
         }
     }
 
-    @PatchMapping("/update-message-permission-setting/{userId}")
-    public UserDTO updateMessagePermissionSetting(@PathVariable UUID userId, @RequestBody Boolean isAllowingMessagesFromNonFriends, Authentication authentication) {
+    @PatchMapping("/update-message-permission-setting")
+    public UserDTO updateMessagePermissionSetting(@RequestBody Boolean isAllowingMessagesFromNonFriends, Authentication authentication) {
         String currentUsername = authentication.getName();
         try {
-            return settingsService.updateMessagePermissionSetting(userId, isAllowingMessagesFromNonFriends, currentUsername);
+            return settingsService.updateMessagePermissionSetting(isAllowingMessagesFromNonFriends, currentUsername);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AccessDeniedException e) {

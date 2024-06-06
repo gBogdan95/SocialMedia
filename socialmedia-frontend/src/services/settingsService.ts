@@ -96,13 +96,12 @@ const updateEmail = async (
 };
 
 const updateFriendRequestSetting = async (
-  userId: string,
   isAllowingFriendRequests: boolean
 ) => {
   const token = getToken();
 
   const response = await fetch(
-    `${API_BASE_URL}/user/settings/update-friend-request-setting/${userId}`,
+    `${API_BASE_URL}/user/settings/update-friend-request-setting`,
     {
       method: "PATCH",
       headers: {
@@ -124,13 +123,12 @@ const updateFriendRequestSetting = async (
 };
 
 const updateMessagePermissionSetting = async (
-  userId: string,
   isAllowingMessagesFromNonFriends: boolean
 ) => {
   const token = getToken();
 
   const response = await fetch(
-    `${API_BASE_URL}/user/settings/update-message-permission-setting/${userId}`,
+    `${API_BASE_URL}/user/settings/update-message-permission-setting`,
     {
       method: "PATCH",
       headers: {

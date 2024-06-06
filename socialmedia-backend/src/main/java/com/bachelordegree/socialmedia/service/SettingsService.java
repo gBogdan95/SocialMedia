@@ -109,13 +109,9 @@ public class SettingsService {
         }
     }
 
-    public UserDTO updateFriendRequestSetting(UUID userId, boolean isAllowing, String username) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
-
-        if (!user.getUsername().equals(username)) {
-            throw new AccessDeniedException("User does not have permission to update this setting.");
-        }
+    public UserDTO updateFriendRequestSetting(boolean isAllowing, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         user.setAllowingFriendRequests(isAllowing);
         User updatedUser = userRepository.save(user);
@@ -123,13 +119,9 @@ public class SettingsService {
         return userConverter.toDTO(updatedUser);
     }
 
-    public UserDTO updateMessagePermissionSetting(UUID userId, boolean isAllowing, String username) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
-
-        if (!user.getUsername().equals(username)) {
-            throw new AccessDeniedException("User does not have permission to update this setting.");
-        }
+    public UserDTO updateMessagePermissionSetting(boolean isAllowing, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         user.setAllowingMessagesFromNonFriends(isAllowing);
         User updatedUser = userRepository.save(user);

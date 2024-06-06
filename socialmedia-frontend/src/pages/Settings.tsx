@@ -39,10 +39,8 @@ const Settings: React.FC = () => {
     const newSetting = event.target.checked;
     setBlockMessages(newSetting);
     try {
-      const updatedUser = await settingsService.updateMessagePermissionSetting(
-        userId,
-        !newSetting
-      );
+      const updatedUser =
+        await settingsService.updateMessagePermissionSetting(!newSetting);
       setBlockMessages(!updatedUser.allowingMessagesFromNonFriends);
     } catch (error) {
       console.error("Failed to update message permissions", error);
@@ -56,10 +54,8 @@ const Settings: React.FC = () => {
     const newSetting = event.target.checked;
     setBlockFriendRequests(newSetting);
     try {
-      const updatedUser = await settingsService.updateFriendRequestSetting(
-        userId,
-        !newSetting
-      );
+      const updatedUser =
+        await settingsService.updateFriendRequestSetting(!newSetting);
       setBlockFriendRequests(!updatedUser.allowingFriendRequests);
     } catch (error) {
       console.error("Failed to update friend request setting", error);
