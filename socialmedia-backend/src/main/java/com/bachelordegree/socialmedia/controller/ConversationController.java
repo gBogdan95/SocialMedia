@@ -1,11 +1,14 @@
 package com.bachelordegree.socialmedia.controller;
 
 import com.bachelordegree.socialmedia.dto.ConversationOverviewDTO;
+import com.bachelordegree.socialmedia.exception.RestException;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.ConversationService;
 import com.bachelordegree.socialmedia.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +27,11 @@ public class ConversationController {
     @GetMapping()
     public List<ConversationOverviewDTO> getAllUserConversations(Authentication authentication) {
         String username = authentication.getName();
-        User currentUser = userService.loadUserByUsername(username);
-        return conversationService.getAllConversationsForUser(currentUser);
+        try {
+            User currentUser = userService.loadUserByUsername(username);
+            return conversationService.getAllConversationsForUser(currentUser);
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 }

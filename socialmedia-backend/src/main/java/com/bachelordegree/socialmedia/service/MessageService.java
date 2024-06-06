@@ -25,7 +25,7 @@ import java.util.*;
 import static com.bachelordegree.socialmedia.exception.ConversationNotFoundException.ERR_MSG_CONVERSATION_NOT_FOUND;
 import static com.bachelordegree.socialmedia.exception.DeleteMessageException.ERR_MSG_UNAUTHORIZED_TO_DELETE;
 import static com.bachelordegree.socialmedia.exception.MessageNotFoundException.ERR_MSG_MESSAGE_NOT_FOUND;
-import static com.bachelordegree.socialmedia.exception.SendMessageException.ERR_MSG_USER_BLOCKED_RECEIVING_MESSAGES;
+import static com.bachelordegree.socialmedia.exception.SendMessageException.ERR_MSG_USER_BLOCKED_RECEIVING_MESSAGES_FROM_NON_FRIENDS;
 
 @Service
 @RequiredArgsConstructor
@@ -38,16 +38,12 @@ public class MessageService {
 
 
     @Transactional
-    public MessageDTO sendMessage(User sender, User receiver, MessageContentDTO messageContentDTO) throws SendMessageException, AccessDeniedException {
-        if (sender.getId().equals(receiver.getId())) {
-            throw new AccessDeniedException("Cannot send a message to oneself!");
-        }
-
+    public MessageDTO sendMessage(User sender, User receiver, MessageContentDTO messageContentDTO) throws SendMessageException {
         if (!receiver.isAllowingMessagesFromNonFriends()) {
             boolean isFriend = friendshipRepository.findByUsersAndStatus(sender.getId(), receiver.getId(), FriendshipStatus.ACCEPTED)
                     .isPresent();
             if (!isFriend) {
-                throw new SendMessageException(ERR_MSG_USER_BLOCKED_RECEIVING_MESSAGES);
+                throw new SendMessageException(ERR_MSG_USER_BLOCKED_RECEIVING_MESSAGES_FROM_NON_FRIENDS);
             }
         }
 
@@ -60,12 +56,7 @@ public class MessageService {
                     return conversationRepository.save(newConversation);
                 });
 
-        Message message = new Message();
-        message.setSender(sender);
-        message.setConversation(conversation);
-        message.setText(messageContentDTO.getText());
-        message.setImageUrl(messageContentDTO.getImageUrl());
-        message.setSentAt(LocalDateTime.now());
+        Message message = messageConverter.toEntity(messageContentDTO, sender, conversation);
         message.setRead(false);
         message = messageRepository.save(message);
 
@@ -77,18 +68,11 @@ public class MessageService {
 
     @Transactional
     public List<MessageDTO> getMessagesBetweenUsers(User caller, User otherUser) throws ConversationNotFoundException {
-        if (caller.getId().equals(otherUser.getId())) {
-            throw new IllegalArgumentException("Action now allowed!");
-        }
+        Conversation conversation = conversationRepository
+                .findFirstByParticipantOneAndParticipantTwoOrParticipantOneAndParticipantTwo(caller, otherUser, otherUser, caller)
+                .orElseThrow(() -> new ConversationNotFoundException(ERR_MSG_CONVERSATION_NOT_FOUND));
 
-        Optional<Conversation> conversation = conversationRepository
-                .findFirstByParticipantOneAndParticipantTwoOrParticipantOneAndParticipantTwo(caller, otherUser, otherUser, caller);
-
-        if (conversation.isEmpty()) {
-            throw new ConversationNotFoundException(ERR_MSG_CONVERSATION_NOT_FOUND);
-        }
-
-        List<Message> messages = messageRepository.findByConversationOrderBySentAtAsc(conversation.get());
+        List<Message> messages = messageRepository.findByConversationOrderBySentAtAsc(conversation);
 
         messages.stream()
                 .filter(message -> !message.isRead() && !message.getSender().equals(caller))
@@ -101,12 +85,12 @@ public class MessageService {
     }
 
     @Transactional
-    public void deleteMessage(UUID messageId, User currentUser) throws MessageNotFoundException, DeleteMessageException {
+    public void deleteMessage(UUID messageId, User currentUser) throws MessageNotFoundException, AccessDeniedException {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new MessageNotFoundException(ERR_MSG_MESSAGE_NOT_FOUND));
 
         if (!message.getSender().equals(currentUser)) {
-            throw new DeleteMessageException(ERR_MSG_UNAUTHORIZED_TO_DELETE);
+            throw new AccessDeniedException("User does not have permission to delete this message.");
         }
 
         Conversation conversation = message.getConversation();

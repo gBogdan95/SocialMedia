@@ -31,11 +31,10 @@ public class MessageController {
             String senderUsername = authentication.getName();
             User sender = userService.loadUserByUsername(senderUsername);
             User receiver = userService.loadUserByUsername(receiverUsername);
-
             return messageService.sendMessage(sender, receiver, messageContentDTO);
         } catch (UsernameNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (SendMessageException | AccessDeniedException e) {
+        } catch (SendMessageException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -46,12 +45,9 @@ public class MessageController {
             String callerUsername = authentication.getName();
             User caller = userService.loadUserByUsername(callerUsername);
             User otherUser = userService.loadUserByUsername(otherUsername);
-
             return messageService.getMessagesBetweenUsers(caller, otherUser);
         } catch (UsernameNotFoundException | ConversationNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (IllegalArgumentException e) {
-            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -63,7 +59,7 @@ public class MessageController {
             messageService.deleteMessage(messageId, currentUser);
         } catch (UsernameNotFoundException | MessageNotFoundException e) {
             throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (DeleteMessageException e) {
+        } catch (AccessDeniedException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

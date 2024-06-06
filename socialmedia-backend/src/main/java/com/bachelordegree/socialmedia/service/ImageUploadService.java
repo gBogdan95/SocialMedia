@@ -21,7 +21,7 @@ public class ImageUploadService {
     private String bucketName;
 
     public String uploadImage(MultipartFile file) throws IOException {
-        String fileKey = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+        String fileKey = UUID.randomUUID() + "-" + file.getOriginalFilename();
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
         metadata.setContentLength(file.getSize());
