@@ -63,23 +63,39 @@ const NotificationsPage = () => {
   }
 
   return (
-    <Box height="100vh" overflow="auto">
-      {friendRequests.length > 0 ? (
-        friendRequests.map((request) => (
-          <FriendRequestNotification
-            key={request.id}
-            requesterId={request.requester.id}
-            username={request.requester.username}
-            avatarUrl={request.requester.avatarUrl}
-            onAccept={() => handleAccept(request.id)}
-            onDecline={() => handleDecline(request.id)}
-          />
-        ))
-      ) : (
-        <Typography sx={{ fontSize: 30, textAlign: "center", mt: 50 }}>
-          You don't have notifications.
-        </Typography>
-      )}
+    <Box
+      display="flex"
+      flexDirection="column"
+      height="100vh"
+      width="100%"
+      overflow="auto"
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: -0.1,
+          mb: 5.7,
+        }}
+      >
+        {friendRequests.length > 0 ? (
+          friendRequests.map((request) => (
+            <FriendRequestNotification
+              key={request.id}
+              requesterId={request.requester.id}
+              username={request.requester.username}
+              avatarUrl={request.requester.avatarUrl}
+              onAccept={() => handleAccept(request.id)}
+              onDecline={() => handleDecline(request.id)}
+            />
+          ))
+        ) : (
+          <Typography sx={{ fontSize: 30, mt: 50 }}>
+            You don't have any notifications.
+          </Typography>
+        )}
+      </Box>
     </Box>
   );
 };

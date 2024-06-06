@@ -11,11 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -61,42 +59,26 @@ public class SettingsController {
     }
 
     @PatchMapping("/update-friend-request-setting/{userId}")
-    public UserDTO updateFriendRequestSetting(@PathVariable UUID userId, @RequestBody Map<String, Boolean> updates, Authentication authentication) {
+    public UserDTO updateFriendRequestSetting(@PathVariable UUID userId, @RequestBody Boolean isAllowingFriendRequests, Authentication authentication) {
         String currentUsername = authentication.getName();
         try {
-            if (!updates.containsKey("isAllowingFriendRequests")) {
-                throw new IllegalArgumentException("Required key 'isAllowingFriendRequests' is missing");
-            }
-            boolean isAllowing = updates.get("isAllowingFriendRequests");
-            return settingsService.updateFriendRequestSetting(userId, isAllowing, currentUsername);
-        } catch (UsernameNotFoundException | AccessDeniedException e) {
-            throw new RestException(HttpStatus.FORBIDDEN, e.getMessage());
-        } catch (IllegalArgumentException e) {
-            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (Exception e) {
-            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the friend request setting");
+            return settingsService.updateFriendRequestSetting(userId, isAllowingFriendRequests, currentUsername);
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AccessDeniedException e) {
+            throw new RestException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @PatchMapping("/update-message-permission-setting/{userId}")
-    public UserDTO updateMessagePermissionSetting(@PathVariable UUID userId,
-                                                  @RequestBody Map<String, Boolean> updates,
-                                                  Authentication authentication) {
+    public UserDTO updateMessagePermissionSetting(@PathVariable UUID userId, @RequestBody Boolean isAllowingMessagesFromNonFriends, Authentication authentication) {
         String currentUsername = authentication.getName();
         try {
-            if (!updates.containsKey("isAllowingMessagesFromNonFriends")) {
-                throw new IllegalArgumentException("Required key 'isAllowingMessagesFromNonFriends' is missing");
-            }
-
-            boolean isAllowing = updates.get("isAllowingMessagesFromNonFriends");
-            return settingsService.updateMessagePermissionSetting(userId, isAllowing, currentUsername);
-        } catch (UsernameNotFoundException | AccessDeniedException e) {
-            throw new RestException(HttpStatus.FORBIDDEN, e.getMessage());
-        } catch (IllegalArgumentException e) {
-            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (Exception e) {
-            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the message permission setting");
+            return settingsService.updateMessagePermissionSetting(userId, isAllowingMessagesFromNonFriends, currentUsername);
+        } catch (UsernameNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AccessDeniedException e) {
+            throw new RestException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
 }

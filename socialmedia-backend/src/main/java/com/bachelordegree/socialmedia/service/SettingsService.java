@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static com.bachelordegree.socialmedia.exception.CustomAuthenticationException.ERR_MSG_LOGIN_FAILED;
@@ -108,12 +109,12 @@ public class SettingsService {
         }
     }
 
-    public UserDTO updateFriendRequestSetting(UUID userId, boolean isAllowing, String username) throws Exception {
+    public UserDTO updateFriendRequestSetting(UUID userId, boolean isAllowing, String username) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
 
         if (!user.getUsername().equals(username)) {
-            throw new AccessDeniedException("User not authorized to update this setting");
+            throw new AccessDeniedException("User does not have permission to update this setting.");
         }
 
         user.setAllowingFriendRequests(isAllowing);
@@ -122,12 +123,12 @@ public class SettingsService {
         return userConverter.toDTO(updatedUser);
     }
 
-    public UserDTO updateMessagePermissionSetting(UUID userId, boolean isAllowing, String username) throws Exception {
+    public UserDTO updateMessagePermissionSetting(UUID userId, boolean isAllowing, String username) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
 
         if (!user.getUsername().equals(username)) {
-            throw new AccessDeniedException("User not authorized to update this setting");
+            throw new AccessDeniedException("User does not have permission to update this setting.");
         }
 
         user.setAllowingMessagesFromNonFriends(isAllowing);
