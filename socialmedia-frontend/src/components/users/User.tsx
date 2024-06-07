@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Typography, Avatar, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import defaultAvatarImg from "../assets/defaultAvatar.png";
-import defaultBackgroundImg from "../assets/defaultBackground.jpg";
+import defaultAvatarImg from "../../assets/defaultAvatar.png";
+import defaultBackgroundImg from "../../assets/defaultBackground.jpg";
 
 export interface UserType {
   id: string;

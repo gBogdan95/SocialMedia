@@ -10,8 +10,8 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { validatePost } from "../utils/validate";
-import { postService } from "../services/postService";
+import { validatePost } from "../../utils/validate";
+import { postService } from "../../services/postService";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
 

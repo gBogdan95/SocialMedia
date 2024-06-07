@@ -8,7 +8,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { validateComment } from "../utils/validate";
+import { validateComment } from "../../utils/validate";
 
 interface UpdateCommentDialogProps {
   open: boolean;

@@ -7,18 +7,18 @@ import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import MessageIcon from "@mui/icons-material/Message";
-import Post, { PostType } from "../components/Post";
+import Post, { PostType } from "../components/posts/Post";
 import { postService } from "../services/postService";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
-import UpdateUserProfileDialog from "../components/UpdateUserProfileDialog";
+import UpdateUserDetailsDialog from "../components/profile/UpdateUserDetailsDialog";
 import { friendshipService } from "../services/friendshipService";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import ConversationDialog from "../components/ConversationDialog";
 import GenericDialog from "../components/GenericDialog";
-import AvatarDialog from "../components/AvatarDialog";
-import BackgroundDialog from "../components/BackgroundDialog";
+import UpdateAvatarDialog from "../components/profile/UpdateAvatarDialog";
+import UpdateBackgroundDialog from "../components/profile/UpdateBackgroundDialog";
 
 export interface ProfileDetailsType {
   id: string;
@@ -183,10 +183,10 @@ const ProfileDetails: React.FC = () => {
           />
         </IconButton>
       )}
-      <BackgroundDialog
+      <UpdateBackgroundDialog
         open={isBackgroundDialogOpen}
         onClose={handleBackgroundDialogClose}
-      ></BackgroundDialog>
+      ></UpdateBackgroundDialog>
       <Paper elevation={5} sx={{ mt: 2, borderRadius: 2, overflow: "hidden" }}>
         <Box
           sx={{
@@ -247,10 +247,10 @@ const ProfileDetails: React.FC = () => {
               </Box>
             )}
           </Box>
-          <AvatarDialog
+          <UpdateAvatarDialog
             open={isAvatarDialogOpen}
             onClose={handleAvatarDialogClose}
-          ></AvatarDialog>
+          ></UpdateAvatarDialog>
         </Box>
         <Box sx={{ pt: 12, pb: 2, px: 5, position: "relative" }}>
           <Typography
@@ -318,7 +318,7 @@ const ProfileDetails: React.FC = () => {
                   }}
                 />
               </IconButton>
-              <UpdateUserProfileDialog
+              <UpdateUserDetailsDialog
                 open={isEditDialogOpen}
                 handleClose={handleEditDialogClose}
                 profileId={profile.id}

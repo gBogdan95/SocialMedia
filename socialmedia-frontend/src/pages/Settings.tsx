@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Box, Button, Typography, Checkbox } from "@mui/material";
-import ChangeUsernameDialog from "../components/ChangeUsernameDialog";
-import ChangeEmailDialog from "../components/ChangeEmailDialog";
-import ChangePasswordDialog from "../components/ChangePasswordDialog";
+import UpdateUsernameDialog from "../components/settings/ChangeUsernameDialog";
+import UpdateEmailDialog from "../components/settings/UpdateEmailDialog";
+import UpdatePasswordDialog from "../components/settings/UpdatePasswordDialog";
 import { settingsService } from "../services/settingsService";
 import { userService } from "../services/userService";
 
@@ -141,17 +141,17 @@ const Settings: React.FC = () => {
               </Button>
             )
           )}
-          <ChangeUsernameDialog
+          <UpdateUsernameDialog
             userId={userId}
             open={isUsernameDialogOpen}
             onClose={toggleUsernameDialog}
           />
-          <ChangeEmailDialog
+          <UpdateEmailDialog
             userId={userId}
             open={isEmailDialogOpen}
             onClose={toggleEmailDialog}
           />
-          <ChangePasswordDialog
+          <UpdatePasswordDialog
             userId={userId}
             open={isPasswordDialogOpen}
             onClose={togglePasswordDialog}

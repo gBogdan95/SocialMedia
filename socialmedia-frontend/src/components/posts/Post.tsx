@@ -13,14 +13,14 @@ import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { postService } from "../services/postService";
-import UpdatePostDialog from "./UpdatePostDialog";
-import ConfirmationDialog from "./ConfirmationDialog";
-import defaultAvatarImg from "../assets/defaultAvatar.png";
-import { parseTextToLinkElements } from "../utils/utils";
-import { useAuth } from "../contexts/AuthContext";
-import { useUser } from "../contexts/UserContext";
-import { userService } from "../services/userService";
+import { postService } from "../../services/postService";
+import UpdatePostDialog from "../../components/posts/UpdatePostDialog";
+import ConfirmationDialog from "./../ConfirmationDialog";
+import defaultAvatarImg from "../../assets/defaultAvatar.png";
+import { parseTextToLinkElements } from "../../utils/utils";
+import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
+import { userService } from "../../services/userService";
 
 export interface PostType {
   id: string;

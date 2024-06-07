@@ -10,7 +10,7 @@ import {
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { userService } from "../services/userService";
+import { userService } from "../../services/userService";
 import { useNavigate } from "react-router-dom";
 
 interface Inventory {

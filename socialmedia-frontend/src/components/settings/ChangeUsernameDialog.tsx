@@ -8,8 +8,8 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { settingsService } from "../services/settingsService";
-import { useAuth } from "../contexts/AuthContext";
+import { settingsService } from "../../services/settingsService";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface ChangeUsernameDialogProps {
   userId: string;

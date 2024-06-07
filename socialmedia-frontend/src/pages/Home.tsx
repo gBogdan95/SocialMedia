@@ -7,7 +7,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import defaultAvatarImg from "../assets/defaultAvatar.png";
 import defaultBackgroundImg from "../assets/defaultBackground.jpg";
 import { friendshipService } from "../services/friendshipService";
-import Friend, { FriendType } from "../components/Friend";
+import Friend, { FriendType } from "../components/users/Friend";
 import { userService } from "../services/userService";
 import { useUser } from "../contexts/UserContext";
 

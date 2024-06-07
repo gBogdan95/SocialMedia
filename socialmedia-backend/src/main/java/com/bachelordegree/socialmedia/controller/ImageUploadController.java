@@ -24,7 +24,7 @@ public class ImageUploadController {
             String imageUrl = imageUploadService.uploadImage(file);
             return new UploadedImageDTO(imageUrl);
         } catch (IOException e) {
-            throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

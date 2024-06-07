@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
-import Post, { PostType } from "../components/Post";
-import Comment, { CommentType } from "../components/Comment";
+import Post, { PostType } from "../components/posts/Post";
+import Comment, { CommentType } from "../components/comments/Comment";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import CreateCommentDialog from "../components/CreateCommentDialog";
+import CreateCommentDialog from "../components/comments/CreateCommentDialog";
 import { postService } from "../services/postService";
 import { commentService } from "../services/commentService";
 import { userService } from "../services/userService";

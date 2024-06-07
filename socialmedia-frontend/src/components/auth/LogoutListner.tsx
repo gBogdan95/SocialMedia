@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useAuth, AuthContextType } from "../contexts/AuthContext";
+import { useAuth, AuthContextType } from "../../contexts/AuthContext";
 
 const AuthListener: React.FC = () => {
   const { logout, isAuthenticated } = useAuth() as AuthContextType;

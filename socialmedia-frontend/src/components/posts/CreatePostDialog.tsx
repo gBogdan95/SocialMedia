@@ -11,8 +11,8 @@ import {
   IconButton,
 } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { validatePost } from "../utils/validate";
-import { postService } from "../services/postService";
+import { validatePost } from "../../utils/validate";
+import { postService } from "../../services/postService";
 import CloseIcon from "@mui/icons-material/Close";
 
 interface CreatePostDialogProps {

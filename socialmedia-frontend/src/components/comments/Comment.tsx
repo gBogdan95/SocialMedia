@@ -9,17 +9,17 @@ import {
   Button,
 } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import defaultAvatarImg from "../assets/defaultAvatar.png";
-import { commentService } from "../services/commentService";
+import defaultAvatarImg from "../../assets/defaultAvatar.png";
+import { commentService } from "../../services/commentService";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import UpdateCommentDialog from "./UpdateCommentDialog";
-import ConfirmationDialog from "./ConfirmationDialog";
-import { parseTextToLinkElements } from "../utils/utils";
-import { useAuth } from "../contexts/AuthContext";
-import { useUser } from "../contexts/UserContext";
-import { userService } from "../services/userService";
+import UpdateCommentDialog from "../../components/comments/UpdateCommentDialog";
+import ConfirmationDialog from "./../ConfirmationDialog";
+import { parseTextToLinkElements } from "../../utils/utils";
+import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
+import { userService } from "../../services/userService";
 
 export interface CommentType {
   id: string;

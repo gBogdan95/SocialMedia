@@ -8,8 +8,8 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { validateUpdateProfile } from "../utils/validate";
-import { userService } from "../services/userService";
+import { validateUpdateProfile } from "../../utils/validate";
+import { userService } from "../../services/userService";
 
 interface UpdateUserProfileDialogProps {
   open: boolean;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Post, { PostType } from "../components/Post";
+import Post, { PostType } from "../components/posts/Post";
 import { Box, Typography } from "@mui/material";
 import { postService } from "../services/postService";
 

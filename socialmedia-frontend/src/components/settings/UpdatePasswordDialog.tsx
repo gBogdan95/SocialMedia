@@ -8,9 +8,9 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { settingsService } from "../services/settingsService";
-import { useAuth } from "../contexts/AuthContext";
-import { validateChangePassword } from "../utils/validate";
+import { settingsService } from "../../services/settingsService";
+import { useAuth } from "../../contexts/AuthContext";
+import { validateChangePassword } from "../../utils/validate";
 
 interface ChangePasswordDialogProps {
   userId: string;
