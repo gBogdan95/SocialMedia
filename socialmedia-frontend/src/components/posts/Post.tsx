@@ -15,7 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { postService } from "../../services/postService";
 import UpdatePostDialog from "../../components/posts/UpdatePostDialog";
-import ConfirmationDialog from "./../ConfirmationDialog";
+import ConfirmationDialog from "../common/ConfirmationDialog";
 import defaultAvatarImg from "../../assets/defaultAvatar.png";
 import { parseTextToLinkElements } from "../../utils/utils";
 import { useAuth } from "../../contexts/AuthContext";

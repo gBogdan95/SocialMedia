@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
-import FriendRequestNotification from "../components/FriendRequestNotification";
+import FriendRequestNotification from "../components/notifications/FriendRequestNotification";
 import { friendshipService } from "../services/friendshipService";
 
 interface FriendRequest {

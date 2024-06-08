@@ -15,7 +15,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateCommentDialog from "../../components/comments/UpdateCommentDialog";
-import ConfirmationDialog from "./../ConfirmationDialog";
+import ConfirmationDialog from "../common/ConfirmationDialog";
 import { parseTextToLinkElements } from "../../utils/utils";
 import { useAuth } from "../../contexts/AuthContext";
 import { useUser } from "../../contexts/UserContext";

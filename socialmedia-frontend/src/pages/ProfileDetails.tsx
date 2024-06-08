@@ -14,9 +14,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import UpdateUserDetailsDialog from "../components/profile/UpdateUserDetailsDialog";
 import { friendshipService } from "../services/friendshipService";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ConfirmationDialog from "../components/ConfirmationDialog";
-import ConversationDialog from "../components/ConversationDialog";
-import GenericDialog from "../components/GenericDialog";
+import ConfirmationDialog from "../components/common/ConfirmationDialog";
+import ConversationMessages from "../components/conversations/ConversationMessages";
+import GenericDialog from "../components/common/GenericDialog";
 import UpdateAvatarDialog from "../components/profile/UpdateAvatarDialog";
 import UpdateBackgroundDialog from "../components/profile/UpdateBackgroundDialog";
 
@@ -377,7 +377,7 @@ const ProfileDetails: React.FC = () => {
           >
             Message
           </Button>
-          <ConversationDialog
+          <ConversationMessages
             open={isMessageDialogOpen}
             onClose={() => setIsMessageDialogOpen(false)}
             participant={

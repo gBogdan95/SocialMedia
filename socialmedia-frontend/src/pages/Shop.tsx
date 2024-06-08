@@ -9,7 +9,7 @@ import {
   Box,
 } from "@mui/material";
 import currencyImg from "../assets/currency.png";
-import GenericDialog from "../components/GenericDialog";
+import GenericDialog from "../components/common/GenericDialog";
 import { shopService } from "../services/shopService";
 import { userService } from "../services/userService";
 import { useUser } from "../contexts/UserContext";

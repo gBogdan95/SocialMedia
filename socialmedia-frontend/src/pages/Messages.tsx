@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import Conversation, { ConversationType } from "../components/Conversation";
+import Conversation, {
+  ConversationType,
+} from "../components/conversations/Conversation";
 import { messageService } from "../services/messageService";
 
 const Messages: React.FC = () => {

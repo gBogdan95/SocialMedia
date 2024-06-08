@@ -13,15 +13,15 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
-import defaultAvatarImg from "../assets/defaultAvatar.png";
+import defaultAvatarImg from "../../assets/defaultAvatar.png";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { messageService } from "../services/messageService";
-import { getCurrentUsername, formatTime } from "../utils/utils";
-import GenericDialog from "../components/GenericDialog";
+import { messageService } from "../../services/messageService";
+import { getCurrentUsername, formatTime } from "../../utils/utils";
+import GenericDialog from "../common/GenericDialog";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { postService } from "../services/postService";
-import ConfirmationDialog from "./ConfirmationDialog";
+import { postService } from "../../services/postService";
+import ConfirmationDialog from "../common/ConfirmationDialog";
 
 export interface ParticipantType {
   id: string;

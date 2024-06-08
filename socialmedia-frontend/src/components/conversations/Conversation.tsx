@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Box, Typography, Avatar } from "@mui/material";
-import ConversationDialog from "./ConversationDialog";
+import ConversationMessages from "./ConversationMessages";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
-import defaultAvatarImg from "../assets/defaultAvatar.png";
-import { getCurrentUsername, formatTime } from "../utils/utils";
+import defaultAvatarImg from "../../assets/defaultAvatar.png";
+import { getCurrentUsername, formatTime } from "../../utils/utils";
 import ImageIcon from "@mui/icons-material/Image";
 
 export interface ParticipantType {
@@ -162,7 +162,7 @@ const Conversation: React.FC<ConversationType> = ({
           </Typography>
         </Box>
       </Box>
-      <ConversationDialog
+      <ConversationMessages
         open={open}
         onClose={handleClose}
         participant={otherParticipant}
