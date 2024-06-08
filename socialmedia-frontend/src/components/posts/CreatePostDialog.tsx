@@ -137,34 +137,54 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
               Image preview:
             </Typography>
             <Box
-              component="img"
-              src={imagePreviewUrl}
-              alt="Preview"
-              sx={{ width: "100%", maxHeight: 300, objectFit: "contain" }}
-            />
-            <IconButton
-              aria-label="remove image"
-              onClick={() => setImagePreviewUrl(null)}
               sx={{
-                position: "absolute",
-                right: 190,
-                top: 460,
-                color: "lightgrey",
-                backgroundColor: "rgba(0, 0, 0, 0.65)",
-                borderRadius: "50px",
-                "&:hover": {
-                  backgroundColor: "black",
-                },
+                position: "relative",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <CloseIcon
+              <Box
                 sx={{
-                  "&:hover": {
-                    color: "white",
-                  },
+                  position: "relative",
+                  display: "inline-block",
                 }}
-              />
-            </IconButton>
+              >
+                <Box
+                  component="img"
+                  src={imagePreviewUrl}
+                  alt="Preview"
+                  sx={{
+                    maxWidth: "100%",
+                    maxHeight: "300px",
+                    display: "block",
+                  }}
+                />
+                <IconButton
+                  aria-label="remove image"
+                  onClick={() => setImagePreviewUrl(null)}
+                  sx={{
+                    position: "absolute",
+                    right: 8,
+                    top: 8,
+                    color: "lightgrey",
+                    backgroundColor: "rgba(0, 0, 0, 0.65)",
+                    borderRadius: "50px",
+                    "&:hover": {
+                      backgroundColor: "black",
+                    },
+                  }}
+                >
+                  <CloseIcon
+                    sx={{
+                      "&:hover": {
+                        color: "white",
+                      },
+                    }}
+                  />
+                </IconButton>
+              </Box>
+            </Box>
           </>
         )}
         <input
