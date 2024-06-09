@@ -13,7 +13,6 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 public class Inventory {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

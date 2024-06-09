@@ -6,6 +6,7 @@ import com.bachelordegree.socialmedia.dto.RegistrationDTO;
 import com.bachelordegree.socialmedia.dto.RegistrationResponseDTO;
 import com.bachelordegree.socialmedia.exception.CustomAuthenticationException;
 import com.bachelordegree.socialmedia.exception.RestException;
+import com.bachelordegree.socialmedia.exception.RoleNotFoundException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.User;
 import com.bachelordegree.socialmedia.service.AuthenticationService;
@@ -29,15 +30,18 @@ public class AuthenticationController {
     @PostMapping("/register")
     public RegistrationResponseDTO registerUser(@RequestBody @Valid RegistrationDTO registrationDTO) {
         try {
-            User user = authenticationService.registerUser(registrationDTO.getUsername(), registrationDTO.getPassword(), registrationDTO.getEmail());
+            User user = authenticationService.registerUser(
+                    registrationDTO.getUsername(), registrationDTO.getPassword(), registrationDTO.getEmail());
             return new RegistrationResponseDTO(user.getId(), user.getUsername(), user.getEmail());
+        } catch (RoleNotFoundException e) {
+            throw new RestException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UserAlreadyExistsException e) {
             throw new RestException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO loginUser (@RequestBody @Valid LoginDTO loginDTO) {
+    public LoginResponseDTO loginUser(@RequestBody @Valid LoginDTO loginDTO) {
         try {
             return authenticationService.loginUser(loginDTO.getUsername(), loginDTO.getPassword());
         } catch (CustomAuthenticationException e) {

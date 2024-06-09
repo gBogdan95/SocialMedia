@@ -28,8 +28,6 @@ public class CommentController {
 
     private final CommentService commentService;
     private final CommentConverter commentConverter;
-    private final PostService postService;
-    private final PostConverter postConverter;
 
     @GetMapping("/{id}")
     public CommentDTO getById(@PathVariable @NotNull UUID id, Authentication authentication) {

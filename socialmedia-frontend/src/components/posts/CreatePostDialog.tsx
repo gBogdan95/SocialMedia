@@ -78,7 +78,6 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
           imageUrl = await postService.uploadImage(imageFile);
         } catch (error) {
           console.error("Failed to upload image:", error);
-          alert("Failed to upload image. Please try again.");
           return;
         }
       }

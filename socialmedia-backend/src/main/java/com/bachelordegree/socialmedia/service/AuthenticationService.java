@@ -4,6 +4,7 @@ import com.bachelordegree.socialmedia.converter.UserConverter;
 import com.bachelordegree.socialmedia.dto.LoginResponseDTO;
 import com.bachelordegree.socialmedia.dto.UserDTO;
 import com.bachelordegree.socialmedia.exception.CustomAuthenticationException;
+import com.bachelordegree.socialmedia.exception.RoleNotFoundException;
 import com.bachelordegree.socialmedia.exception.UserAlreadyExistsException;
 import com.bachelordegree.socialmedia.model.Inventory;
 import com.bachelordegree.socialmedia.model.Role;
@@ -24,6 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.bachelordegree.socialmedia.exception.CustomAuthenticationException.ERR_MSG_LOGIN_FAILED;
+import static com.bachelordegree.socialmedia.exception.RoleNotFoundException.ERR_MSG_ROLE_NOT_FOUND;
 import static com.bachelordegree.socialmedia.exception.UserAlreadyExistsException.ERR_MSG_USER_ALREADY_EXISTS;
 
 @Service
@@ -48,14 +50,14 @@ public class AuthenticationService {
     private TokenService tokenService;
 
     @Transactional
-    public User registerUser(String username, String password, String email) throws UserAlreadyExistsException {
+    public User registerUser(String username, String password, String email) throws UserAlreadyExistsException, RoleNotFoundException {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new UserAlreadyExistsException(ERR_MSG_USER_ALREADY_EXISTS);
         }
 
         String encodedPassword = passwordEncoder.encode(password);
 
-        Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new RuntimeException("Role not found"));
+        Role userRole = roleRepository.findByAuthority("USER").orElseThrow(() -> new RoleNotFoundException(ERR_MSG_ROLE_NOT_FOUND));
         Set<Role> authorities = new HashSet<>();
         authorities.add(userRole);
 

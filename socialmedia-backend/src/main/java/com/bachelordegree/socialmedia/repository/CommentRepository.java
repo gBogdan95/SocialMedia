@@ -10,7 +10,6 @@ import java.util.UUID;
 
 public interface CommentRepository extends JpaRepository<Comment, UUID> {
     List<Comment> findAllByPostIdOrderByCreatedAtAsc(UUID postId);
-
     @Query("SELECT COUNT(l) > 0 FROM Comment c JOIN c.likedByUsers l WHERE c.id = :commentId AND l.id = :userId")
     boolean likedByUser(@Param("commentId") UUID commentId, @Param("userId") UUID userId);
 }

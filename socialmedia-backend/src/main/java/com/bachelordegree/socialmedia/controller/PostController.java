@@ -33,7 +33,6 @@ public class PostController {
     @GetMapping
     public List<PostDTO> getAll(Authentication authentication) {
         String currentUsername = authentication.getName();
-
         return postService.getAll().stream()
                 .map(post -> postConverter.toDTO(post, currentUsername))
                 .toList();
