@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogActions,
@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { settingsService } from "../../services/settingsService";
 import { useAuth } from "../../contexts/AuthContext";
+import useForm from "../../hooks/useForm";
 import { validateChangePassword } from "../../utils/validate";
 
 interface ChangePasswordDialogProps {
@@ -25,73 +26,46 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
 }) => {
   const { updateUser } = useAuth();
 
-  const [formData, setFormData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+    setValues,
+    reset,
+    setErrors,
+  } = useForm({
+    initialValues: {
+      currentPassword: "",
+      newPassword: "",
+    },
+    validate: (name, value) => validateChangePassword[name](value),
   });
-  const [errors, setErrors] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-    generalError: "",
-  });
+
+  const [generalError, setGeneralError] = useState("");
 
   useEffect(() => {
     if (open) {
-      setFormData({
+      setValues({
         currentPassword: "",
         newPassword: "",
-        confirmPassword: "",
       });
       setErrors({
         currentPassword: "",
         newPassword: "",
-        confirmPassword: "",
-        generalError: "",
       });
+      setGeneralError("");
     }
-  }, [open]);
+  }, [open, setValues, setErrors]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (name === "confirmPassword") {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: validateChangePassword[name](value, formData.newPassword),
-      }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: validateChangePassword[name](value),
-      }));
-    }
+  const handleClose = () => {
+    onClose();
+    reset();
   };
 
-  const handleSave = async () => {
-    const { currentPassword, newPassword, confirmPassword } = formData;
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      setErrors({
-        ...errors,
-        currentPassword: currentPassword ? "" : "Current password is required",
-        newPassword: newPassword ? "" : "New password is required",
-        confirmPassword: confirmPassword
-          ? ""
-          : "Confirm new password is required",
-      });
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setErrors((prev) => ({
-        ...prev,
-        confirmPassword: "Passwords do not match",
-      }));
-      return;
-    }
-
+  const onSubmit = async () => {
     try {
+      const { currentPassword, newPassword } = values;
       const response = await settingsService.updatePassword(
         userId,
         currentPassword,
@@ -103,7 +77,7 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
       const errorMessage =
         (error as Error).message || "An unknown error occurred";
       console.error("Update password error:", errorMessage);
-      setErrors((prev) => ({ ...prev, generalError: errorMessage }));
+      setGeneralError("Incorrect password");
     }
   };
 
@@ -128,98 +102,90 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
         Change Password
       </DialogTitle>
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="currentPassword"
-          label="Current Password"
-          type="password"
-          fullWidth
-          name="currentPassword"
-          value={formData.currentPassword}
-          onChange={handleChange}
-          error={!!errors.currentPassword}
-          helperText={errors.currentPassword}
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          margin="dense"
-          id="newPassword"
-          label="New Password"
-          type="password"
-          fullWidth
-          name="newPassword"
-          value={formData.newPassword}
-          onChange={handleChange}
-          error={!!errors.newPassword}
-          helperText={errors.newPassword}
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          margin="dense"
-          id="confirmPassword"
-          label="Confirm New Password"
-          type="password"
-          fullWidth
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          error={!!errors.confirmPassword}
-          helperText={errors.confirmPassword}
-        />
+        <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="currentPassword"
+            label="Current Password"
+            type="password"
+            fullWidth
+            name="currentPassword"
+            value={values.currentPassword}
+            onChange={handleChange}
+            error={!!errors.currentPassword}
+            helperText={errors.currentPassword}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            id="newPassword"
+            label="New Password"
+            type="password"
+            fullWidth
+            name="newPassword"
+            value={values.newPassword}
+            onChange={handleChange}
+            error={!!errors.newPassword}
+            helperText={errors.newPassword}
+            sx={{ mb: 2 }}
+          />
+          {generalError && (
+            <Typography color="error" sx={{ mt: 1, textAlign: "left" }}>
+              {generalError}
+            </Typography>
+          )}
+          <DialogActions
+            sx={{
+              marginTop: "5px",
+              justifyContent: "flex-end",
+              mt: 1,
+              mb: -1,
+              mr: -3,
+            }}
+          >
+            <Button
+              onClick={handleClose}
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 1.5,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 2,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+                "&.Mui-disabled": {
+                  backgroundColor: "lightgray",
+                  color: "gray",
+                },
+              }}
+              disabled={
+                !values.currentPassword.trim() || !values.newPassword.trim()
+              }
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </form>
       </DialogContent>
-      {errors.generalError && (
-        <Typography color="error" sx={{ ml: 3.1, textAlign: "left" }}>
-          {errors.generalError}
-        </Typography>
-      )}
-      <DialogActions
-        sx={{
-          marginBottom: "15px",
-        }}
-      >
-        <Button
-          onClick={onClose}
-          sx={{
-            fontSize: "1rem",
-            padding: "6px 16px",
-            width: "125px",
-            color: "white",
-            mr: 1,
-            backgroundColor: "#40A2D8",
-            "&:hover": {
-              backgroundColor: "#1450A3",
-            },
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          sx={{
-            fontSize: "1rem",
-            padding: "6px 16px",
-            width: "125px",
-            color: "white",
-            mr: 2,
-            backgroundColor: "#40A2D8",
-            "&:hover": {
-              backgroundColor: "#1450A3",
-            },
-            "&.Mui-disabled": {
-              backgroundColor: "lightgray",
-              color: "gray",
-            },
-          }}
-          disabled={
-            !formData.currentPassword.trim() ||
-            !formData.newPassword.trim() ||
-            formData.newPassword !== formData.confirmPassword
-          }
-        >
-          Save
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

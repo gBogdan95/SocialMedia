@@ -20,6 +20,10 @@ const getAllImages = async () => {
     },
   });
 
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
+
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`Failed to display images: ${errorText}`);

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Box, Button, Typography, Checkbox } from "@mui/material";
-import UpdateUsernameDialog from "../components/settings/ChangeUsernameDialog";
+import UpdateUsernameDialog from "../components/settings/UpdateUsernameDialog";
 import UpdateEmailDialog from "../components/settings/UpdateEmailDialog";
 import UpdatePasswordDialog from "../components/settings/UpdatePasswordDialog";
 import { settingsService } from "../services/settingsService";

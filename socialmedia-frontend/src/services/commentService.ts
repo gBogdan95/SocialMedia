@@ -23,6 +23,10 @@ const fetchCommentsByPostId = async (postId: string) => {
     }
   );
 
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
+
   if (!response.ok) {
     const errorText = await response.text();
     console.error(
@@ -46,6 +50,10 @@ const fetchCommentById = async (commentId: string) => {
       "Content-Type": "application/json",
     },
   });
+
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
 
   if (!response.ok) {
     const errorText = await response.text();

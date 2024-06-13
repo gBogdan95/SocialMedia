@@ -36,6 +36,13 @@ export const validateUpdateProfile: ValidationFunctions = {
     value.length <= 16 ? "" : "Name must not exceed 16 characters",
 };
 
+export const validateChangeUsername = {
+  newUsername: (value: string) =>
+    !value.trim() ? "This field cannot be empty" : "",
+  password: (value: string) =>
+    !value.trim() ? "This field cannot be empty" : "",
+};
+
 export const validateChangeEmail: ValidationFunctions = {
   email: (value: string) =>
     /\S+@\S+\.\S+/.test(value) ? "" : "Email must be a valid email address",
@@ -48,6 +55,4 @@ export const validateChangePassword: ValidationFunctions = {
     value.trim().length === 0 ? "Current password is required" : "",
   newPassword: (value: string) =>
     value.length >= 6 ? "" : "Password must be at least 6 characters",
-  confirmPassword: (value: string, newPassword: string) =>
-    value === newPassword ? "" : "Passwords do not match",
 };

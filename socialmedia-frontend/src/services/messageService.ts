@@ -50,6 +50,10 @@ const getMessages = async (otherUsername: string) => {
     }
   );
 
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
+
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`Failed to retrieve messages: ${errorText}`);
@@ -87,6 +91,10 @@ const getAllConversations = async () => {
       "Content-Type": "application/json",
     },
   });
+
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
 
   if (!response.ok) {
     const errorText = await response.text();

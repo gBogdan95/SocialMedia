@@ -20,6 +20,10 @@ const fetchUsers = async () => {
     },
   });
 
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
+
   if (!response.ok) {
     const errorText = await response.text();
     console.error("Failed to fetch users:", errorText);
@@ -63,6 +67,10 @@ const fetchUserById = async (userId: string) => {
     },
   });
 
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
+
   if (!response.ok) {
     const errorText = await response.text();
     console.error(`Failed to fetch user with ID ${userId}:`, errorText);
@@ -83,6 +91,10 @@ const fetchUserInventory = async () => {
       "Content-Type": "application/json",
     },
   });
+
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
 
   if (!response.ok) {
     const errorText = await response.text();

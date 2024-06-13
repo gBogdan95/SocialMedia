@@ -77,6 +77,10 @@ const listPendingFriendRequests = async () => {
     },
   });
 
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
+
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(`Failed to list pending friend requests: ${errorText}`);
@@ -95,6 +99,10 @@ const listFriends = async () => {
       "Content-Type": "application/json",
     },
   });
+
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -136,6 +144,10 @@ const checkFriendshipStatus = async (friendId: string) => {
       },
     }
   );
+
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
 
   if (!response.ok) {
     const errorText = await response.text();

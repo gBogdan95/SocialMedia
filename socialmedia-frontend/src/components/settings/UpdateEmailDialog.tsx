@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogActions,
@@ -9,8 +9,9 @@ import {
   Typography,
 } from "@mui/material";
 import { settingsService } from "../../services/settingsService";
-import { useAuth } from "../../contexts/AuthContext";
 import { validateChangeEmail } from "../../utils/validate";
+import { useAuth } from "../../contexts/AuthContext";
+import useForm from "../../hooks/useForm";
 
 interface ChangeEmailDialogProps {
   userId: string;
@@ -25,36 +26,38 @@ const ChangeEmailDialog: React.FC<ChangeEmailDialogProps> = ({
 }) => {
   const { updateUser } = useAuth();
 
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({ email: "", password: "" });
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+    setValues,
+    reset,
+    setErrors,
+  } = useForm({
+    initialValues: { email: "", password: "" },
+    validate: (name, value) =>
+      validateChangeEmail[name as keyof typeof validateChangeEmail](value),
+  });
+
   const [generalError, setGeneralError] = useState("");
 
   useEffect(() => {
     if (open) {
-      setFormData({ email: "", password: "" });
+      setValues({ email: "", password: "" });
       setErrors({ email: "", password: "" });
       setGeneralError("");
     }
-  }, [open]);
+  }, [open, setValues, setErrors]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    const error = validateChangeEmail[name](value);
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: error }));
+  const handleClose = () => {
+    onClose();
+    reset();
   };
 
-  const handleSave = async () => {
-    const { email, password } = formData;
-    if (!email.trim() || !password.trim()) {
-      setErrors({
-        email: email.trim() ? "" : "Email is required",
-        password: password.trim() ? "" : "Password is required",
-      });
-      return;
-    }
-
+  const onSubmit = async () => {
     try {
+      const { email, password } = values;
       const response = await settingsService.updateEmail(
         userId,
         email,
@@ -66,7 +69,6 @@ const ChangeEmailDialog: React.FC<ChangeEmailDialogProps> = ({
     } catch (error) {
       const errorMessage =
         (error as Error).message || "An unknown error occurred";
-
       console.error("Update email error:", errorMessage);
 
       if (errorMessage.toLowerCase().includes("error")) {
@@ -103,85 +105,91 @@ const ChangeEmailDialog: React.FC<ChangeEmailDialogProps> = ({
         Change Email
       </DialogTitle>
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="email"
-          label="New Email"
-          type="email"
-          fullWidth
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          error={!!errors.email}
-          helperText={errors.email}
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          margin="dense"
-          id="password"
-          label="Password"
-          type="password"
-          fullWidth
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          error={!!errors.password}
-          helperText={errors.password}
-        />
+        <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="email"
+            label="New Email"
+            type="email"
+            fullWidth
+            name="email"
+            value={values.email}
+            onChange={handleChange}
+            error={!!errors.email}
+            helperText={errors.email}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            id="password"
+            label="Password"
+            type="password"
+            fullWidth
+            name="password"
+            value={values.password}
+            onChange={handleChange}
+            error={!!errors.password}
+            helperText={errors.password}
+          />
+          {generalError && (
+            <Typography color="error" sx={{ mt: 1, textAlign: "left" }}>
+              {generalError}
+            </Typography>
+          )}
+          <DialogActions
+            sx={{
+              marginTop: "5px",
+              justifyContent: "flex-end",
+              mt: 1,
+              mb: -1,
+              mr: -3,
+            }}
+          >
+            <Button
+              onClick={handleClose}
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 1.5,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 2,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+                "&.Mui-disabled": {
+                  backgroundColor: "lightgray",
+                  color: "gray",
+                },
+              }}
+              disabled={
+                !values.email.trim() ||
+                !values.password.trim() ||
+                errors.email !== ""
+              }
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </form>
       </DialogContent>
-      {generalError && (
-        <Typography color="error" sx={{ ml: 3.1, textAlign: "left" }}>
-          {generalError}
-        </Typography>
-      )}
-      <DialogActions
-        sx={{
-          marginBottom: "15px",
-        }}
-      >
-        <Button
-          onClick={onClose}
-          sx={{
-            fontSize: "1rem",
-            padding: "6px 16px",
-            width: "125px",
-            color: "white",
-            mr: 1,
-            backgroundColor: "#40A2D8",
-            "&:hover": {
-              backgroundColor: "#1450A3",
-            },
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          sx={{
-            fontSize: "1rem",
-            padding: "6px 16px",
-            width: "125px",
-            color: "white",
-            mr: 2,
-            backgroundColor: "#40A2D8",
-            "&:hover": {
-              backgroundColor: "#1450A3",
-            },
-            "&.Mui-disabled": {
-              backgroundColor: "lightgray",
-              color: "gray",
-            },
-          }}
-          disabled={
-            !formData.email.trim() ||
-            !formData.password.trim() ||
-            errors.email !== ""
-          }
-        >
-          Save
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

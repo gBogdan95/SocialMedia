@@ -8,26 +8,24 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { validateUpdateProfile } from "../../utils/validate";
-import { userService } from "../../services/userService";
+import { settingsService } from "../../services/settingsService";
+import { validateChangeUsername } from "../../utils/validate";
+import { useAuth } from "../../contexts/AuthContext";
 import useForm from "../../hooks/useForm";
 
-interface UpdateUserProfileDialogProps {
+interface ChangeUsernameDialogProps {
+  userId: string;
   open: boolean;
-  handleClose: () => void;
-  profileId: string;
-  initialFormData: {
-    name: string;
-    phoneNumber: string;
-    description: string;
-  };
+  onClose: () => void;
 }
 
-const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
+const ChangeUsernameDialog: React.FC<ChangeUsernameDialogProps> = ({
+  userId,
   open,
-  handleClose,
-  initialFormData,
+  onClose,
 }) => {
+  const { updateUser } = useAuth();
+
   const {
     values,
     errors,
@@ -37,41 +35,64 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
     reset,
     setErrors,
   } = useForm({
-    initialValues: initialFormData,
+    initialValues: { newUsername: "", password: "" },
     validate: (name, value) =>
-      validateUpdateProfile[name] ? validateUpdateProfile[name](value) : "",
+      validateChangeUsername[name as keyof typeof validateChangeUsername](
+        value
+      ),
   });
+
+  const [credentialsError, setCredentialsError] = useState("");
 
   useEffect(() => {
     if (open) {
-      setValues(initialFormData);
-      setErrors({ name: "", phoneNumber: "", description: "" });
+      setValues({ newUsername: "", password: "" });
+      setErrors({ newUsername: "", password: "" });
+      setCredentialsError("");
     }
-  }, [open, initialFormData, setValues, setErrors]);
+  }, [open, setValues, setErrors]);
 
-  const handleFormSubmit = async () => {
+  const handleClose = () => {
+    onClose();
+    reset();
+  };
+
+  const onSubmit = async () => {
     try {
-      await userService.updateUserProfile(
-        values.name,
-        values.phoneNumber,
-        values.description
+      const { newUsername, password } = values;
+      const response = await settingsService.updateUsername(
+        userId,
+        newUsername,
+        password
       );
-      handleClose();
+      const { user, jwt } = response;
+      updateUser(user, jwt);
       window.location.reload();
+      onClose();
     } catch (error) {
       const errorMessage =
         (error as Error).message || "An unknown error occurred";
-      if (errorMessage.toLowerCase().includes("this name already exists")) {
+      console.error("Update username error:", errorMessage);
+
+      if (errorMessage.toLowerCase().includes("error")) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          name: errorMessage,
+          newUsername: errorMessage,
         }));
+      } else {
+        setCredentialsError("Incorrect username or password");
       }
     }
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+      sx={{ mr: 11 }}
+    >
       <DialogTitle
         sx={{
           fontSize: 24,
@@ -79,57 +100,44 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
           backgroundColor: "#1450A3",
           textShadow: "2px 2px 4px rgba(0, 0, 0, 1)",
           color: "white",
+          mb: 1,
         }}
       >
-        Edit Profile
+        Change Username
       </DialogTitle>
       <DialogContent>
-        <Typography sx={{ fontSize: 25, mt: 2 }}>
-          Add your personal informations:
-        </Typography>
-        <form onSubmit={(e) => handleSubmit(e, handleFormSubmit)}>
+        <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
           <TextField
             autoFocus
             margin="dense"
-            id="name"
-            label="Name"
+            id="newUsername"
+            label="New Username"
             type="text"
             fullWidth
-            variant="outlined"
-            name="name"
-            value={values.name}
+            name="newUsername"
+            value={values.newUsername}
             onChange={handleChange}
-            error={!!errors.name}
-            helperText={errors.name}
-            sx={{ mb: 2, mt: 2 }}
-          />
-          <TextField
-            margin="dense"
-            id="description"
-            label="Description"
-            type="text"
-            fullWidth
-            variant="outlined"
-            name="description"
-            value={values.description}
-            onChange={handleChange}
-            multiline
-            rows={5}
+            error={!!errors.newUsername}
+            helperText={errors.newUsername}
             sx={{ mb: 2 }}
           />
           <TextField
             margin="dense"
-            id="phoneNumber"
-            label="Phone Number"
-            type="phoneNumber"
+            id="password"
+            label="Password"
+            type="password"
             fullWidth
-            variant="outlined"
-            name="phoneNumber"
-            value={values.phoneNumber}
+            name="password"
+            value={values.password}
             onChange={handleChange}
-            error={!!errors.phoneNumber}
-            helperText={errors.phoneNumber}
+            error={!!errors.password}
+            helperText={errors.password}
           />
+          {credentialsError && (
+            <Typography color="error" sx={{ mt: 1, textAlign: "left" }}>
+              {credentialsError}
+            </Typography>
+          )}
           <DialogActions
             sx={{
               marginTop: "5px",
@@ -146,7 +154,7 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
                 padding: "6px 16px",
                 width: "125px",
                 color: "white",
-                mr: 1,
+                mr: 1.5,
                 backgroundColor: "#40A2D8",
                 "&:hover": {
                   backgroundColor: "#1450A3",
@@ -172,7 +180,7 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
                   color: "gray",
                 },
               }}
-              disabled={!!errors.name || !!errors.phoneNumber}
+              disabled={!values.newUsername.trim() || !values.password.trim()}
             >
               Save
             </Button>
@@ -183,4 +191,4 @@ const UpdateUserProfileDialog: React.FC<UpdateUserProfileDialogProps> = ({
   );
 };
 
-export default UpdateUserProfileDialog;
+export default ChangeUsernameDialog;
