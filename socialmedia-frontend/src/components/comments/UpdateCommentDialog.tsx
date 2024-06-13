@@ -79,6 +79,7 @@ const UpdateCommentDialog: React.FC<UpdateCommentDialogProps> = ({
           />
           <DialogActions
             sx={{
+              marginTop: "5px",
               justifyContent: "flex-end",
               paddingRight: "0px",
             }}

@@ -191,15 +191,18 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
             onClick={handleImageUploadClick}
             sx={{
               position: "absolute",
-              left: 8,
-              bottom: 8,
+              left: 9,
+              bottom: 6,
             }}
           >
             <AddPhotoAlternateIcon sx={{ width: 60, height: 60 }} />
           </IconButton>
           <DialogActions
             sx={{
-              marginBottom: "15px",
+              justifyContent: "flex-end",
+              mt: 1,
+              mb: -1,
+              pr: 0,
             }}
           >
             <Button
@@ -209,7 +212,7 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
                 padding: "6px 16px",
                 width: "125px",
                 color: "white",
-                mr: 1,
+                mr: 1.5,
                 backgroundColor: "#40A2D8",
                 "&:hover": {
                   backgroundColor: "#1450A3",
@@ -225,7 +228,6 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
                 padding: "6px 16px",
                 width: "125px",
                 color: "white",
-                mr: 2,
                 backgroundColor: "#40A2D8",
                 "&:hover": {
                   backgroundColor: "#1450A3",
