@@ -14,6 +14,7 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { validatePost } from "../../utils/validate";
 import { postService } from "../../services/postService";
 import CloseIcon from "@mui/icons-material/Close";
+import useForm from "../../hooks/useForm";
 
 interface CreatePostDialogProps {
   open: boolean;
@@ -26,24 +27,18 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
   onClose,
   onSave,
 }) => {
-  const [formData, setFormData] = useState({ title: "", content: "" });
-  const [errors, setErrors] = useState({ title: "", content: "" });
+  const { values, errors, handleChange, handleSubmit, reset } = useForm({
+    initialValues: { title: "", content: "" },
+    validate: (name, value) => validatePost[name](value),
+  });
+
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
   const handleClose = () => {
-    setFormData({ title: "", content: "" });
-    setErrors({ title: "", content: "" });
+    reset();
     setImagePreviewUrl(null);
     onClose();
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-
-    const error = validatePost[name](value);
-    setErrors({ ...errors, [name]: error });
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,26 +61,21 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
     fileInput.click();
   };
 
-  const handleSave = async () => {
-    const titleError = validatePost.title(formData.title);
-    const contentError = validatePost.content(formData.content);
+  const onSubmit = async () => {
+    let imageUrl: string | undefined = undefined;
 
-    if (!titleError && !contentError) {
-      let imageUrl: string | undefined = undefined;
-
-      if (imageFile) {
-        try {
-          imageUrl = await postService.uploadImage(imageFile);
-        } catch (error) {
-          console.error("Failed to upload image:", error);
-          return;
-        }
+    if (imageFile) {
+      try {
+        imageUrl = await postService.uploadImage(imageFile);
+      } catch (error) {
+        console.error("Failed to upload image:", error);
+        alert("Failed to upload image. Please try again.");
+        return;
       }
-
-      onSave(formData.title, formData.content, imageUrl);
-    } else {
-      setErrors({ title: titleError, content: contentError });
     }
+
+    onSave(values.title, values.content, imageUrl);
+    handleClose();
   };
 
   return (
@@ -102,149 +92,151 @@ const CreatePostDialog: React.FC<CreatePostDialogProps> = ({
         Create a new post
       </DialogTitle>
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="post-title"
-          label="Title"
-          type="text"
-          fullWidth
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          error={!!errors.title}
-          helperText={errors.title}
-          sx={{ mb: 2, mt: 2 }}
-        />
-        <TextField
-          margin="dense"
-          id="post-content"
-          label="Description"
-          type="text"
-          fullWidth
-          name="content"
-          value={formData.content}
-          onChange={handleChange}
-          error={!!errors.content}
-          helperText={errors.content}
-          multiline
-          rows={8}
-        />
-        {imagePreviewUrl && (
-          <>
-            <Typography sx={{ fontSize: 25, mt: 2, mb: 2 }}>
-              Image preview:
-            </Typography>
-            <Box
-              sx={{
-                position: "relative",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+        <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="post-title"
+            label="Title"
+            type="text"
+            fullWidth
+            name="title"
+            value={values.title}
+            onChange={handleChange}
+            error={!!errors.title}
+            helperText={errors.title}
+            sx={{ mb: 2, mt: 2 }}
+          />
+          <TextField
+            margin="dense"
+            id="post-content"
+            label="Description"
+            type="text"
+            fullWidth
+            name="content"
+            value={values.content}
+            onChange={handleChange}
+            error={!!errors.content}
+            helperText={errors.content}
+            multiline
+            rows={8}
+          />
+          {imagePreviewUrl && (
+            <>
+              <Typography sx={{ fontSize: 25, mt: 2, mb: 2 }}>
+                Image preview:
+              </Typography>
               <Box
                 sx={{
                   position: "relative",
-                  display: "inline-block",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <Box
-                  component="img"
-                  src={imagePreviewUrl}
-                  alt="Preview"
                   sx={{
-                    maxWidth: "100%",
-                    maxHeight: "300px",
-                    display: "block",
-                  }}
-                />
-                <IconButton
-                  aria-label="remove image"
-                  onClick={() => setImagePreviewUrl(null)}
-                  sx={{
-                    position: "absolute",
-                    right: 8,
-                    top: 8,
-                    color: "lightgrey",
-                    backgroundColor: "rgba(0, 0, 0, 0.65)",
-                    borderRadius: "50px",
-                    "&:hover": {
-                      backgroundColor: "black",
-                    },
+                    position: "relative",
+                    display: "inline-block",
                   }}
                 >
-                  <CloseIcon
+                  <Box
+                    component="img"
+                    src={imagePreviewUrl}
+                    alt="Preview"
                     sx={{
-                      "&:hover": {
-                        color: "white",
-                      },
+                      maxWidth: "100%",
+                      maxHeight: "300px",
+                      display: "block",
                     }}
                   />
-                </IconButton>
+                  <IconButton
+                    aria-label="remove image"
+                    onClick={() => setImagePreviewUrl(null)}
+                    sx={{
+                      position: "absolute",
+                      right: 8,
+                      top: 8,
+                      color: "lightgrey",
+                      backgroundColor: "rgba(0, 0, 0, 0.65)",
+                      borderRadius: "50px",
+                      "&:hover": {
+                        backgroundColor: "black",
+                      },
+                    }}
+                  >
+                    <CloseIcon
+                      sx={{
+                        "&:hover": {
+                          color: "white",
+                        },
+                      }}
+                    />
+                  </IconButton>
+                </Box>
               </Box>
-            </Box>
-          </>
-        )}
-        <input
-          type="file"
-          id="image-upload-input"
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-          accept="image/*"
-        />
-        <IconButton
-          color="primary"
-          aria-label="upload picture"
-          component="span"
-          onClick={handleImageUploadClick}
-          sx={{
-            position: "absolute",
-            left: 8,
-            bottom: 8,
-          }}
-        >
-          <AddPhotoAlternateIcon sx={{ width: 60, height: 60 }} />
-        </IconButton>
+            </>
+          )}
+          <input
+            type="file"
+            id="image-upload-input"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+            accept="image/*"
+          />
+          <IconButton
+            color="primary"
+            aria-label="upload picture"
+            component="span"
+            onClick={handleImageUploadClick}
+            sx={{
+              position: "absolute",
+              left: 8,
+              bottom: 8,
+            }}
+          >
+            <AddPhotoAlternateIcon sx={{ width: 60, height: 60 }} />
+          </IconButton>
+          <DialogActions
+            sx={{
+              marginBottom: "15px",
+            }}
+          >
+            <Button
+              onClick={handleClose}
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 1,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 2,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+              }}
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </form>
       </DialogContent>
-      <DialogActions
-        sx={{
-          marginBottom: "15px",
-        }}
-      >
-        <Button
-          onClick={handleClose}
-          sx={{
-            fontSize: "1rem",
-            padding: "6px 16px",
-            width: "125px",
-            color: "white",
-            mr: 1,
-            backgroundColor: "#40A2D8",
-            "&:hover": {
-              backgroundColor: "#1450A3",
-            },
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          sx={{
-            fontSize: "1rem",
-            padding: "6px 16px",
-            width: "125px",
-            color: "white",
-            mr: 2,
-            backgroundColor: "#40A2D8",
-            "&:hover": {
-              backgroundColor: "#1450A3",
-            },
-          }}
-        >
-          Save
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

@@ -15,13 +15,13 @@ const Posts = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAndSetPosts();
-  }, []);
-
   const refreshPosts = () => {
     fetchAndSetPosts();
   };
+
+  useEffect(() => {
+    fetchAndSetPosts();
+  }, []);
 
   return (
     <Box

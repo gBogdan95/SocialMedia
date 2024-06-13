@@ -14,7 +14,6 @@ import { authService } from "../services/authService";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
-  //const { login } = useAuth();
   const navigate = useNavigate();
 
   const { values, errors, handleChange, handleSubmit, reset } = useForm({

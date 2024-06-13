@@ -14,6 +14,7 @@ import { validatePost } from "../../utils/validate";
 import { postService } from "../../services/postService";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
+import useForm from "../../hooks/useForm"; // Adjust the path based on your file structure
 
 interface UpdatePostDialogProps {
   open: boolean;
@@ -32,8 +33,12 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
   onClose,
   onSave,
 }) => {
-  const [formData, setFormData] = useState({ title, content });
-  const [errors, setErrors] = useState({ title: "", content: "" });
+  const { values, errors, handleChange, handleSubmit, setValues, reset } =
+    useForm({
+      initialValues: { title, content },
+      validate: (name, value) => validatePost[name](value),
+    });
+
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(
     imageUrl || null
@@ -41,18 +46,11 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
 
   useEffect(() => {
     if (open) {
-      setFormData({ title, content });
+      setValues({ title, content });
       setImagePreviewUrl(imageUrl || null);
-      setErrors({ title: "", content: "" });
+      reset();
     }
-  }, [open, title, content, imageUrl]);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    const error = validatePost[name](value);
-    setErrors((prev) => ({ ...prev, [name]: error }));
-  };
+  }, [open, title, content, imageUrl, setValues]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -73,28 +71,21 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
     fileInput.click();
   };
 
-  const handleSave = async () => {
-    const titleError = validatePost.title(formData.title);
-    const contentError = validatePost.content(formData.content);
+  const onSubmit = async () => {
+    let imageUrl: string | undefined = imagePreviewUrl || undefined;
 
-    if (!titleError && !contentError) {
-      let imageUrl: string | undefined = imagePreviewUrl || undefined;
-
-      if (imageFile) {
-        try {
-          imageUrl = await postService.uploadImage(imageFile);
-        } catch (error) {
-          console.error("Failed to upload image:", error);
-          alert("Failed to upload image. Please try again.");
-          return;
-        }
+    if (imageFile) {
+      try {
+        imageUrl = await postService.uploadImage(imageFile);
+      } catch (error) {
+        console.error("Failed to upload image:", error);
+        alert("Failed to upload image. Please try again.");
+        return;
       }
-
-      onSave(formData.title, formData.content, imageUrl);
-      onClose();
-    } else {
-      setErrors({ title: titleError, content: contentError });
     }
+
+    onSave(values.title, values.content, imageUrl);
+    onClose();
   };
 
   return (
@@ -111,154 +102,156 @@ const UpdatePostDialog: React.FC<UpdatePostDialogProps> = ({
         Edit Post
       </DialogTitle>
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="title"
-          label="Title"
-          type="text"
-          fullWidth
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          error={!!errors.title}
-          helperText={errors.title}
-          sx={{ mb: 2, mt: 2 }}
-        />
-        <TextField
-          margin="dense"
-          id="text"
-          label="Description"
-          type="text"
-          fullWidth
-          name="content"
-          multiline
-          rows={8}
-          value={formData.content}
-          onChange={handleChange}
-          error={!!errors.content}
-          helperText={errors.content}
-        />
-        {imagePreviewUrl && (
-          <>
-            <Typography sx={{ fontSize: 25, mt: 2, mb: 2 }}>
-              Image preview:
-            </Typography>
-            <Box
-              sx={{
-                position: "relative",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+        <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="title"
+            label="Title"
+            type="text"
+            fullWidth
+            name="title"
+            value={values.title}
+            onChange={handleChange}
+            error={!!errors.title}
+            helperText={errors.title}
+            sx={{ mb: 2, mt: 2 }}
+          />
+          <TextField
+            margin="dense"
+            id="text"
+            label="Description"
+            type="text"
+            fullWidth
+            name="content"
+            multiline
+            rows={8}
+            value={values.content}
+            onChange={handleChange}
+            error={!!errors.content}
+            helperText={errors.content}
+          />
+          {imagePreviewUrl && (
+            <>
+              <Typography sx={{ fontSize: 25, mt: 2, mb: 2 }}>
+                Image preview:
+              </Typography>
               <Box
                 sx={{
                   position: "relative",
-                  display: "inline-block",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <Box
-                  component="img"
-                  src={imagePreviewUrl}
-                  alt="Preview"
                   sx={{
-                    maxWidth: "100%",
-                    maxHeight: "300px",
-                    display: "block",
-                  }}
-                />
-                <IconButton
-                  aria-label="remove image"
-                  onClick={() => setImagePreviewUrl(null)}
-                  sx={{
-                    position: "absolute",
-                    right: 8,
-                    top: 8,
-                    color: "lightgrey",
-                    backgroundColor: "rgba(0, 0, 0, 0.65)",
-                    borderRadius: "50px",
-                    "&:hover": {
-                      backgroundColor: "black",
-                    },
+                    position: "relative",
+                    display: "inline-block",
                   }}
                 >
-                  <CloseIcon
+                  <Box
+                    component="img"
+                    src={imagePreviewUrl}
+                    alt="Preview"
                     sx={{
-                      "&:hover": {
-                        color: "white",
-                      },
+                      maxWidth: "100%",
+                      maxHeight: "300px",
+                      display: "block",
                     }}
                   />
-                </IconButton>
+                  <IconButton
+                    aria-label="remove image"
+                    onClick={() => setImagePreviewUrl(null)}
+                    sx={{
+                      position: "absolute",
+                      right: 8,
+                      top: 8,
+                      color: "lightgrey",
+                      backgroundColor: "rgba(0, 0, 0, 0.65)",
+                      borderRadius: "50px",
+                      "&:hover": {
+                        backgroundColor: "black",
+                      },
+                    }}
+                  >
+                    <CloseIcon
+                      sx={{
+                        "&:hover": {
+                          color: "white",
+                        },
+                      }}
+                    />
+                  </IconButton>
+                </Box>
               </Box>
-            </Box>
-          </>
-        )}
-        <input
-          type="file"
-          id="image-upload-input"
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-          accept="image/*"
-        />
-        <IconButton
-          color="primary"
-          aria-label="upload picture"
-          component="span"
-          onClick={handleImageUploadClick}
-          sx={{
-            position: "absolute",
-            left: 8,
-            bottom: 8,
-          }}
-        >
-          <AddPhotoAlternateIcon sx={{ width: 60, height: 60 }} />
-        </IconButton>
+            </>
+          )}
+          <input
+            type="file"
+            id="image-upload-input"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+            accept="image/*"
+          />
+          <IconButton
+            color="primary"
+            aria-label="upload picture"
+            component="span"
+            onClick={handleImageUploadClick}
+            sx={{
+              position: "absolute",
+              left: 8,
+              bottom: 8,
+            }}
+          >
+            <AddPhotoAlternateIcon sx={{ width: 60, height: 60 }} />
+          </IconButton>
+          <DialogActions
+            sx={{
+              marginBottom: "15px",
+            }}
+          >
+            <Button
+              onClick={onClose}
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 1,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              sx={{
+                fontSize: "1rem",
+                padding: "6px 16px",
+                width: "125px",
+                color: "white",
+                mr: 2,
+                backgroundColor: "#40A2D8",
+                "&:hover": {
+                  backgroundColor: "#1450A3",
+                },
+                "&.Mui-disabled": {
+                  backgroundColor: "lightgray",
+                  color: "gray",
+                },
+              }}
+              disabled={!values.title.trim() || !values.content.trim()}
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </form>
       </DialogContent>
-      <DialogActions
-        sx={{
-          marginBottom: "15px",
-        }}
-      >
-        <Button
-          onClick={onClose}
-          sx={{
-            fontSize: "1rem",
-            padding: "6px 16px",
-            width: "125px",
-            color: "white",
-            mr: 1,
-            backgroundColor: "#40A2D8",
-            "&:hover": {
-              backgroundColor: "#1450A3",
-            },
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          sx={{
-            fontSize: "1rem",
-            padding: "6px 16px",
-            width: "125px",
-            color: "white",
-            mr: 2,
-            backgroundColor: "#40A2D8",
-            "&:hover": {
-              backgroundColor: "#1450A3",
-            },
-            "&.Mui-disabled": {
-              backgroundColor: "lightgray",
-              color: "gray",
-            },
-          }}
-          disabled={!formData.title.trim() || !formData.content.trim()}
-        >
-          Save
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

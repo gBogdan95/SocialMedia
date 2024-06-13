@@ -35,8 +35,11 @@ export interface PostType {
 
 interface PostProps {
   post: PostType;
+
   refreshPosts?: () => void;
+
   trimText?: boolean;
+
   isDetailPage?: boolean;
 }
 

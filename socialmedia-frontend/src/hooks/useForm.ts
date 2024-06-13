@@ -15,6 +15,7 @@ const useForm = <T extends Record<string, any>>({
   );
   const reset = () => {
     setValues(initialValues);
+    setErrors({} as Record<keyof T, string>);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +44,15 @@ const useForm = <T extends Record<string, any>>({
     if (callback) await callback();
   };
 
-  return { values, errors, handleChange, handleSubmit, setErrors, reset };
+  return {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+    setValues,
+    setErrors,
+    reset,
+  };
 };
 
 export default useForm;

@@ -33,5 +33,4 @@ public class RSAKeyProperties {
     public void setPrivateKey(RSAPrivateKey privateKey){
         this.privateKey = privateKey;
     }
-
 }
