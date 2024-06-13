@@ -6,7 +6,6 @@ import { AuthProvider } from "./contexts/AuthContext";
 import MainLayout from "./components/layout/MainLayout";
 import TopNavbar from "./components/layout/TopNavbar";
 import Posts from "./pages/Posts";
-import Groups from "./pages/Groups";
 import Users from "./pages/Users";
 import Shop from "./pages/Shop";
 import Settings from "./pages/Settings";
@@ -32,7 +31,6 @@ function App() {
                 <Route path="explore" element={<Posts />} />
                 <Route path="post/:id" element={<PostDetails />} />
                 <Route path="profile/:userId" element={<ProfileDetails />} />
-                <Route path="groups" element={<Groups />} />
                 <Route path="users" element={<Users />} />
                 <Route path="shop" element={<Shop />} />
                 <Route path="settings" element={<Settings />} />
