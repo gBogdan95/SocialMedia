@@ -1,14 +1,14 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 
-interface FormOptions<T> {
+interface FormProps<T> {
   initialValues: T;
-  validate: (name: keyof T, value: string) => string;
+  validate: (name: keyof T, value: any) => string;
 }
 
 const useForm = <T extends Record<string, any>>({
   initialValues,
   validate,
-}: FormOptions<T>) => {
+}: FormProps<T>) => {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Record<keyof T, string>>(
     {} as Record<keyof T, string>

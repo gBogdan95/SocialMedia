@@ -79,7 +79,8 @@ const UpdateCommentDialog: React.FC<UpdateCommentDialogProps> = ({
           />
           <DialogActions
             sx={{
-              marginBottom: "15px",
+              justifyContent: "flex-end",
+              paddingRight: "0px",
             }}
           >
             <Button
@@ -89,7 +90,7 @@ const UpdateCommentDialog: React.FC<UpdateCommentDialogProps> = ({
                 padding: "6px 16px",
                 width: "125px",
                 color: "white",
-                mr: 1,
+                mr: 1.5,
                 backgroundColor: "#40A2D8",
                 "&:hover": {
                   backgroundColor: "#1450A3",
@@ -105,7 +106,6 @@ const UpdateCommentDialog: React.FC<UpdateCommentDialogProps> = ({
                 padding: "6px 16px",
                 width: "125px",
                 color: "white",
-                mr: 2,
                 backgroundColor: "#40A2D8",
                 "&:hover": {
                   backgroundColor: "#1450A3",

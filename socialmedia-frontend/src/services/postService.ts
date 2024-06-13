@@ -188,6 +188,10 @@ const deletePost = async (postId: string) => {
     },
   });
 
+  if (response.status === 401) {
+    window.location.href = "/";
+  }
+
   if (!response.ok) {
     const errorText = await response.text();
     console.error(`Failed to delete post with ID ${postId}:`, errorText);
