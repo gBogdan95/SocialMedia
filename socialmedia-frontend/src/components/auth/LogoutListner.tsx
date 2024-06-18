@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth, AuthContextType } from "../../contexts/AuthContext";
 
-const AuthListener: React.FC = () => {
+const LogoutListner: React.FC = () => {
   const { logout, isAuthenticated } = useAuth() as AuthContextType;
   const location = useLocation();
 
@@ -17,4 +17,4 @@ const AuthListener: React.FC = () => {
   return null;
 };
 
-export default AuthListener;
+export default LogoutListner;

@@ -2,6 +2,13 @@ interface ValidationFunctions {
   [key: string]: (...args: any[]) => string;
 }
 
+export const validatePost: ValidationFunctions = {
+  title: (value: string) =>
+    value.trim().length === 0 ? "Title is required!" : "",
+  content: (value: string) =>
+    value.trim().length === 0 ? "Description is required!" : "",
+};
+
 export const validateRegister: ValidationFunctions = {
   username: (value: string) => (value ? "" : "Username is required"),
   password: (value: string) =>
@@ -15,13 +22,6 @@ export const validateLogin: ValidationFunctions = {
     value.trim().length === 0 ? "This field cannot be empty" : "",
   password: (value: string) =>
     value.trim().length === 0 ? "This field cannot be empty" : "",
-};
-
-export const validatePost: ValidationFunctions = {
-  title: (value: string) =>
-    value.trim().length === 0 ? "Title is required!" : "",
-  content: (value: string) =>
-    value.trim().length === 0 ? "Description is required!" : "",
 };
 
 export const validateComment: ValidationFunctions = {

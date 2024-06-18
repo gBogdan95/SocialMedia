@@ -14,7 +14,7 @@ import { validatePost } from "../../utils/validate";
 import { postService } from "../../services/postService";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
-import useForm from "../../hooks/useForm"; // Adjust the path based on your file structure
+import useForm from "../../hooks/useForm";
 
 interface UpdatePostDialogProps {
   open: boolean;

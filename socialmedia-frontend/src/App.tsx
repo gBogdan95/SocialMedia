@@ -10,7 +10,7 @@ import Users from "./pages/Users";
 import Shop from "./pages/Shop";
 import Settings from "./pages/Settings";
 import { RightContentProvider } from "./contexts/RightContentContext";
-import AuthListener from "./components/auth/LogoutListner";
+import LogoutListner from "./components/auth/LogoutListner";
 import PostDetails from "./pages/PostDetails";
 import ProfileDetails from "./pages/ProfileDetails";
 import { UserProvider } from "./contexts/UserContext";
@@ -21,7 +21,7 @@ function App() {
       <UserProvider>
         <RightContentProvider>
           <BrowserRouter>
-            <AuthListener />
+            <LogoutListner />
             <TopNavbar />
             <Routes>
               <Route path="/" element={<Login />} />

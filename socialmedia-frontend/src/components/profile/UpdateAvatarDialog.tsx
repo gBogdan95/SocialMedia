@@ -8,7 +8,6 @@ import {
   Typography,
   IconButton,
   Box,
-  Snackbar,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { userService } from "../../services/userService";

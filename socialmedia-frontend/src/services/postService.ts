@@ -50,8 +50,8 @@ const fetchPosts = async () => {
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Failed to fetch posts:", errorText);
-    throw new Error("Failed to fetch posts.");
+    console.error(`Failed to fetch posts: ${errorText}`);
+    throw new Error(`Failed to fetch posts: ${errorText}`);
   }
 
   const data = await response.json();
